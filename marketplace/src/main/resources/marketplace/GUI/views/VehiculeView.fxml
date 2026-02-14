@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="720.0" prefWidth="1030.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.VehiculeController">
+   <center>
+      <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <!-- CREER TAB -->
+          <Tab fx:id="tabCreer" text="Créer">
+            <content>
+              <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="content-padding">
+                 <padding>
+                    <Insets bottom="25.0" left="30.0" right="30.0" top="25.0" />
+                 </padding>
+                 <children>
+                    <Label styleClass="section-title" text="Ajouter un véhicule" />
+                    <GridPane hgap="12.0" maxWidth="700.0" vgap="10.0">
+                      <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="130.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="570.0" minWidth="10.0" prefWidth="570.0" />
+                      </columnConstraints>
+                      <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      </rowConstraints>
+                       <children>
+                          <Label styleClass="form-label" text="Nom:" />
+                          <TextField fx:id="txtNom" promptText="Nom du véhicule" GridPane.columnIndex="1" />
+                          
+                          <Label styleClass="form-label" text="Catégorie:" GridPane.rowIndex="1" />
+                          <ComboBox fx:id="cbCategorie" maxWidth="300.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                          
+                          <Label styleClass="form-label" text="Marque:" GridPane.rowIndex="2" />
+                          <TextField fx:id="txtMarque" maxWidth="300.0" promptText="Marque" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                          
+                          <Label styleClass="form-label" text="Modèle:" GridPane.rowIndex="3" />
+                          <TextField fx:id="txtModele" maxWidth="300.0" promptText="Modèle" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                          
+                          <Label styleClass="form-label" text="Immatriculation:" GridPane.rowIndex="4" />
+                          <TextField fx:id="txtImmatriculation" maxWidth="200.0" promptText="XX-000-XX" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                          
+                          <Label styleClass="form-label" text="Prix/Jour (€):" GridPane.rowIndex="5" />
+                          <TextField fx:id="txtPrixJour" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                          
+                          <Label styleClass="form-label" text="Prix/Semaine (€):" GridPane.rowIndex="6" />
+                          <TextField fx:id="txtPrixSemaine" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                          
+                          <Label styleClass="form-label" text="Prix/Mois (€):" GridPane.rowIndex="7" />
+                          <TextField fx:id="txtPrixMois" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                          
+                          <Label styleClass="form-label" text="Image URL:" GridPane.rowIndex="8" />
+                          <TextField fx:id="txtImage" promptText="http://..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                          
+                          <Label styleClass="form-label" text="Description:" GridPane.rowIndex="9" />
+                          <TextArea fx:id="txtDescription" maxHeight="70.0" prefHeight="70.0" promptText="Description détaillée..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                          
+                          <Label styleClass="form-label" text="Disponible:" GridPane.rowIndex="10" />
+                          <CheckBox fx:id="chkDisponible" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                       </children>
+                    </GridPane>
+                    <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                       <children>
+                          <Button mnemonicParsing="false" onAction="#handleAjouter" prefWidth="180.0" styleClass="action-button" text="Ajouter" />
+                       </children>
+                       <VBox.margin>
+                          <Insets top="10.0" />
+                       </VBox.margin>
+                    </HBox>
+                 </children>
+              </VBox>
+            </content>
+          </Tab>
+          
+          <!-- MODIFIER TAB -->
+          <Tab fx:id="tabModifier" text="Modifier">
+            <content>
+               <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="content-padding">
+                 <padding>
+                    <Insets bottom="25.0" left="30.0" right="30.0" top="25.0" />
+                 </padding>
+                 <children>
+                    <HBox alignment="CENTER" spacing="10.0">
+                       <children>
+                          <TextField fx:id="txtSearchModif" prefWidth="280.0" promptText="Rechercher par nom..." />
+                          <Button mnemonicParsing="false" onAction="#handleRechercher" styleClass="action-button" text="Rechercher" />
+                       </children>
+                       <VBox.margin>
+                          <Insets bottom="5.0" />
+                       </VBox.margin>
+                    </HBox>
+                    <Label styleClass="section-title" text="Modifier un véhicule" />
+                    <GridPane hgap="12.0" maxWidth="700.0" vgap="10.0">
+                      <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="130.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="570.0" minWidth="10.0" prefWidth="570.0" />
+                      </columnConstraints>
+                      <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      </rowConstraints>
+                       <children>
+                          <Label styleClass="form-label" text="Nom:" />
+                          <TextField fx:id="txtNomModif" promptText="Nom du véhicule" GridPane.columnIndex="1" />
+                          
+                          <Label styleClass="form-label" text="Catégorie:" GridPane.rowIndex="1" />
+                          <ComboBox fx:id="cbCategorieModif" maxWidth="300.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                          
+                          <Label styleClass="form-label" text="Marque:" GridPane.rowIndex="2" />
+                          <TextField fx:id="txtMarqueModif" maxWidth="300.0" promptText="Marque" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                          
+                          <Label styleClass="form-label" text="Modèle:" GridPane.rowIndex="3" />
+                          <TextField fx:id="txtModeleModif" maxWidth="300.0" promptText="Modèle" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                          
+                          <Label styleClass="form-label" text="Immatriculation:" GridPane.rowIndex="4" />
+                          <TextField fx:id="txtImmatriculationModif" maxWidth="200.0" promptText="XX-000-XX" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                          
+                          <Label styleClass="form-label" text="Prix/Jour (€):" GridPane.rowIndex="5" />
+                          <TextField fx:id="txtPrixJourModif" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                          
+                          <Label styleClass="form-label" text="Prix/Semaine (€):" GridPane.rowIndex="6" />
+                          <TextField fx:id="txtPrixSemaineModif" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                          
+                          <Label styleClass="form-label" text="Prix/Mois (€):" GridPane.rowIndex="7" />
+                          <TextField fx:id="txtPrixMoisModif" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                          
+                          <Label styleClass="form-label" text="Image URL:" GridPane.rowIndex="8" />
+                          <TextField fx:id="txtImageModif" promptText="http://..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                          
+                          <Label styleClass="form-label" text="Description:" GridPane.rowIndex="9" />
+                          <TextArea fx:id="txtDescriptionModif" maxHeight="70.0" prefHeight="70.0" promptText="Description détaillée..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                          
+                          <Label styleClass="form-label" text="Disponible:" GridPane.rowIndex="10" />
+                          <CheckBox fx:id="chkDisponibleModif" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                       </children>
+                    </GridPane>
+                    <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                       <children>
+                          <Button mnemonicParsing="false" onAction="#handleModifier" prefWidth="180.0" styleClass="action-button" text="Enregistrer" />
+                       </children>
+                       <VBox.margin>
+                          <Insets top="10.0" />
+                       </VBox.margin>
+                    </HBox>
+                 </children>
+              </VBox>
+            </content>
+          </Tab>
+          
+          <!-- LISTE TAB -->
+          <Tab fx:id="tabListe" text="Liste">
+            <content>
+              <BorderPane>
+                  <center>
+                     <TableView fx:id="tableVehicules" BorderPane.alignment="CENTER">
+                       <columns>
+                         <TableColumn fx:id="colId" prefWidth="60.0" text="ID" />
+                         <TableColumn fx:id="colImage" prefWidth="90.0" text="Image" />
+                         <TableColumn fx:id="colNom" prefWidth="150.0" text="Nom" />
+                         <TableColumn fx:id="colMarque" prefWidth="100.0" text="Marque" />
+                         <TableColumn fx:id="colModele" prefWidth="100.0" text="Modèle" />
+                         <TableColumn fx:id="colPrixJour" prefWidth="100.0" text="Prix/Jour" />
+                         <TableColumn fx:id="colActions" minWidth="280.0" prefWidth="320.0" text="Actions" />
+                       </columns>
+                       <padding>
+                          <Insets bottom="15.0" left="15.0" right="15.0" />
+                       </padding>
+                     </TableView>
+                  </center>
+                  <top>
+                     <HBox alignment="CENTER_RIGHT" prefHeight="60.0" spacing="10.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets bottom="10.0" left="20.0" right="20.0" top="15.0" />
+                        </padding>
+                        <children>
+                           <Button mnemonicParsing="false" onAction="#handleRefresh" styleClass="action-button" text="Actualiser" />
+                        </children>
+                     </HBox>
+                  </top>
+               </BorderPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
