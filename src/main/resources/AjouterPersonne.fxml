@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="510.0" prefWidth="738.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.connection3a7.controllers.AjouterPersonne">
+   <children>
+      <Text layoutX="119.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom" />
+      <Text layoutX="119.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prénom" />
+      <TextField fx:id="nomtextfield" layoutX="213.0" layoutY="112.0" prefHeight="25.0" prefWidth="252.0" />
+      <TextField fx:id="prenomtextfield" layoutX="213.0" layoutY="158.0" prefHeight="25.0" prefWidth="252.0" />
+      <Button layoutX="313.0" layoutY="210.0" mnemonicParsing="false" onAction="#ajouterpersonneaction" text="Valider" />
+   </children>
+</AnchorPane>
