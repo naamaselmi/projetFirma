@@ -1,0 +1,73 @@
+/* ===== TABPANE CONTAINER ===== */
+.tab-pane {
+    -fx-background-color: white;
+    -fx-tab-min-width: 100px;
+    -fx-tab-max-width: 200px;
+    -fx-tab-min-height: 40px;
+}
+
+/* ===== HEADER BACKGROUND ===== */
+.tab-pane .tab-header-area {
+    -fx-background-color: #fefbde;
+    -fx-padding: 10 0 0 10;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: #fefbde;
+}
+
+/* ===== INDIVIDUAL TABS (unselected) ===== */
+.tab-pane .tab {
+    -fx-background-color: #fefbde;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 10 30 10 30;
+    -fx-border-color: #c8c8c8 #c8c8c8 transparent #c8c8c8;
+    -fx-border-width: 1 1 0 1;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #555555;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* ===== SELECTED TAB ===== */
+.tab-pane .tab:selected {
+    -fx-background-color: white;
+    -fx-border-color: #49ad32 #49ad32 transparent #49ad32;
+    -fx-border-width: 3 1 0 1;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #49ad32;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* ===== REMOVE FOCUS RING ===== */
+.tab-pane .tab:focused,
+.tab-pane .tab:selected:focused {
+    -fx-background-insets: 0;
+}
+
+.tab-pane .tab .focus-indicator {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* ===== CONTENT AREA ===== */
+.tab-pane .tab-content-area {
+    -fx-background-color: white;
+    -fx-border-color: #49ad32;
+    -fx-border-width: 2;
+}
+
+/* ===== HOVER EFFECT ===== */
+.tab-pane .tab:hover .tab-label {
+    -fx-text-fill: #49ad32;
+}
