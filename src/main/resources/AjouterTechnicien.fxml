@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.connection3a7.controller.AjouterTechnicienController">
+
+    <children>
+
+        <!-- ===== SIDEBAR ===== -->
+        <VBox prefWidth="230.0" spacing="10.0" style="-fx-background-color: #1a961e; -fx-border-color: #BDDB9A; -fx-border-width: 0 1 0 0;">
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="20.0" />
+            </padding>
+
+            <children>
+                <!-- LOGO (chemin corrigé) -->
+                <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" style="-fx-background-color: transparent;">
+                    <children>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
+                            <image>
+                                <Image url="@images/o.png" />
+                            </image>
+                        </ImageView>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18;" text="FIRMA" />
+                    </children>
+                    <effect>
+                        <DropShadow color="#0000001a" radius="5.0" />
+                    </effect>
+                </VBox>
+
+                <!-- Sidebar Buttons -->
+                <Button alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="🏠  Accueil">
+                    <padding><Insets left="15.0" /></padding>
+                </Button>
+
+                <Button alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="➕  Nouveau Technicien">
+                    <padding><Insets left="15.0" /></padding>
+                </Button>
+
+                <Button alignment="CENTER_LEFT" onAction="#voirListe" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="📋  Liste Techniciens">
+                    <padding><Insets left="15.0" /></padding>
+                </Button>
+
+                <!-- ✅ NOUVEAU BOUTON VOIR LE FRONT -->
+                <Button fx:id="btnVoirFront" alignment="CENTER_LEFT" onAction="#allerVersFront" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="👁️  Voir le front">
+                    <padding><Insets left="15.0" /></padding>
+                </Button>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Button alignment="CENTER" prefHeight="35.0" style="-fx-background-color: transparent; -fx-text-fill: #d9534f; -fx-font-weight: bold; -fx-font-size: 13;" text="🚪  Déconnecter" />
+            </children>
+        </VBox>
+
+        <!-- ===== MAIN CONTENT WITH SCROLLPANE ===== -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #F9F9F9;" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox spacing="20.0" style="-fx-background-color: #F9F9F9;">
+                    <padding>
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+                    </padding>
+
+                    <children>
+                        <!-- TITRE -->
+                        <Label text="Ajouter un nouveau technicien" textFill="#1a961e">
+                            <font>
+                                <Font name="System Bold" size="32.0" />
+                            </font>
+                        </Label>
+
+                        <!-- FORMULAIRE -->
+                        <VBox spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #CCC; -fx-border-radius: 15; -fx-padding: 30;">
+                            <children>
+                                <GridPane hgap="30.0" vgap="20.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50" />
+                                        <ColumnConstraints percentWidth="50" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="60" />
+                                        <RowConstraints minHeight="60" />
+                                        <RowConstraints minHeight="60" />
+                                        <RowConstraints minHeight="60" />
+                                        <RowConstraints minHeight="60" />
+                                        <RowConstraints minHeight="60" />
+                                        <RowConstraints minHeight="60" />
+                                    </rowConstraints>
+
+                                    <children>
+                                        <!-- NOM -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Nom :" />
+                                                <TextField fx:id="txtNom" prefHeight="35.0" promptText="Entrez le nom" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- PRÉNOM -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Prénom :" />
+                                                <TextField fx:id="txtPrenom" prefHeight="35.0" promptText="Entrez le prénom" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- EMAIL -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Email :" />
+                                                <TextField fx:id="txtEmail" prefHeight="35.0" promptText="exemple@email.com" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- TÉLÉPHONE -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Téléphone :" />
+                                                <TextField fx:id="txtTelephone" prefHeight="35.0" promptText="+216 XX XXX XXX" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- CIN -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="CIN :" />
+                                                <TextField fx:id="txtCin" prefHeight="35.0" promptText="Numéro CIN" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- ÂGE -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Âge :" />
+                                                <TextField fx:id="txtAge" prefHeight="35.0" promptText="Âge" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- SPÉCIALITÉ -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Spécialité :" />
+                                                <ComboBox fx:id="comboSpecialite" prefHeight="35.0" promptText="Sélectionnez la spécialité" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- DATE DE NAISSANCE -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Date de naissance :" />
+                                                <DatePicker fx:id="dateNaissance" maxWidth="Infinity" prefHeight="35.0" promptText="JJ/MM/AAAA" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- LOCALISATION -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Localisation :" />
+                                                <TextField fx:id="txtLocalisation" prefHeight="35.0" promptText="Ville, Pays" style="-fx-font-size: 13;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- DISPONIBILITÉ -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Disponibilité :" />
+                                                <CheckBox fx:id="checkDisponibilite" selected="true" style="-fx-font-size: 13;" text="Technicien disponible" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- SECTION IMAGE -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                                            <children>
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Photo du technicien :" />
+
+                                                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                                    <children>
+                                                        <ImageView fx:id="imagePreview" fitHeight="120.0" fitWidth="120.0" preserveRatio="true" style="-fx-border-color: #CCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-color: #f5f5f5;">
+                                                            <effect>
+                                                                <DropShadow color="#00000020" radius="5.0" />
+                                                            </effect>
+                                                        </ImageView>
+
+                                                        <VBox spacing="10.0">
+                                                            <children>
+                                                                <Button fx:id="btnChoisirImage" onAction="#parcourirImage" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-cursor: hand;" text="📁  Parcourir..." />
+
+                                                                <Button fx:id="btnSupprimerImage" disable="true" onAction="#supprimerImageSelectionnee" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-cursor: hand;" text="🗑️  Supprimer" />
+
+                                                                <Label fx:id="lblNomImage" style="-fx-text-fill: gray; -fx-font-size: 12; -fx-font-style: italic;" text="Aucune image sélectionnée" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- NOTE INFORMATIVE -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                                            <children>
+                                                <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11; -fx-font-style: italic;" text="💡 Formats acceptés : PNG, JPG, JPEG, GIF - Taille max : 5 Mo" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </GridPane>
+
+                                <!-- BOUTONS D'ACTION -->
+                                <HBox alignment="CENTER_RIGHT" spacing="15.0" style="-fx-padding: 20 0 0 0;">
+                                    <children>
+                                        <Button fx:id="btnAnnuler" onAction="#annuler" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-font-size: 14;" text="❌  Annuler" />
+
+                                        <Button fx:id="btnEnregistrer" onAction="#ajouterTechnicien" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-font-size: 14;" text="✅  Ajouter Technicien" />
+                                    </children>
+                                </HBox>
+                            </children>
+                            <effect>
+                                <DropShadow color="#00000014" height="20.0" radius="9.5" width="20.0" />
+                            </effect>
+                        </VBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</HBox>

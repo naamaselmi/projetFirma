@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<HBox prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: white;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.connection3a7.controller.ListeDesTechniciensfront">
+
+    <children>
+
+        <!-- ===== SIDEBAR ===== -->
+        <VBox prefWidth="250.0" spacing="10.0" style="-fx-background-color: #1a961e; -fx-border-color: #BDDB9A; -fx-border-width: 0 1 0 0;">
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="20.0" />
+            </padding>
+
+            <children>
+                <!-- LOGO -->
+                <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" style="-fx-background-color: transparent;">
+                    <children>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
+                            <image>
+                                <Image url="@images/o.png" />
+                            </image>
+                        </ImageView>
+                        <Label style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18;" text="FIRMA" />
+                    </children>
+                    <effect>
+                        <DropShadow color="#0000001a" radius="5.0" />
+                    </effect>
+                </VBox>
+
+                <!-- Sidebar Buttons -->
+                <Button prefHeight="40.0" prefWidth="200.0" alignment="CENTER_LEFT"
+                        style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;"
+                        text="🏠  Accueil">
+                    <padding><Insets left="15.0"/></padding>
+                </Button>
+
+
+                <Button onAction="#retournerVersBack"
+                        text="📋  Liste Techniciens"
+                        style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand;"
+                        prefHeight="40.0"
+                        prefWidth="200.0"
+                        alignment="CENTER_LEFT">
+                    <padding><Insets left="15.0" /></padding>
+                </Button>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Button prefHeight="35.0" alignment="CENTER"
+                        style="-fx-background-color: transparent; -fx-text-fill: #d9534f; -fx-font-weight: bold; -fx-font-size: 13;"
+                        text="🚪  Déconnecter"/>
+            </children>
+        </VBox>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #F9F9F9;" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox spacing="20.0" style="-fx-background-color: #F9F9F9;">
+                    <padding>
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0"/>
+                    </padding>
+
+                    <children>
+                        <!-- TITRE -->
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                            <children>
+                                <Label fx:id="lblTitre" text="Choisissez un technicien" textFill="#1a961e">
+                                    <font>
+                                        <Font name="System Bold" size="36.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+
+                        <!-- BARRE DE RECHERCHE -->
+                        <HBox spacing="15.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Label text="🔍 Recherche :" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                                <TextField fx:id="searchField" promptText="Nom, prénom ou spécialité..."
+                                           HBox.hgrow="ALWAYS" prefHeight="40.0"
+                                           style="-fx-background-radius: 25; -fx-padding: 0 20; -fx-font-size: 14; -fx-border-color: #ccc; -fx-border-radius: 25;"/>
+                                <Button fx:id="refreshButton" text="🔄 Actualiser"
+                                        style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20;"/>
+                            </children>
+                        </HBox>
+
+                        <!-- STATS -->
+                        <HBox spacing="20.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Label fx:id="lblInfo" text="Cliquez sur un technicien pour le sélectionner"
+                                       style="-fx-background-color: white; -fx-padding: 8 20; -fx-background-radius: 20; -fx-border-color: #CCC; -fx-border-radius: 20; -fx-font-size: 14;"/>
+                            </children>
+                        </HBox>
+
+                        <!-- GRILLE DES TECHNICIENS -->
+                        <ScrollPane fitToWidth="true" fitToHeight="true"
+                                    style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;">
+                            <content>
+                                <FlowPane fx:id="technicienGrid"
+                                          hgap="25.0" vgap="25.0"
+                                          style="-fx-padding: 15; -fx-background-color: transparent;"
+                                          prefWrapLength="1000.0"/>
+                            </content>
+                        </ScrollPane>
+
+                        <!-- BOUTON CRÉER DEMANDE -->
+                        <HBox alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                            <children>
+                                <Button fx:id="btnCreerDemande" text="📝  Créer une demande avec le technicien sélectionné"
+                                        style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-cursor: hand; -fx-padding: 15 30; -fx-font-size: 16;"
+                                        prefHeight="60.0"/>
+                            </children>
+                        </HBox>
+
+                        <Label text="💡 Astuce: Cliquez sur une carte pour sélectionner un technicien, puis cliquez sur le bouton ci-dessus"
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 12; -fx-font-style: italic; -fx-alignment: center;"/>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</HBox>

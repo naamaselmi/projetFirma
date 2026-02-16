@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 25;"
+      prefWidth="450.0" prefHeight="350.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.connection3a7.controller.ModifierAvisController">
+
+    <effect>
+        <DropShadow color="#00000020" radius="15.0"/>
+    </effect>
+
+    <children>
+        <Label fx:id="lblTitre" text="Modifier l'avis" textFill="#1a961e">
+            <font><Font name="System Bold" size="22.0"/></font>
+        </Label>
+
+        <Separator/>
+
+        <!-- Note -->
+        <HBox spacing="15.0" alignment="CENTER_LEFT">
+            <children>
+                <Label text="Note (1-10) :" style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="comboNote" prefWidth="100.0"/>
+            </children>
+        </HBox>
+
+        <!-- Commentaire -->
+        <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+            <Label text="Commentaire :"/>
+            <TextArea fx:id="txtCommentaire" promptText="Votre commentaire..." wrapText="true" prefHeight="120.0"/>
+        </VBox>
+
+        <!-- Boutons -->
+        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <children>
+                <Button fx:id="btnAnnuler" text="Annuler"
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 20; -fx-cursor: hand;"/>
+                <Button fx:id="btnValider" text="Modifier"
+                        style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 30; -fx-cursor: hand;"/>
+            </children>
+        </HBox>
+    </children>
+</VBox>

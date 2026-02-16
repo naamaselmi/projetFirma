@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;"
+      prefWidth="450.0" prefHeight="350.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.connection3a7.controller.AjouterAvisSimpleController">
+
+    <children>
+        <Label text="Donner votre avis" textFill="#1a961e">
+            <font><Font name="System Bold" size="22.0"/></font>
+        </Label>
+
+        <Label fx:id="lblTechnicien" style="-fx-font-size: 14;"/>
+
+        <Separator/>
+
+        <!-- Note avec ComboBox -->
+        <HBox spacing="15.0" alignment="CENTER_LEFT">
+            <children>
+                <Label text="Note (1-10) :" style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="comboNote" prefWidth="100.0"/>
+            </children>
+        </HBox>
+
+        <!-- Commentaire -->
+        <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+            <Label text="Commentaire (optionnel) :"/>
+            <TextArea fx:id="txtCommentaire" promptText="Votre commentaire..." wrapText="true"/>
+        </VBox>
+
+        <!-- Boutons -->
+        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <children>
+                <Button fx:id="btnAnnuler" text="Annuler"
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 20;"/>
+                <Button fx:id="btnValider" text="Valider"
+                        style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 30;"/>
+            </children>
+        </HBox>
+    </children>
+</VBox>

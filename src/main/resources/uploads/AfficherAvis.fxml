@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 25;"
+      prefWidth="600.0" prefHeight="600.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.connection3a7.controller.AfficherAvisSimpleController">
+
+    <effect>
+        <DropShadow color="#00000020" radius="15.0"/>
+    </effect>
+
+    <children>
+        <!-- En-tête -->
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <children>
+                <Label fx:id="lblNomTechnicien" text="Avis pour le technicien" textFill="#1a961e">
+                    <font><Font name="System Bold" size="20.0"/></font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnFermer" text="✕"
+                        style="-fx-background-color: transparent; -fx-text-fill: #666; -fx-font-size: 18; -fx-cursor: hand;"/>
+            </children>
+        </HBox>
+
+        <Separator/>
+
+        <!-- Statistiques -->
+        <HBox spacing="20.0" alignment="CENTER">
+            <children>
+                <VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-background-radius: 10; -fx-min-width: 200;">
+                    <Label text="Note moyenne" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                    <Label fx:id="lblMoyenne" text="0.0/10"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1a961e;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-background-radius: 10; -fx-min-width: 200;">
+                    <Label text="Nombre d'avis" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                    <Label fx:id="lblTotal" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1a961e;"/>
+                </VBox>
+            </children>
+        </HBox>
+
+        <!-- Liste des avis -->
+        <Label text="Détail des avis" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background: transparent; -fx-background-color: transparent;">
+            <content>
+                <VBox fx:id="avisContainer" spacing="15.0" style="-fx-padding: 5;">
+                    <!-- Les avis seront ajoutés dynamiquement ici -->
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <!-- Bouton fermer -->
+        <HBox alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+            <Button text="FERMER" onAction="#fermer"
+                    style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 12 40; -fx-cursor: hand; -fx-font-size: 14;"
+                    prefWidth="200.0"/>
+        </HBox>
+    </children>
+</VBox>

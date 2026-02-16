@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<HBox prefHeight="650.0" prefWidth="950.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.connection3a7.controller.AjouterDemandeBackController">
+
+    <children>
+        <!-- ===== SIDEBAR ===== -->
+        <VBox prefWidth="230.0" spacing="10.0" style="-fx-background-color: #1a961e; -fx-border-color: #BDDB9A; -fx-border-width: 0 1 0 0;">
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="20.0" />
+            </padding>
+            <children>
+                <!-- LOGO -->
+                <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" style="-fx-background-color: transparent;">
+                    <children>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
+                            <image>
+
+                            </image>
+                        </ImageView>
+
+                    </children>
+                    <effect>
+                        <DropShadow color="#0000001a" radius="5.0" />
+                    </effect>
+                </VBox>
+
+                <!-- Sidebar Buttons -->
+                <Button fx:id="btnDashboard" onAction="#retourDashboard" prefHeight="45.0" prefWidth="200.0" alignment="CENTER_LEFT" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="📊  Dashboard">
+                    <padding><Insets left="15.0"/></padding>
+                </Button>
+
+                <Button fx:id="btnDemandes" prefHeight="45.0" prefWidth="200.0" alignment="CENTER_LEFT" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="📋  Demandes reçues">
+                    <padding><Insets left="15.0"/></padding>
+                </Button>
+
+                <Button fx:id="btnInterventions" onAction="#retourDashboard" prefHeight="45.0" prefWidth="200.0" alignment="CENTER_LEFT" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="🔧  Mes interventions">
+                    <padding><Insets left="15.0"/></padding>
+                </Button>
+
+                <Button fx:id="btnProfil" onAction="#retourDashboard" prefHeight="45.0" prefWidth="200.0" alignment="CENTER_LEFT" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="👤  Mon profil">
+                    <padding><Insets left="15.0"/></padding>
+                </Button>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Button fx:id="btnDeconnexion" onAction="#deconnecter" prefHeight="35.0" alignment="CENTER" style="-fx-background-color: transparent; -fx-text-fill: #d9534f; -fx-font-weight: bold; -fx-font-size: 13;" text="🚪  Déconnecter"/>
+            </children>
+        </VBox>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #F9F9F9;" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox spacing="20.0" style="-fx-background-color: #F9F9F9;">
+                    <padding>
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0"/>
+                    </padding>
+
+                    <children>
+                        <!-- HEADER avec bouton retour -->
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                            <children>
+
+                                <Label text="Gestion des demandes reçues" textFill="#1a961e">
+                                    <font>
+                                        <Font name="System Bold" size="32.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <!-- HEADER avec photo du technicien connecté -->
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #1a961e; -fx-border-radius: 10;">
+                            <children>
+                                <ImageView fx:id="imageTechnicien" fitHeight="60.0" fitWidth="60.0" preserveRatio="true" style="-fx-border-radius: 30; -fx-background-radius: 30; -fx-border-color: #1a961e; -fx-border-width: 2;"/>
+                                <VBox>
+                                    <Label fx:id="nomTechnicien" style="-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: #1a961e;"/>
+                                    <Label fx:id="specialiteTechnicien" style="-fx-text-fill: #666; -fx-font-size: 13;"/>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <!-- INFOS TECHNICIEN -->
+                        <HBox spacing="20.0" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15;">
+                            <children>
+                                <ImageView fitHeight="60.0" fitWidth="60.0" style="-fx-border-radius: 30; -fx-border-color: #1a961e;">
+                                    <image>
+                                        <Image url="@../images/avatar.png"/>
+                                    </image>
+                                </ImageView>
+                                <VBox>
+                                    <Label fx:id="lblNomTechnicien" style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: #333;"/>
+                                    <Label fx:id="lblSpecialiteTechnicien" style="-fx-text-fill: #666; -fx-font-size: 14;"/>
+                                    <Label fx:id="lblInfoTechnicien" style="-fx-text-fill: #1a961e; -fx-font-size: 12;"/>
+                                </VBox>
+                            </children>
+                            <effect>
+                                <DropShadow color="#0000000a" radius="5.0"/>
+                            </effect>
+                        </HBox>
+
+                        <!-- FILTRES ET STATS -->
+                        <HBox spacing="20.0" alignment="CENTER_LEFT">
+                            <children>
+                                <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15;" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label text="Filtres" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #1a961e;"/>
+                                        <HBox spacing="10.0" alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="Statut:" style="-fx-font-size: 13;"/>
+                                                <ComboBox fx:id="comboFiltreStatut" prefWidth="150.0" style="-fx-font-size: 13;"/>
+                                                <Button fx:id="btnActualiser" onAction="#actualiser" text="🔄  Actualiser" style="-fx-background-color: #5bc0de; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;" prefHeight="35.0"/>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15;" alignment="CENTER">
+                                    <Label fx:id="lblStats" text="Chargement..." style="-fx-font-size: 14; -fx-text-fill: #1a961e;"/>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <!-- BOUTON RETOUR (flèche) -->
+                        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-padding: 10 0 20 0;">
+                            <children>
+                                <Button onAction="#retournerListeTechnicien"
+                                        style="-fx-background-color: transparent; -fx-cursor: hand;">
+                                    <graphic>
+                                        <HBox spacing="5" alignment="CENTER">
+                                            <Label text="⬅️" style="-fx-font-size: 24; -fx-text-fill: #1a961e;"/>
+                                            <Label text="Retour à la liste des techniciens"
+                                                   style="-fx-text-fill: #1a961e; -fx-font-weight: bold; -fx-font-size: 14;"/>
+                                        </HBox>
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </HBox>
+                        <!-- TABLEAU DES DEMANDES -->
+                        <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #CCC; -fx-border-radius: 15; -fx-padding: 20;">
+                            <children>
+                                <Label text="Liste des demandes" style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: #1a961e;"/>
+
+                                <TableView fx:id="tableDemandesRecues" prefHeight="300.0" style="-fx-font-size: 12;">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                                        <TableColumn fx:id="colUtilisateur" text="Client" prefWidth="70"/>
+                                        <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                                        <TableColumn fx:id="colDescription" text="Description" prefWidth="200"/>
+                                        <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+                                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+                                    </columns>
+                                </TableView>
+
+                                <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                    <Button fx:id="btnVoirDetails" onAction="#voirDetailDemande" text="👁️  Voir détails" style="-fx-background-color: #5bc0de; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;" prefHeight="40.0" prefWidth="130.0" disable="true"/>
+                                    <Button fx:id="btnAccepter" onAction="#accepterDemande" text="✅  Accepter" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;" prefHeight="40.0" prefWidth="120.0" disable="true"/>
+                                    <Button fx:id="btnRefuser" onAction="#refuserDemande" text="❌  Refuser" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;" prefHeight="40.0" prefWidth="120.0" disable="true"/>
+                                    <Button fx:id="btnTerminer" onAction="#terminerDemande" text="✓  Terminer" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;" prefHeight="40.0" prefWidth="120.0" disable="true"/>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</HBox>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.connection3a7.controller.AjouterDemandeBackController"
+            prefWidth="700" prefHeight="500"
+            style="-fx-background-color: #F9F9F9; -fx-padding: 20;">
+
+    <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
+          AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+
+        <Label text="Gestion des Demandes" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+        <TableView fx:id="demandeTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="utilisateurCol" text="Utilisateur" prefWidth="100"/>
+                <TableColumn fx:id="techCol" text="Technicien" prefWidth="100"/>
+                <TableColumn fx:id="typeCol" text="Type de problème" prefWidth="120"/>
+                <TableColumn fx:id="descCol" text="Description" prefWidth="200"/>
+                <TableColumn fx:id="dateCol" text="Date" prefWidth="100"/>
+                <TableColumn fx:id="statutCol" text="Statut" prefWidth="80"/>
+            </columns>
+        </TableView>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="actualiserButton" text="Actualiser"/>
+            <Button fx:id="changerStatutButton" text="Changer Statut"/>
+        </HBox>
+
+    </VBox>
+</AnchorPane>
