@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: #fefbde; -fx-background: #fefbde;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.ProductDetailController">
+   <content>
+      <VBox spacing="20.0" style="-fx-background-color: #fefbde;">
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
+         </padding>
+         <children>
+            <!-- Back Button -->
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                     <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                           <children>
+                              <SVGPath content="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="#49ad32" scaleX="1.3" scaleY="1.3" />
+                              <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #49ad32;" text="Retour au Marketplace" />
+                           </children>
+                        </HBox>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+            
+            <!-- Main Content -->
+            <HBox spacing="40.0" alignment="TOP_LEFT">
+               <!-- Left: Product Image -->
+               <VBox alignment="TOP_CENTER" spacing="15.0" prefWidth="500.0">
+                  <children>
+                     <StackPane fx:id="imageContainer" style="-fx-background-color: #f0f9ed; -fx-background-radius: 15; -fx-border-color: #49ad32; -fx-border-width: 2; -fx-border-radius: 15;" prefWidth="480.0" prefHeight="400.0">
+                        <children>
+                           <ImageView fx:id="productImage" fitHeight="380.0" fitWidth="460.0" preserveRatio="true" />
+                        </children>
+                        <padding>
+                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        </padding>
+                     </StackPane>
+                     
+                     <!-- Type Badge -->
+                     <Label fx:id="typeBadge" style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 20;" text="Type" />
+                  </children>
+               </VBox>
+               
+               <!-- Right: Product Details -->
+               <VBox spacing="20.0" VBox.vgrow="ALWAYS" prefWidth="500.0">
+                  <children>
+                     <!-- Product Name -->
+                     <Label fx:id="productName" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Nom du produit" wrapText="true" />
+                     
+                     <!-- Price Section -->
+                     <VBox spacing="5.0" style="-fx-background-color: #f0f9ed; -fx-background-radius: 10; -fx-padding: 15;">
+                        <children>
+                           <Label style="-fx-font-size: 14px; -fx-text-fill: #666;" text="Prix" />
+                           <Label fx:id="priceLabel" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #49ad32;" text="0.00 DT" />
+                           <Label fx:id="priceSubLabel" style="-fx-font-size: 13px; -fx-text-fill: #888;" text="" />
+                        </children>
+                     </VBox>
+                     
+                     <Separator />
+                     
+                     <!-- Description -->
+                     <VBox spacing="8.0">
+                        <children>
+                           <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Description" />
+                           <Label fx:id="descriptionLabel" style="-fx-font-size: 14px; -fx-text-fill: #555; -fx-line-spacing: 5;" text="Description du produit..." wrapText="true" />
+                        </children>
+                     </VBox>
+                     
+                     <Separator />
+                     
+                     <!-- Additional Details -->
+                     <VBox fx:id="detailsBox" spacing="10.0">
+                        <children>
+                           <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Détails" />
+                           <!-- Details will be added dynamically -->
+                        </children>
+                     </VBox>
+                     
+                     <!-- Spacer -->
+                     <VBox VBox.vgrow="ALWAYS" />
+                     
+                     <!-- Quantity Selector (for equipment) -->
+                     <HBox fx:id="quantityBox" spacing="15.0" alignment="CENTER_LEFT" visible="false" managed="false">
+                        <children>
+                           <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Quantité:" />
+                           <Spinner fx:id="quantitySpinner" prefWidth="100.0" prefHeight="40.0" />
+                           <Label fx:id="stockInfoLabel" style="-fx-font-size: 14px; -fx-text-fill: #666;" text="en stock" />
+                        </children>
+                     </HBox>
+                     
+                     <!-- Rental Date Selection (for vehicles/terrains) -->
+                     <VBox fx:id="rentalDatesBox" spacing="10.0" visible="false" managed="false">
+                        <children>
+                           <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Période de location:" />
+                           <HBox spacing="20.0" alignment="CENTER_LEFT">
+                              <children>
+                                 <VBox spacing="5.0">
+                                    <children>
+                                       <Label style="-fx-font-size: 14px; -fx-text-fill: #666;" text="Date de début:" />
+                                       <DatePicker fx:id="startDatePicker" prefWidth="150.0" />
+                                    </children>
+                                 </VBox>
+                                 <VBox spacing="5.0">
+                                    <children>
+                                       <Label style="-fx-font-size: 14px; -fx-text-fill: #666;" text="Date de fin:" />
+                                       <DatePicker fx:id="endDatePicker" prefWidth="150.0" />
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </HBox>
+                           <Label fx:id="rentalDurationLabel" style="-fx-font-size: 14px; -fx-text-fill: #49ad32; -fx-font-weight: bold;" text="" />
+                        </children>
+                     </VBox>
+                     
+                     <!-- Action Buttons -->
+                     <HBox spacing="15.0" alignment="CENTER_LEFT">
+                        <children>
+                           <Button fx:id="actionButton" onAction="#handleAction" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;" text="Acheter">
+                              <graphic>
+                                 <SVGPath fx:id="actionIcon" content="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="white" scaleX="1.0" scaleY="1.0" />
+                              </graphic>
+                           </Button>
+                           
+                           <Button onAction="#handleContact" prefHeight="50.0" prefWidth="180.0" style="-fx-background-color: white; -fx-text-fill: #49ad32; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-border-color: #49ad32; -fx-border-radius: 25; -fx-border-width: 2; -fx-cursor: hand;" text="Contacter">
+                              <graphic>
+                                 <SVGPath content="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#49ad32" scaleX="0.9" scaleY="0.9" />
+                              </graphic>
+                           </Button>
+                        </children>
+                     </HBox>
+                     
+                     <!-- Caution Info (for rentals) -->
+                     <VBox fx:id="cautionBox" spacing="5.0" style="-fx-background-color: #fff3cd; -fx-background-radius: 8; -fx-padding: 12;" visible="false" managed="false">
+                        <children>
+                           <HBox spacing="8.0" alignment="CENTER_LEFT">
+                              <children>
+                                 <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#856404" scaleX="1.0" scaleY="1.0" />
+                                 <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #856404;" text="Caution requise" />
+                              </children>
+                           </HBox>
+                           <Label fx:id="cautionLabel" style="-fx-font-size: 14px; -fx-text-fill: #856404;" text="Caution: 0.00 DT" />
+                        </children>
+                     </VBox>
+                  </children>
+               </VBox>
+            </HBox>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

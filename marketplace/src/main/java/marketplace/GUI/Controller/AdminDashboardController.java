@@ -139,4 +139,16 @@ public class AdminDashboardController implements Initializable {
         setActiveButton(btnUtilisateur);
         loadPlaceholder("Utilisateur");
     }
+
+    @FXML
+    void handleDeconnecter(ActionEvent event) {
+        try {
+            // Load login view
+            Parent loginView = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/marketplace/GUI/views/login.fxml")));
+            contentArea.getScene().setRoot(loginView);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Could not load login view");
+        }
+    }
 }

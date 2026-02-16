@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import marketplace.entities.Categorie;
 import marketplace.entities.ProductType;
@@ -200,7 +201,10 @@ public class VehiculeController implements Initializable {
     private void loadTableData() {
         try {
             List<Vehicule> list = vehiculeService.getEntities();
-            tableVehicules.setItems(FXCollections.observableArrayList(list));
+            System.out.println("Véhicules chargés: " + list.size());
+            tableVehicules.getItems().clear();
+            tableVehicules.getItems().addAll(list);
+            tableVehicules.refresh();
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la liste des véhicules.");
@@ -212,6 +216,14 @@ public class VehiculeController implements Initializable {
     @FXML
     void handleAjouter(ActionEvent event) {
         if (!validateForm(txtNom, cbCategorie, txtPrixJour)) {
+            return;
+        }
+        
+        if (!validateMarque(txtMarque.getText())) {
+            return;
+        }
+        
+        if (!validateImmatriculation(txtImmatriculation.getText())) {
             return;
         }
 
@@ -233,6 +245,7 @@ public class VehiculeController implements Initializable {
             vehiculeService.addEntity(vehicule);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Véhicule ajouté avec succès.");
             clearCreateForm();
+            loadTableData();
 
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format", "Veuillez vérifier les champs numériques.");
@@ -276,6 +289,14 @@ public class VehiculeController implements Initializable {
         if (!validateForm(txtNomModif, cbCategorieModif, txtPrixJourModif)) {
             return;
         }
+        
+        if (!validateMarque(txtMarqueModif.getText())) {
+            return;
+        }
+        
+        if (!validateImmatriculation(txtImmatriculationModif.getText())) {
+            return;
+        }
 
         try {
             currentEditingVehicule.setNom(txtNomModif.getText());
@@ -293,6 +314,7 @@ public class VehiculeController implements Initializable {
 
             vehiculeService.updateEntity(currentEditingVehicule);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Véhicule modifié avec succès.");
+            loadTableData();
 
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format", "Veuillez vérifier les champs numériques.");
@@ -304,6 +326,7 @@ public class VehiculeController implements Initializable {
 
     @FXML
     void handleRefresh(ActionEvent event) {
+        System.out.println("=== REFRESH Véhicules cliqué ===");
         loadTableData();
     }
 
@@ -439,6 +462,36 @@ public class VehiculeController implements Initializable {
         return true;
     }
 
+    private boolean validateMarque(String marque) {
+        if (marque == null || marque.trim().isEmpty()) {
+            return true; // Optional field
+        }
+        // Check if marque contains only letters and spaces (not a number)
+        if (marque.matches(".*\\d+.*")) {
+            showAlert(Alert.AlertType.WARNING, "Marque invalide", "La marque ne doit pas contenir de chiffres.");
+            return false;
+        }
+        if (!marque.matches("^[a-zA-ZÀ-ÿ\\s\\-]+$")) {
+            showAlert(Alert.AlertType.WARNING, "Marque invalide", "La marque doit contenir uniquement des lettres.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateImmatriculation(String immat) {
+        if (immat == null || immat.trim().isEmpty()) {
+            return true; // Optional field
+        }
+        // Format: xxx TUN xxxx or xxx tun xxxx (3 digits + TUN/tun + 4 digits)
+        String pattern = "^\\d{3}\\s*[Tt][Uu][Nn]\\s*\\d{4}$";
+        if (!immat.matches(pattern)) {
+            showAlert(Alert.AlertType.WARNING, "Immatriculation invalide", 
+                "L'immatriculation doit être au format: xxx TUN xxxx (ex: 123 TUN 4567)");
+            return false;
+        }
+        return true;
+    }
+
     private void clearCreateForm() {
         txtNom.clear();
         txtDescription.clear();
@@ -460,5 +513,31 @@ public class VehiculeController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    void handleBrowseImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner une image");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+        );
+        java.io.File file = fileChooser.showOpenDialog(txtImage.getScene().getWindow());
+        if (file != null) {
+            txtImage.setText(file.toURI().toString());
+        }
+    }
+
+    @FXML
+    void handleBrowseImageModif(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner une image");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+        );
+        java.io.File file = fileChooser.showOpenDialog(txtImageModif.getScene().getWindow());
+        if (file != null) {
+            txtImageModif.setText(file.toURI().toString());
+        }
     }
 }

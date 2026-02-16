@@ -166,7 +166,10 @@ public class FournisseurController implements Initializable {
     private void loadTableData() {
         try {
             allFournisseurs = fournisseurService.getEntities();
-            tableFournisseurs.setItems(FXCollections.observableArrayList(allFournisseurs));
+            System.out.println("Fournisseurs chargés: " + allFournisseurs.size());
+            tableFournisseurs.getItems().clear();
+            tableFournisseurs.getItems().addAll(allFournisseurs);
+            tableFournisseurs.refresh();
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la liste des fournisseurs.");
@@ -178,6 +181,14 @@ public class FournisseurController implements Initializable {
     @FXML
     void handleAjouter(ActionEvent event) {
         if (!validateForm(txtNomEntreprise, txtContactNom, txtEmail, txtTelephone)) {
+            return;
+        }
+        
+        if (!validateTelephone(txtTelephone.getText())) {
+            return;
+        }
+        
+        if (!validateEmail(txtEmail.getText())) {
             return;
         }
 
@@ -195,6 +206,7 @@ public class FournisseurController implements Initializable {
             fournisseurService.addEntity(fournisseur);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Fournisseur ajouté avec succès.");
             clearCreateForm();
+            loadTableData();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -243,6 +255,14 @@ public class FournisseurController implements Initializable {
         if (!validateForm(txtNomEntrepriseModif, txtContactNomModif, txtEmailModif, txtTelephoneModif)) {
             return;
         }
+        
+        if (!validateTelephone(txtTelephoneModif.getText())) {
+            return;
+        }
+        
+        if (!validateEmail(txtEmailModif.getText())) {
+            return;
+        }
 
         try {
             currentEditingFournisseur.setNomEntreprise(txtNomEntrepriseModif.getText());
@@ -255,6 +275,7 @@ public class FournisseurController implements Initializable {
 
             fournisseurService.updateEntity(currentEditingFournisseur);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Fournisseur modifié avec succès.");
+            loadTableData();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -264,6 +285,7 @@ public class FournisseurController implements Initializable {
 
     @FXML
     void handleRefresh(ActionEvent event) {
+        System.out.println("=== REFRESH Fournisseurs cliqué ===");
         loadTableData();
     }
 
@@ -356,6 +378,35 @@ public class FournisseurController implements Initializable {
         if (nomEntreprise.getText().isEmpty() || contactNom.getText().isEmpty() ||
                 email.getText().isEmpty() || telephone.getText().isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Champs manquants", "Veuillez remplir tous les champs obligatoires.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateTelephone(String telephone) {
+        if (telephone == null || telephone.trim().isEmpty()) {
+            return true;
+        }
+        // Format: xx xxx xxx or +216 xx xxx xxx
+        String pattern1 = "^\\d{2}\\s?\\d{3}\\s?\\d{3}$";
+        String pattern2 = "^\\+216\\s?\\d{2}\\s?\\d{3}\\s?\\d{3}$";
+        if (!telephone.matches(pattern1) && !telephone.matches(pattern2)) {
+            showAlert(Alert.AlertType.WARNING, "Téléphone invalide", 
+                "Le numéro de téléphone doit être au format: xx xxx xxx ou +216 xx xxx xxx");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return true;
+        }
+        // Standard email format validation
+        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        if (!email.matches(emailPattern)) {
+            showAlert(Alert.AlertType.WARNING, "Email invalide", 
+                "Veuillez saisir une adresse email valide (ex: exemple@domaine.com)");
             return false;
         }
         return true;

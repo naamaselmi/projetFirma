@@ -17,8 +17,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1030.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.VehiculeController">
+<BorderPane prefHeight="720.0" prefWidth="1030.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.VehiculeController">
    <center>
       <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -37,6 +38,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="570.0" minWidth="10.0" prefWidth="570.0" />
                       </columnConstraints>
                       <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
@@ -74,14 +76,22 @@
                           <Label styleClass="form-label" text="Prix/Mois (€):" GridPane.rowIndex="7" />
                           <TextField fx:id="txtPrixMois" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                           
-                          <Label styleClass="form-label" text="Image URL:" GridPane.rowIndex="8" />
-                          <TextField fx:id="txtImage" promptText="http://..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                          <Label styleClass="form-label" text="Caution (€):" GridPane.rowIndex="8" />
+                          <TextField fx:id="txtCaution" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                           
-                          <Label styleClass="form-label" text="Description:" GridPane.rowIndex="9" />
-                          <TextArea fx:id="txtDescription" maxHeight="70.0" prefHeight="70.0" promptText="Description détaillée..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                          <Label styleClass="form-label" text="Image URL:" GridPane.rowIndex="9" />
+                          <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                             <children>
+                                <TextField fx:id="txtImage" promptText="http://..." HBox.hgrow="ALWAYS" />
+                                <Button mnemonicParsing="false" onAction="#handleBrowseImage" styleClass="action-button" text="Parcourir" />
+                             </children>
+                          </HBox>
                           
-                          <Label styleClass="form-label" text="Disponible:" GridPane.rowIndex="10" />
-                          <CheckBox fx:id="chkDisponible" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                          <Label styleClass="form-label" text="Description:" GridPane.rowIndex="10" />
+                          <TextArea fx:id="txtDescription" maxHeight="70.0" prefHeight="70.0" promptText="Description détaillée..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                          
+                          <Label styleClass="form-label" text="Disponible:" GridPane.rowIndex="11" />
+                          <CheckBox fx:id="chkDisponible" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                        </children>
                     </GridPane>
                     <HBox alignment="CENTER_RIGHT" spacing="10.0">
@@ -130,6 +140,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       </rowConstraints>
@@ -158,14 +169,22 @@
                           <Label styleClass="form-label" text="Prix/Mois (€):" GridPane.rowIndex="7" />
                           <TextField fx:id="txtPrixMoisModif" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                           
-                          <Label styleClass="form-label" text="Image URL:" GridPane.rowIndex="8" />
-                          <TextField fx:id="txtImageModif" promptText="http://..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                          <Label styleClass="form-label" text="Caution (€):" GridPane.rowIndex="8" />
+                          <TextField fx:id="txtCautionModif" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                           
-                          <Label styleClass="form-label" text="Description:" GridPane.rowIndex="9" />
-                          <TextArea fx:id="txtDescriptionModif" maxHeight="70.0" prefHeight="70.0" promptText="Description détaillée..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                          <Label styleClass="form-label" text="Image URL:" GridPane.rowIndex="9" />
+                          <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                             <children>
+                                <TextField fx:id="txtImageModif" promptText="http://..." HBox.hgrow="ALWAYS" />
+                                <Button mnemonicParsing="false" onAction="#handleBrowseImageModif" styleClass="action-button" text="Parcourir" />
+                             </children>
+                          </HBox>
                           
-                          <Label styleClass="form-label" text="Disponible:" GridPane.rowIndex="10" />
-                          <CheckBox fx:id="chkDisponibleModif" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                          <Label styleClass="form-label" text="Description:" GridPane.rowIndex="10" />
+                          <TextArea fx:id="txtDescriptionModif" maxHeight="70.0" prefHeight="70.0" promptText="Description détaillée..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                          
+                          <Label styleClass="form-label" text="Disponible:" GridPane.rowIndex="11" />
+                          <CheckBox fx:id="chkDisponibleModif" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                        </children>
                     </GridPane>
                     <HBox alignment="CENTER_RIGHT" spacing="10.0">
@@ -217,4 +236,18 @@
         </tabs>
       </TabPane>
    </center>
+   <top>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Gestion des véhicules : " textFill="#4aab32">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="25.0" left="10.0" top="50.0" />
+         </BorderPane.margin>
+      </HBox>
+   </top>
 </BorderPane>

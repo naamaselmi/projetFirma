@@ -208,4 +208,17 @@ public class TerrainService implements IService<Terrain> {
 
         return terrains;
     }
+    
+    /**
+     * Update terrain availability
+     */
+    public void updateDisponibilite(int terrainId, boolean disponible) throws SQLException {
+        String requete = "UPDATE terrains SET disponible = ? WHERE id = ?";
+        try (PreparedStatement pst = DB_connection.getInstance().getConnection().prepareStatement(requete)) {
+            pst.setBoolean(1, disponible);
+            pst.setInt(2, terrainId);
+            int rowsUpdated = pst.executeUpdate();
+            System.out.println("Terrain " + terrainId + " disponibilite updated to: " + disponible + " (rows affected: " + rowsUpdated + ")");
+        }
+    }
 }

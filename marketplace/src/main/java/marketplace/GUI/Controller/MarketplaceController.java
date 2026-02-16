@@ -123,4 +123,14 @@ public class MarketplaceController implements Initializable {
     void handleVehicules(ActionEvent event) {
         navigateTo(event, "/marketplace/GUI/views/VehiculeView.fxml");
     }
+
+    @FXML
+    void handleLocations(ActionEvent event) {
+        navigateTo(event, "/marketplace/GUI/views/LocationAdminView.fxml");
+    }
+
+    @FXML
+    void handleCommandes(ActionEvent event) {
+        navigateTo(event, "/marketplace/GUI/views/CommandeAdminView.fxml");
+    }
 }

@@ -139,11 +139,11 @@ public class LocationService implements IService<Location> {
      */
     public void updateStatus(int locationId, RentalStatus status) throws SQLException {
         String requete = "UPDATE locations SET statut = ? WHERE id = ?";
-        PreparedStatement pst = DB_connection.getInstance().getConnection().prepareStatement(requete);
-        pst.setString(1, status.getValue());
-        pst.setInt(2, locationId);
-
-        pst.executeUpdate();
-        System.out.println("Location status updated to: " + status);
+        try (PreparedStatement pst = DB_connection.getInstance().getConnection().prepareStatement(requete)) {
+            pst.setString(1, status.getValue());
+            pst.setInt(2, locationId);
+            int rowsUpdated = pst.executeUpdate();
+            System.out.println("Location " + locationId + " status updated to: " + status + " (rows affected: " + rowsUpdated + ")");
+        }
     }
 }

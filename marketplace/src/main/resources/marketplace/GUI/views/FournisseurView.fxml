@@ -15,8 +15,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1030.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.FournisseurController">
+<BorderPane prefHeight="720.0" prefWidth="1030.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.FournisseurController">
    <center>
       <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -48,19 +49,19 @@
                           <TextField fx:id="txtNomEntreprise" promptText="Nom de l'entreprise" GridPane.columnIndex="1" />
                           
                           <Label styleClass="form-label" text="Nom Contact:" GridPane.rowIndex="1" />
-                          <TextField fx:id="txtContactNom" maxWidth="300.0" promptText="Nom du contact" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                          <TextField fx:id="txtContactNom" maxWidth="731.0" prefWidth="731.0" promptText="Nom du contact" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                           
                           <Label styleClass="form-label" text="Email:" GridPane.rowIndex="2" />
-                          <TextField fx:id="txtEmail" maxWidth="350.0" promptText="email@exemple.com" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                          <TextField fx:id="txtEmail" maxWidth="754.0" prefWidth="754.0" promptText="email@exemple.com" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                           
                           <Label styleClass="form-label" text="Téléphone:" GridPane.rowIndex="3" />
-                          <TextField fx:id="txtTelephone" maxWidth="200.0" promptText="+33 X XX XX XX XX" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                          <TextField fx:id="txtTelephone" maxWidth="751.0" prefWidth="751.0" promptText="+216 12 345 678" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                           
                           <Label styleClass="form-label" text="Adresse:" GridPane.rowIndex="4" />
                           <TextField fx:id="txtAdresse" promptText="Adresse complète" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                           
                           <Label styleClass="form-label" text="Ville:" GridPane.rowIndex="5" />
-                          <TextField fx:id="txtVille" maxWidth="300.0" promptText="Ville" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                          <TextField fx:id="txtVille" maxWidth="800.0" prefWidth="800.0" promptText="Ville" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                           
                           <Label styleClass="form-label" text="Actif:" GridPane.rowIndex="6" />
                           <CheckBox fx:id="chkActif" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
@@ -113,22 +114,22 @@
                       </rowConstraints>
                        <children>
                           <Label styleClass="form-label" text="Nom Entreprise:" />
-                          <TextField fx:id="txtNomEntrepriseModif" promptText="Nom de l'entreprise" GridPane.columnIndex="1" />
+                          <TextField fx:id="txtNomEntrepriseModif" prefWidth="673.0" promptText="Nom de l'entreprise" GridPane.columnIndex="1" />
                           
                           <Label styleClass="form-label" text="Nom Contact:" GridPane.rowIndex="1" />
-                          <TextField fx:id="txtContactNomModif" maxWidth="300.0" promptText="Nom du contact" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                          <TextField fx:id="txtContactNomModif" maxWidth="637.0" prefWidth="637.0" promptText="Nom du contact" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                           
                           <Label styleClass="form-label" text="Email:" GridPane.rowIndex="2" />
-                          <TextField fx:id="txtEmailModif" maxWidth="350.0" promptText="email@exemple.com" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                          <TextField fx:id="txtEmailModif" maxWidth="603.0" prefWidth="603.0" promptText="email@exemple.com" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                           
                           <Label styleClass="form-label" text="Téléphone:" GridPane.rowIndex="3" />
-                          <TextField fx:id="txtTelephoneModif" maxWidth="200.0" promptText="+33 X XX XX XX XX" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                          <TextField fx:id="txtTelephoneModif" maxWidth="633.0" prefWidth="611.0" promptText="+216 12 345 678" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                           
                           <Label styleClass="form-label" text="Adresse:" GridPane.rowIndex="4" />
-                          <TextField fx:id="txtAdresseModif" promptText="Adresse complète" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                          <TextField fx:id="txtAdresseModif" prefWidth="630.0" promptText="Adresse complète" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                           
                           <Label styleClass="form-label" text="Ville:" GridPane.rowIndex="5" />
-                          <TextField fx:id="txtVilleModif" maxWidth="300.0" promptText="Ville" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                          <TextField fx:id="txtVilleModif" maxWidth="617.0" prefWidth="617.0" promptText="Ville" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                           
                           <Label styleClass="form-label" text="Actif:" GridPane.rowIndex="6" />
                           <CheckBox fx:id="chkActifModif" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
@@ -183,4 +184,18 @@
         </tabs>
       </TabPane>
    </center>
+   <top>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Gestion des fournisseurs : " textFill="#4aab32">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="25.0" left="10.0" top="50.0" />
+         </padding>
+      </HBox>
+   </top>
 </BorderPane>

@@ -1,8 +1,9 @@
 module com.example.marketplace {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.desktop;
+    requires javafx.base;
     requires transitive javafx.graphics;
+    requires java.desktop;
     requires java.sql;
 
     // Open GUI packages to JavaFX for FXML loading

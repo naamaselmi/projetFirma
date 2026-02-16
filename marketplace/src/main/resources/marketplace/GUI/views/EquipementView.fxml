@@ -75,6 +75,7 @@
                               <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                  <children>
                                     <TextField fx:id="txtImage" promptText="http://..." HBox.hgrow="ALWAYS" />
+                                    <Button mnemonicParsing="false" onAction="#handleBrowseImage" styleClass="action-button" text="Parcourir" />
                                  </children>
                               </HBox>
 
@@ -84,6 +85,9 @@
                               <Label styleClass="form-label" text="Disponible:" GridPane.rowIndex="9" />
                               <CheckBox fx:id="chkDisponible" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                            </children>
+                           <opaqueInsets>
+                              <Insets top="50.0" />
+                           </opaqueInsets>
                         </GridPane>
                         <HBox alignment="CENTER_RIGHT" spacing="10.0">
                            <children>
@@ -187,6 +191,7 @@
                               <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                  <children>
                                     <TextField fx:id="txtImageModif" promptText="http://..." HBox.hgrow="ALWAYS" />
+                                    <Button mnemonicParsing="false" onAction="#handleBrowseImageModif" styleClass="action-button" text="Parcourir" />
                                  </children>
                               </HBox>
 
@@ -257,7 +262,7 @@
    <top>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label text="Marketplace :" textFill="#4aab32">
+            <Label text="Gestion des équipement :" textFill="#4aab32">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>

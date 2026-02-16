@@ -5,7 +5,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-green)
 ![Maven](https://img.shields.io/badge/Maven-3.x-red)
 
-A comprehensive JavaFX desktop application for managing agricultural marketplace operations including equipment sales, vehicle rentals, and terrain leasing. Built with modern Java architecture following MVC pattern.
+A comprehensive JavaFX desktop application for managing agricultural marketplace operations including equipment sales, vehicle rentals, terrain leasing, and order management. Built with modern Java architecture following MVC pattern.
 
 ---
 
@@ -17,6 +17,7 @@ A comprehensive JavaFX desktop application for managing agricultural marketplace
 - [Technologies](#-technologies)
 - [Getting Started](#-getting-started)
 - [Database Schema](#-database-schema)
+- [Screenshots](#-screenshots)
 - [API Reference](#-api-reference)
 - [Testing](#-testing)
 - [Contributing](#-contributing)
@@ -25,15 +26,36 @@ A comprehensive JavaFX desktop application for managing agricultural marketplace
 
 ## ✨ Features
 
-### Core Business Features
-- **🛒 Equipment Management** - Full CRUD operations for agricultural equipment inventory
-- **🚗 Vehicle Rentals** - Manage vehicle fleet with daily/weekly/monthly pricing
-- **🌾 Terrain Leasing** - Handle agricultural land rental operations
-- **📦 Order Management** - Complete order lifecycle with payment & delivery tracking
-- **👥 Supplier Management** - Maintain supplier relationships and purchase records
-- **📊 Category System** - Organize products by type (Equipment, Vehicles, Terrain)
+### 🛠️ Administration Features (Admin Dashboard)
+- **🏪 Marketplace Hub** - Central management dashboard with 6 management modules
+- **🛒 Equipment Management** - Full CRUD for agricultural equipment with stock alerts
+- **🚗 Vehicle Management** - Fleet management with daily/weekly/monthly pricing
+- **🌾 Terrain Management** - Agricultural land management with pricing
+- **👥 Supplier Management** - Supplier relationships and purchase tracking
+- **📍 Location/Rental Management** - Complete rental lifecycle management
+  - View all rentals (vehicles & terrains)
+  - Filter by type, status
+  - Confirm, complete, or cancel rentals
+  - Auto-update product availability
+- **📦 Order Management** - Complete order tracking system
+  - Payment status updates (En attente, Payé, Échoué)
+  - Delivery status tracking (En attente → En préparation → Expédié → Livré)
+  - Client information display
+  - CSV export functionality
 
-### User Management
+### 🛍️ Client Features (Client Dashboard)
+- **🏠 Welcome Page** - Personalized client dashboard
+- **🛒 Product Marketplace** - Browse available products
+  - Filter by category
+  - View product details
+  - Add to cart functionality
+- **🛒 Shopping Cart** - Cart management with checkout
+- **💳 Payment System** - Integrated payment view
+- **📋 Rental History** - View and manage personal rentals
+  - View rental status
+  - Delete terminated/cancelled rentals
+
+### 👥 User Management
 - **🔐 Role-Based Access** - Admin and Client user types
 - **🖥️ Dual Dashboards** - Separate interfaces for administrators and clients
 - **🔑 Secure Login** - Database-authenticated user sessions
@@ -76,15 +98,27 @@ The application follows a **layered architecture** with clear separation of conc
 ```
 marketplace/
 ├── src/main/java/marketplace/
-│   ├── Launcher.java                 # Application entry point
+│   ├── Launcher.java                      # Application entry point
 │   ├── GUI/
 │   │   ├── Application/
-│   │   │   └── LoginApplication.java # JavaFX Application class
-│   │   └── Controller/
-│   │       ├── LoginController.java
+│   │   │   └── LoginApplication.java      # JavaFX Application class
+│   │   └── Controller/                    # 15 Controllers
+│   │       ├── LoginController.java       # Authentication
 │   │       ├── AdminDashboardController.java
-│   │       └── ClientDashboardController.java
-│   ├── entities/                     # Domain models (13 classes)
+│   │       ├── ClientDashboardController.java
+│   │       ├── MarketplaceController.java # Admin marketplace hub
+│   │       ├── ClientMarketplaceController.java # Client product browser
+│   │       ├── EquipementController.java  # Equipment CRUD
+│   │       ├── VehiculeController.java    # Vehicle CRUD
+│   │       ├── TerrainController.java     # Terrain CRUD
+│   │       ├── FournisseurController.java # Supplier CRUD
+│   │       ├── LocationAdminController.java # Rental management
+│   │       ├── CommandeAdminController.java # Order management
+│   │       ├── CartPanelController.java   # Shopping cart
+│   │       ├── PaymentController.java     # Payment processing
+│   │       ├── ProductDetailController.java # Product details
+│   │       └── RentalsPanelController.java # Client rentals
+│   ├── entities/                          # 15 Domain models
 │   │   ├── Categorie.java
 │   │   ├── Fournisseur.java
 │   │   ├── Equipement.java
@@ -94,11 +128,13 @@ marketplace/
 │   │   ├── DetailCommande.java
 │   │   ├── Location.java
 │   │   ├── AchatFournisseur.java
-│   │   ├── ProductType.java          # Enum
-│   │   ├── PaymentStatus.java        # Enum
-│   │   ├── DeliveryStatus.java       # Enum
-│   │   └── RentalStatus.java         # Enum
-│   ├── service/                      # Business logic (9 services)
+│   │   ├── Utilisateur.java
+│   │   ├── CartItem.java
+│   │   ├── ProductType.java               # Enum
+│   │   ├── PaymentStatus.java             # Enum
+│   │   ├── DeliveryStatus.java            # Enum
+│   │   └── RentalStatus.java              # Enum
+│   ├── service/                           # 11 Services
 │   │   ├── CategorieService.java
 │   │   ├── FournisseurService.java
 │   │   ├── EquipementService.java
@@ -107,23 +143,41 @@ marketplace/
 │   │   ├── CommandeService.java
 │   │   ├── DetailCommandeService.java
 │   │   ├── LocationService.java
-│   │   └── AchatFournisseurService.java
+│   │   ├── AchatFournisseurService.java
+│   │   ├── UtilisateurService.java
+│   │   └── CartService.java
 │   ├── interfaces/
-│   │   └── IService.java             # Generic service interface
+│   │   └── IService.java                  # Generic service interface
 │   ├── tools/
-│   │   └── DB_connection.java        # Database singleton
+│   │   └── DB_connection.java             # Database singleton
 │   └── test/
-│       └── TestMain.java             # CRUD test suite
+│       └── TestMain.java                  # CRUD test suite
 ├── src/main/resources/
-│   ├── marketplace/GUI/views/        # FXML files
-│   │   ├── login.fxml
-│   │   ├── admin_dashboard.fxml
-│   │   └── client_dashboard.fxml
-│   └── image/                        # Application assets
+│   ├── marketplace/GUI/
+│   │   ├── views/                         # 17 FXML files
+│   │   │   ├── login.fxml
+│   │   │   ├── AdminDashboard.fxml
+│   │   │   ├── client_dashboard.fxml
+│   │   │   ├── MarketplaceView.fxml       # Admin hub (6 cards)
+│   │   │   ├── ClientMarketplaceView.fxml
+│   │   │   ├── ClientAccueilView.fxml
+│   │   │   ├── EquipementView.fxml
+│   │   │   ├── VehiculeView.fxml
+│   │   │   ├── TerrainView.fxml
+│   │   │   ├── FournisseurView.fxml
+│   │   │   ├── LocationAdminView.fxml     # Rental admin
+│   │   │   ├── CommandeAdminView.fxml     # Order admin
+│   │   │   ├── CartPanelView.fxml
+│   │   │   ├── PaymentView.fxml
+│   │   │   ├── ProductDetailView.fxml
+│   │   │   └── RentalsPanelView.fxml
+│   │   └── css/
+│   │       └── styles.css                 # Application styles
+│   └── image/                             # Application assets
 │       ├── logo.png
-│       ├── slogan.png
+│       ├── i1.png - i6.png                # Management icons
 │       └── firma.png
-└── pom.xml                           # Maven configuration
+└── pom.xml                                # Maven configuration
 ```
 
 ---
@@ -185,6 +239,23 @@ mvn compile exec:java -Dexec.mainClass="marketplace.test.TestMain"
 
 ## 🗄️ Database Schema
 
+### Database: `mp`
+
+### Tables Overview
+
+| Table | Description |
+|-------|-------------|
+| `utilisateurs` | Users (admin/client) with authentication |
+| `categories` | Product categories (equipement, vehicule, terrain) |
+| `equipements` | Agricultural equipment inventory |
+| `vehicules` | Vehicle fleet for rental |
+| `terrains` | Agricultural land for lease |
+| `fournisseurs` | Supplier information |
+| `commandes` | Customer orders |
+| `details_commandes` | Order line items |
+| `locations` | Rental records (vehicles & terrains) |
+| `achats_fournisseurs` | Supplier purchases |
+
 ### Entity Relationship
 
 ```
@@ -204,6 +275,37 @@ mvn compile exec:java -Dexec.mainClass="marketplace.test.TestMain"
 │   Location   │←─────────────────────────│   Terrain    │
 └──────────────┘                          └──────────────┘
 ```
+
+### Database Triggers
+
+The database includes several triggers for automatic calculations:
+- `before_location_insert` - Auto-calculates rental duration
+- `before_commande_insert` - Auto-generates order numbers
+- `after_commande_payee` - Updates stock on payment
+- `before_detail_commande_insert` - Calculates subtotals
+
+---
+
+## 🖼️ Application Views
+
+### Admin Dashboard
+The admin dashboard provides access to 6 management modules through the Marketplace hub:
+
+| Module | Description |
+|--------|-------------|
+| 🛠️ Équipements | Manage agricultural equipment inventory |
+| 🌾 Terrains | Manage agricultural land listings |
+| 🚗 Véhicules | Manage vehicle fleet |
+| 👥 Fournisseurs | Manage supplier relationships |
+| 📍 Locations | Monitor and manage all rentals |
+| 📦 Commandes | Track and manage customer orders |
+
+### Client Dashboard
+The client interface includes:
+- **Accueil** - Welcome page with user info
+- **Marketplace** - Browse and filter available products
+- **Panier** - Shopping cart management
+- **Mes Locations** - Personal rental history
 
 ---
 
@@ -230,10 +332,34 @@ Each service extends the base interface with domain-specific methods:
 |---------|-------------------|
 | CategorieService | `getCategoriesByType(ProductType)` |
 | EquipementService | `getAvailableEquipements()`, `getLowStockEquipements()`, `searchByName()` |
-| VehiculeService | `getAvailableVehicules()`, `search()` |
-| TerrainService | `getAvailableTerrains()`, `searchByVille()` |
-| CommandeService | `getCommandesByUser()`, `getPendingCommandes()`, `updatePaymentStatus()` |
-| LocationService | `getLocationsByUser()`, `updateStatus()` |
+| VehiculeService | `getAvailableVehicules()`, `search()`, `updateDisponibilite()` |
+| TerrainService | `getAvailableTerrains()`, `searchByVille()`, `updateDisponibilite()` |
+| CommandeService | `getCommandesByUser()`, `getPendingCommandes()`, `updatePaymentStatus()`, `updateDeliveryStatus()` |
+| LocationService | `getLocationsByUser()`, `updateStatus()`, `getActiveLocations()` |
+| UtilisateurService | `authenticate()`, `getById()` |
+| CartService | `addToCart()`, `removeFromCart()`, `getCartItems()`, `clearCart()` |
+
+### Status Enums
+
+**RentalStatus:**
+- `EN_ATTENTE` - Waiting for confirmation
+- `CONFIRMEE` - Confirmed
+- `EN_COURS` - In progress
+- `TERMINEE` - Completed
+- `ANNULEE` - Cancelled
+
+**PaymentStatus:**
+- `EN_ATTENTE` - Pending
+- `PAYE` - Paid
+- `ECHOUE` - Failed
+- `PARTIEL` - Partial
+
+**DeliveryStatus:**
+- `EN_ATTENTE` - Pending
+- `EN_PREPARATION` - Preparing
+- `EXPEDIE` - Shipped
+- `LIVRE` - Delivered
+- `ANNULE` - Cancelled
 
 ---
 

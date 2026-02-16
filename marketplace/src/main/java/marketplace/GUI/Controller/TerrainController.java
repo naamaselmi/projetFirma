@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import marketplace.entities.Categorie;
 import marketplace.entities.ProductType;
@@ -196,7 +197,10 @@ public class TerrainController implements Initializable {
     private void loadTableData() {
         try {
             List<Terrain> list = terrainService.getEntities();
-            tableTerrains.setItems(FXCollections.observableArrayList(list));
+            System.out.println("Terrains chargés: " + list.size());
+            tableTerrains.getItems().clear();
+            tableTerrains.getItems().addAll(list);
+            tableTerrains.refresh();
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la liste des terrains.");
@@ -228,6 +232,7 @@ public class TerrainController implements Initializable {
             terrainService.addEntity(terrain);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Terrain ajouté avec succès.");
             clearCreateForm();
+            loadTableData();
 
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format", "Veuillez vérifier les champs numériques.");
@@ -286,6 +291,7 @@ public class TerrainController implements Initializable {
 
             terrainService.updateEntity(currentEditingTerrain);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Terrain modifié avec succès.");
+            loadTableData();
 
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format", "Veuillez vérifier les champs numériques.");
@@ -297,6 +303,7 @@ public class TerrainController implements Initializable {
 
     @FXML
     void handleRefresh(ActionEvent event) {
+        System.out.println("=== REFRESH Terrains cliqué ===");
         loadTableData();
     }
 
@@ -448,5 +455,31 @@ public class TerrainController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    void handleBrowseImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner une image");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+        );
+        java.io.File file = fileChooser.showOpenDialog(txtImage.getScene().getWindow());
+        if (file != null) {
+            txtImage.setText(file.toURI().toString());
+        }
+    }
+
+    @FXML
+    void handleBrowseImageModif(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner une image");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+        );
+        java.io.File file = fileChooser.showOpenDialog(txtImageModif.getScene().getWindow());
+        if (file != null) {
+            txtImageModif.setText(file.toURI().toString());
+        }
     }
 }

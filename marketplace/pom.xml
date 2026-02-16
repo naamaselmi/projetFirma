@@ -25,6 +25,16 @@
             <artifactId>javafx-fxml</artifactId>
             <version>17.0.14</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>17.0.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>17.0.14</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

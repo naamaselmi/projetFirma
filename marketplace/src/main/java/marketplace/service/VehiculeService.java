@@ -180,4 +180,17 @@ public class VehiculeService implements IService<Vehicule> {
 
         return vehicules;
     }
+    
+    /**
+     * Update vehicle availability
+     */
+    public void updateDisponibilite(int vehiculeId, boolean disponible) throws SQLException {
+        String requete = "UPDATE vehicules SET disponible = ? WHERE id = ?";
+        try (PreparedStatement pst = DB_connection.getInstance().getConnection().prepareStatement(requete)) {
+            pst.setBoolean(1, disponible);
+            pst.setInt(2, vehiculeId);
+            int rowsUpdated = pst.executeUpdate();
+            System.out.println("Vehicule " + vehiculeId + " disponibilite updated to: " + disponible + " (rows affected: " + rowsUpdated + ")");
+        }
+    }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox spacing="20.0" style="-fx-background-color: #fefbde;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.ClientMarketplaceController">
+   <padding>
+      <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+   </padding>
+   <children>
+      <!-- Header Section -->
+      <HBox alignment="CENTER_LEFT" spacing="20.0">
+         <children>
+            <Label style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #49ad32;" text="Marketplace" />
+            <HBox HBox.hgrow="ALWAYS" />
+            
+            <!-- Search Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="search-container">
+               <children>
+                  <TextField fx:id="searchField" prefHeight="40.0" prefWidth="300.0" promptText="Rechercher un produit..." styleClass="search-field" onAction="#handleSearch" />
+                  <Button onAction="#handleSearch" styleClass="search-button">
+                     <graphic>
+                        <SVGPath content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="white" scaleX="1.2" scaleY="1.2" />
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      
+      <!-- Filter Section -->
+      <HBox alignment="CENTER_LEFT" spacing="15.0">
+         <children>
+            <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #555;" text="Filtrer par:" />
+            <ComboBox fx:id="filterTypeCombo" onAction="#handleFilterChange" prefHeight="38.0" prefWidth="180.0" promptText="Type de produit" styleClass="filter-combo" />
+            <ComboBox fx:id="filterCategoryCombo" onAction="#handleFilterChange" prefHeight="38.0" prefWidth="180.0" promptText="Catégorie" styleClass="filter-combo" />
+            <Button onAction="#handleClearFilters" style="-fx-background-color: #e0e0e0; -fx-background-radius: 5; -fx-cursor: hand;" text="Effacer filtres" />
+            <HBox HBox.hgrow="ALWAYS" />
+            <Label fx:id="countLabel" style="-fx-font-size: 14px; -fx-text-fill: #777;" text="0 produits" />
+         </children>
+      </HBox>
+      
+      <!-- Products Grid -->
+      <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+         <content>
+            <FlowPane fx:id="productsGrid" hgap="20.0" vgap="20.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </FlowPane>
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>

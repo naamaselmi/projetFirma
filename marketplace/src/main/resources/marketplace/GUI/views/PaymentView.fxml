@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: #fefbde; -fx-background: #fefbde;" 
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="marketplace.GUI.Controller.PaymentController">
+   <content>
+      <VBox spacing="25.0" style="-fx-background-color: #fefbde;">
+         <padding>
+            <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+         </padding>
+         <children>
+            
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+               <children>
+                  <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                     <graphic>
+                        <SVGPath content="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="#49ad32" scaleX="1.3" scaleY="1.3" />
+                     </graphic>
+                  </Button>
+                  <SVGPath content="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" fill="#49ad32" scaleX="1.5" scaleY="1.5" />
+                  <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Paiement" />
+               </children>
+            </HBox>
+            
+            <Separator />
+            
+            <!-- Main Content - Two Columns -->
+            <HBox spacing="40.0" alignment="TOP_LEFT">
+               
+               <!-- Left Column: Order Summary -->
+               <VBox spacing="20.0" prefWidth="500.0">
+                  
+                  <!-- Order Summary Card -->
+                  <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                     <children>
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Résumé de la commande" />
+                        <Separator />
+                        
+                        <!-- Items list -->
+                        <VBox fx:id="orderItemsContainer" spacing="12.0">
+                           <!-- Order items will be added dynamically -->
+                        </VBox>
+                        
+                        <Separator />
+                        
+                        <!-- Totals -->
+                        <VBox spacing="8.0">
+                           <HBox alignment="CENTER_LEFT">
+                              <Label style="-fx-font-size: 14px; -fx-text-fill: #666;" text="Sous-total" />
+                              <HBox HBox.hgrow="ALWAYS" />
+                              <Label fx:id="subtotalLabel" style="-fx-font-size: 14px; -fx-text-fill: #333;" text="0.00 DT" />
+                           </HBox>
+                           
+                           <HBox fx:id="cautionsRow" alignment="CENTER_LEFT" managed="false" visible="false">
+                              <Label style="-fx-font-size: 14px; -fx-text-fill: #e67e22;" text="Cautions (remboursables)" />
+                              <HBox HBox.hgrow="ALWAYS" />
+                              <Label fx:id="cautionsLabel" style="-fx-font-size: 14px; -fx-text-fill: #e67e22;" text="0.00 DT" />
+                           </HBox>
+                           
+                           <Separator />
+                           
+                           <HBox alignment="CENTER_LEFT">
+                              <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Total à payer" />
+                              <HBox HBox.hgrow="ALWAYS" />
+                              <Label fx:id="totalLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #49ad32;" text="0.00 DT" />
+                           </HBox>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </VBox>
+               
+               <!-- Right Column: Payment Form -->
+               <VBox spacing="20.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
+                  
+                  <!-- Shipping Address Card -->
+                  <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                     <children>
+                        <HBox spacing="10.0" alignment="CENTER_LEFT">
+                           <SVGPath content="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#49ad32" scaleX="1.2" scaleY="1.2" />
+                           <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Adresse de livraison" />
+                        </HBox>
+                        
+                        <VBox spacing="10.0">
+                           <Label style="-fx-font-size: 13px; -fx-text-fill: #666;" text="Adresse complète *" />
+                           <TextField fx:id="addressField" promptText="Entrez votre adresse" style="-fx-pref-height: 40; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" />
+                           
+                           <Label style="-fx-font-size: 13px; -fx-text-fill: #666;" text="Ville *" />
+                           <TextField fx:id="cityField" promptText="Ville" style="-fx-pref-height: 40; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" />
+                           
+                           <Label style="-fx-font-size: 13px; -fx-text-fill: #666;" text="Téléphone *" />
+                           <TextField fx:id="phoneField" promptText="+216 XX XXX XXX" style="-fx-pref-height: 40; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" />
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Payment Method Card -->
+                  <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                     <children>
+                        <HBox spacing="10.0" alignment="CENTER_LEFT">
+                           <SVGPath content="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" fill="#49ad32" scaleX="1.2" scaleY="1.2" />
+                           <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Méthode de paiement" />
+                        </HBox>
+                        
+                        <!-- Stripe placeholder -->
+                        <VBox spacing="10.0" alignment="CENTER" style="-fx-background-color: #f8f9fa; -fx-background-radius: 8; -fx-padding: 30;">
+                           <SVGPath content="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" fill="#6772e5" scaleX="1.8" scaleY="1.8" />
+                           <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #6772e5;" text="Paiement sécurisé par Stripe" />
+                           <Label style="-fx-font-size: 12px; -fx-text-fill: #888; -fx-text-alignment: center;" text="L'intégration Stripe sera disponible prochainement.&#10;Pour le moment, les commandes sont enregistrées en attente de paiement." wrapText="true" />
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Pay Button -->
+                  <Button fx:id="confirmPayButton" maxWidth="Infinity" onAction="#handleConfirmPayment" 
+                          prefHeight="55.0" 
+                          style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(73,173,50,0.4), 10, 0, 0, 3);"
+                          text="Confirmer la commande">
+                     <graphic>
+                        <SVGPath content="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="white" scaleX="1.2" scaleY="1.2" />
+                     </graphic>
+                  </Button>
+                  
+                  <!-- Security note -->
+                  <HBox spacing="8.0" alignment="CENTER">
+                     <SVGPath content="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" fill="#888" scaleX="0.9" scaleY="0.9" />
+                     <Label style="-fx-font-size: 11px; -fx-text-fill: #888;" text="Vos informations sont sécurisées et cryptées" />
+                  </HBox>
+                  
+               </VBox>
+            </HBox>
+            
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

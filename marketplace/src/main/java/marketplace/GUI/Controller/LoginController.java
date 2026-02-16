@@ -72,6 +72,9 @@ public class LoginController {
                 loginMessage.setText("Welcome " + utilisateur.getPrenom() + " " + utilisateur.getNom() + " ("
                         + utilisateur.getTypeUser() + ")!");
 
+                // Set current user in CartService for order processing
+                marketplace.service.CartService.getInstance().setCurrentUser(utilisateur.getId());
+
                 // Navigate to dashboard based on user role
                 navigateToDashboard(utilisateur.getTypeUser());
             } else {
