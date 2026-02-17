@@ -172,4 +172,68 @@ public class EvenementService implements IService<Evenement> {
 
         return data;
     }
+
+    public Evenement getById(int id) throws SQLException {
+        String requete = "SELECT * FROM evenements WHERE id_evenement = ?";
+        PreparedStatement pst = MyConnection.getInstance().getCnx().prepareStatement(requete);
+        pst.setInt(1, id);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            Evenement e = new Evenement();
+            e.setIdEvenement(rs.getInt("id_evenement"));
+            e.setTitre(rs.getString("titre"));
+            e.setDescription(rs.getString("description"));
+            e.setImageUrl(rs.getString("image_url"));
+            e.setTypeEvenement(Type.valueOf(rs.getString("type_evenement")));
+
+            Date dateDebut = rs.getDate("date_debut");
+            if (dateDebut != null) e.setDateDebut(dateDebut.toLocalDate());
+
+            Date dateFin = rs.getDate("date_fin");
+            if (dateFin != null) e.setDateFin(dateFin.toLocalDate());
+
+            Time horaireDebut = rs.getTime("horaire_debut");
+            if (horaireDebut != null) e.setHoraireDebut(horaireDebut.toLocalTime());
+
+            Time horaireFin = rs.getTime("horaire_fin");
+            if (horaireFin != null) e.setHoraireFin(horaireFin.toLocalTime());
+
+            e.setLieu(rs.getString("lieu"));
+            e.setAdresse(rs.getString("adresse"));
+            e.setCapaciteMax(rs.getInt("capacite_max"));
+            e.setPlacesDisponibles(rs.getInt("places_disponibles"));
+            e.setOrganisateur(rs.getString("organisateur"));
+            e.setContactEmail(rs.getString("contact_email"));
+            e.setContactTel(rs.getString("contact_tel"));
+            e.setStatut(Statutevent.valueOf(rs.getString("statut")));
+
+            Timestamp dateCreation = rs.getTimestamp("date_creation");
+            if (dateCreation != null) {
+                e.setDateCreation(dateCreation.toLocalDateTime());
+            }
+
+            Timestamp dateModification = rs.getTimestamp("date_modification");
+            if (dateModification != null) {
+                e.setDateModification(dateModification.toLocalDateTime());
+            }
+
+            return e;
+        }
+
+        return null;
+    }
+
+    /**
+     * Met à jour uniquement le statut d'un événement.
+     */
+    public void updateStatut(int idEvenement, String nouveauStatut) throws SQLException {
+        String requete = "UPDATE evenements SET statut = ?, date_modification = NOW() WHERE id_evenement = ?";
+        PreparedStatement pst = MyConnection.getInstance().getCnx().prepareStatement(requete);
+        pst.setString(1, nouveauStatut);
+        pst.setInt(2, idEvenement);
+        pst.executeUpdate();
+        System.out.println("Statut de l'événement " + idEvenement + " mis à jour : " + nouveauStatut);
+    }
 }

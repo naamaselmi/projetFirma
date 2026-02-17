@@ -80,12 +80,15 @@
                     <VBox spacing="20" style="-fx-background-color: white;">
                         <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
                         <HBox alignment="CENTER_LEFT" spacing="10">
-                            <TextField fx:id="searchField" prefHeight="40.0" prefWidth="900.0" promptText="Recherche"
+                            <TextField fx:id="searchField" prefHeight="40.0" promptText="Recherche" HBox.hgrow="ALWAYS"
                                        style="-fx-font-size: 16px; -fx-background-color: white; -fx-border-color: #e1dfdf; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 5;" />
                             <Button fx:id="btnSearch" onAction="#rechercher" prefHeight="40.0" prefWidth="50.0"
                                     style="-fx-background-color: #49ad32; -fx-background-radius: 5;">
                                 <graphic><Label style="-fx-text-fill: white; -fx-font-size: 20px;" text="🔍" /></graphic>
                             </Button>
+                            <Label text="Trier par :" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;" />
+                            <ComboBox fx:id="sortComboBox" prefHeight="40.0" prefWidth="200"
+                                      style="-fx-font-size: 13px; -fx-border-color: #e1dfdf; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 5;" />
                         </HBox>
                         <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-background: white;" VBox.vgrow="ALWAYS">
                             <VBox fx:id="evenementsContainer" spacing="15" style="-fx-background-color: white;">
@@ -162,10 +165,16 @@
                                            style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
                             </HBox>
 
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Image :" />
+                                <Label fx:id="createImageLabel" text="Aucune image sélectionnée" HBox.hgrow="ALWAYS"
+                                       style="-fx-font-size: 13px; -fx-text-fill: #888; -fx-background-color: #f5f5f5; -fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-border-radius: 5;" />
+                                <Button onAction="#ajouterImage" prefHeight="38" prefWidth="110"
+                                        style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Parcourir" />
+                            </HBox>
+
                             <HBox alignment="CENTER_RIGHT" spacing="15">
                                 <VBox.margin><Insets top="10" /></VBox.margin>
-                                <Button onAction="#ajouterImage" prefHeight="42" prefWidth="130"
-                                        style="-fx-background-color: #38b6ff; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;" text="+ Image" />
                                 <Button onAction="#creerEvenement" prefHeight="42" prefWidth="130"
                                         style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;" text="+ Créer" />
                             </HBox>
@@ -249,10 +258,16 @@
                                            style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
                             </HBox>
 
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Image :" />
+                                <Label fx:id="modifyImageLabel" text="Aucune image sélectionnée" HBox.hgrow="ALWAYS"
+                                       style="-fx-font-size: 13px; -fx-text-fill: #888; -fx-background-color: #f5f5f5; -fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-border-radius: 5;" />
+                                <Button onAction="#modifierImage" prefHeight="38" prefWidth="110"
+                                        style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Parcourir" />
+                            </HBox>
+
                             <HBox alignment="CENTER_RIGHT" spacing="15">
                                 <VBox.margin><Insets top="10" /></VBox.margin>
-                                <Button onAction="#modifierImage" prefHeight="42" prefWidth="130"
-                                        style="-fx-background-color: #38b6ff; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;" text="+ Image" />
                                 <Button onAction="#modifierEvenement" prefHeight="42" prefWidth="130"
                                         style="-fx-background-color: #f5a623; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;" text="Modifier" />
                             </HBox>

@@ -1,14 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.connection3a7.controllers.FrontController"
-            prefHeight="400.0" prefWidth="600.0">
+            style="-fx-background-color: #fefbde;"
+            stylesheets="@evenement-style.css">
 
-</AnchorPane>
+    <!-- MENU LATERAL GAUCHE -->
+    <left>
+        <VBox prefWidth="185.0" spacing="0"
+              style="-fx-background-color: #49ad32; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 3, 0);">
+            <padding><Insets top="20" /></padding>
+
+            <VBox alignment="CENTER" prefHeight="185.0">
+                <ImageView fitHeight="150.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@image/logofirma.jpg" /></image>
+                </ImageView>
+            </VBox>
+
+            <VBox spacing="0" VBox.vgrow="ALWAYS">
+                <Button fx:id="btnAccueil" onAction="#goToAccueil"
+                        prefHeight="52.0" prefWidth="185.0" text="Accueil"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnEvenement" onAction="#goToEvenement"
+                        prefHeight="52.0" prefWidth="185.0" text="Evènement"
+                        style="-fx-background-color: white; -fx-background-radius: 0 26 26 0; -fx-text-fill: #49ad32; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnMarketplace" onAction="#goToMarketplace"
+                        prefHeight="52.0" prefWidth="185.0" text="Marketplace"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnForum" onAction="#goToForum"
+                        prefHeight="52.0" prefWidth="185.0" text="Forum"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnTechnicien" onAction="#goToTechnicien"
+                        prefHeight="52.0" prefWidth="185.0" text="Technicien"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnProfil" onAction="#goToProfil"
+                        prefHeight="52.0" prefWidth="185.0" text="Profil"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+            <Button onAction="#deconnecter"
+                    prefHeight="50.0" prefWidth="185.0" text="Déconnecter"
+                    style="-fx-background-color: rgba(0,0,0,0.18); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25; -fx-background-radius: 0;">
+                <VBox.margin><Insets bottom="20" /></VBox.margin>
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- CONTENU PRINCIPAL -->
+    <center>
+        <VBox spacing="0" style="-fx-background-color: #fefbde;">
+
+            <!-- Barre titre -->
+            <VBox style="-fx-background-color: #fefbde;">
+                <padding><Insets top="28" right="35" bottom="12" left="35" /></padding>
+                <Label text="Evènements" textFill="#49ad32">
+                    <font><Font name="System Bold" size="42.0" /></font>
+                </Label>
+                <Label text="Découvrez et rejoignez les évènements près de chez vous"
+                       style="-fx-font-size: 14px; -fx-text-fill: #888888;" />
+            </VBox>
+
+            <!-- Barre recherche + tri -->
+            <HBox spacing="12" alignment="CENTER_LEFT"
+                  style="-fx-background-color: #fefbde;">
+                <padding><Insets top="8" right="35" bottom="14" left="35" /></padding>
+
+                <TextField fx:id="searchField" prefHeight="40" prefWidth="320"
+                           promptText="Rechercher un evenement..."
+                           style="-fx-font-size: 14px; -fx-background-color: white; -fx-border-color: #d0d0d0; -fx-border-width: 1.5; -fx-background-radius: 20; -fx-border-radius: 20; -fx-padding: 0 15;" />
+
+                <Button fx:id="btnSearch" onAction="#rechercher"
+                        prefHeight="40" prefWidth="90"
+                        style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;" text="Rechercher" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Label text="Trier par :" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;" />
+                <ComboBox fx:id="sortComboBox" onAction="#trierEvenements"
+                          prefHeight="40" prefWidth="220"
+                          style="-fx-font-size: 13px; -fx-background-color: white; -fx-border-color: #d0d0d0; -fx-border-width: 1.5; -fx-background-radius: 8; -fx-border-radius: 8;" />
+
+                <Button fx:id="btnMesParticipations"
+                        prefHeight="40" prefWidth="40"
+                        style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="📋" />
+            </HBox>
+
+            <!-- Separateur -->
+            <Region prefHeight="1" style="-fx-background-color: #e8e4c0;" />
+
+            <!-- Liste événements -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: #fefbde; -fx-background: #fefbde; -fx-border-color: transparent;">
+                <VBox spacing="0" style="-fx-background-color: #fefbde;">
+                    <padding><Insets top="22" right="35" bottom="30" left="35" /></padding>
+                    <FlowPane fx:id="evenementsContainer" hgap="20" vgap="20"
+                              style="-fx-background-color: transparent;" />
+                </VBox>
+            </ScrollPane>
+
+        </VBox>
+    </center>
+
+</BorderPane>

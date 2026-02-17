@@ -1,0 +1,118 @@
+/* ═══════════════════════════════════════════════
+   FRONT.FXML — Style des cartes événements
+═══════════════════════════════════════════════ */
+
+/* ScrollPane background transparent */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+/* ── Carte événement principale ── */
+.event-card {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e8e4c0;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 10, 0, 0, 3);
+    -fx-cursor: hand;
+}
+.event-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(73,173,50,0.22), 18, 0, 0, 5);
+    -fx-border-color: #49ad32;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* ── Badge de type ── */
+.type-badge {
+    -fx-background-color: #e8f8e0;
+    -fx-background-radius: 20;
+    -fx-text-fill: #2d8a1a;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+}
+
+/* ── Badge statut actif ── */
+.statut-actif {
+    -fx-background-color: #e8f8e0;
+    -fx-background-radius: 20;
+    -fx-text-fill: #2d8a1a;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+}
+.statut-annule {
+    -fx-background-color: #fde8e8;
+    -fx-background-radius: 20;
+    -fx-text-fill: #c0392b;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+}
+
+/* ── Bouton Participer ── */
+.btn-participer {
+    -fx-background-color: #49ad32;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+    -fx-padding: 8 22;
+}
+.btn-participer:hover {
+    -fx-background-color: #3d9428;
+    -fx-effect: dropshadow(gaussian, rgba(73,173,50,0.35), 8, 0, 0, 2);
+}
+.btn-participer:pressed {
+    -fx-background-color: #2e7a1e;
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+.btn-participer:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #888888;
+    -fx-cursor: default;
+    -fx-opacity: 0.6;
+}
+
+/* ── Bouton Maps ── */
+.btn-maps {
+    -fx-background-color: #4285F4;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+}
+.btn-maps:hover {
+    -fx-background-color: #2a6dd9;
+    -fx-effect: dropshadow(gaussian, rgba(66,133,244,0.35), 8, 0, 0, 2);
+}
+.btn-maps:pressed {
+    -fx-background-color: #1a5bc2;
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+.btn-maps:disabled {
+    -fx-background-color: #aaaaaa;
+    -fx-text-fill: white;
+    -fx-cursor: default;
+    -fx-opacity: 0.6;
+}
+
+/* ── Jauge de remplissage ── */
+.progress-bar {
+    -fx-accent: #49ad32;
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}

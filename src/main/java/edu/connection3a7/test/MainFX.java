@@ -1,6 +1,6 @@
 package edu.connection3a7.test;
 
-import edu.connection3a7.controllers.AjouterPersonne;
+import edu.connection3a7.controllers.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

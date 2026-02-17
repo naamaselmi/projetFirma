@@ -11,6 +11,7 @@ public class Participation {
     private LocalDateTime dateAnnulation;
     private int nombreAccompagnants;
     private String commentaire;
+    private String codeParticipation;
 
     public Participation() {};
 
@@ -89,6 +90,14 @@ public class Participation {
         this.commentaire = commentaire;
     }
 
+    public String getCodeParticipation() {
+        return codeParticipation;
+    }
+
+    public void setCodeParticipation(String codeParticipation) {
+        this.codeParticipation = codeParticipation;
+    }
+
     @Override
     public String toString() {
         return "Participation{" +
@@ -100,6 +109,7 @@ public class Participation {
                 ", dateAnnulation=" + dateAnnulation +
                 ", nombreAccompagnants=" + nombreAccompagnants +
                 ", commentaire='" + commentaire + '\'' +
+                ", codeParticipation='" + codeParticipation + '\'' +
                 '}';
     }
 }
