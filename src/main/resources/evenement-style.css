@@ -71,3 +71,12 @@
 .tab-pane .tab:hover .tab-label {
     -fx-text-fill: #49ad32;
 }
+
+/* ═══════════════════════════════════════════════
+   BOUTONS CARTES ÉVÉNEMENT — États visuels
+═══════════════════════════════════════════════ */
+
+/* ── Carte événement hover ── */
+.tab-pane .tab-content-area .scroll-pane .viewport VBox HBox:hover {
+    -fx-effect: dropshadow(gaussian, rgba(73,173,50,0.12), 6, 0, 0, 2);
+}

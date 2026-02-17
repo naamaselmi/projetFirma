@@ -11,6 +11,7 @@ public enum Type {
     atelier,
     conference,
     salon,
+    formation,
     Formation,
     autre
 }
