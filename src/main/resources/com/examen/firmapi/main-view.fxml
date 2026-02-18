@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.examen.firmapi.controllers.MainController">
+
+  <Label fx:id="welcomeText"
+         layoutX="20"
+         layoutY="20"
+         style="-fx-font-size: 20px;" />
+
+</AnchorPane>

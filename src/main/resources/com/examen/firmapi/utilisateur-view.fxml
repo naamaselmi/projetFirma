@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.examen.firmapi.controllers.UtilisateurController">
+
+    <!-- ================= LEFT SIDEBAR ================= -->
+    <left>
+        <VBox spacing="15"
+              prefWidth="200"
+              style="-fx-background-color: #CEEFAB;"
+              alignment="TOP_CENTER">
+
+            <padding>
+                <Insets top="20" left="10" right="10" bottom="20"/>
+            </padding>
+
+            <!-- ===== LOGO ===== -->
+            <ImageView fx:id="logoImage"
+                       fitWidth="120"
+                       preserveRatio="true"/>
+
+            <!-- ===== MENU ===== -->
+<!--            <Button text="Accueil" style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+<!--            <Button text="Événement" style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+<!--            <Button text="Marketplace" style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+<!--            <Button text="Forum" style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+<!--            <Button text="Technicien" style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+<!--            <Button text="Utilisateur" style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+
+<!--            <VBox VBox.vgrow="ALWAYS"/>-->
+
+<!--            <Button text="Déconnecter"-->
+<!--                    style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+        </VBox>
+    </left>
+
+    <!-- ================= CENTER CONTENT ================= -->
+    <center>
+
+        <AnchorPane style="-fx-background-color: #FFFADE;">
+
+            <VBox spacing="20"
+                  AnchorPane.topAnchor="20"
+                  AnchorPane.bottomAnchor="20"
+                  AnchorPane.leftAnchor="30"
+                  AnchorPane.rightAnchor="30">
+
+                <!-- ===== Title ===== -->
+                <Label text="Gestion des utilisateurs"
+                       style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#2f4f2f;"/>
+
+                <!-- ================= FORM CARD ================= -->
+                <VBox spacing="15"
+                      style="-fx-background-color:white;
+                             -fx-background-radius:12;
+                             -fx-padding:20;">
+
+                    <Label text="Ajouter / Modifier utilisateur"
+                           style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+
+                    <GridPane hgap="15" vgap="15">
+
+                        <!-- Row 1 -->
+                        <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="nomField"
+                                   promptText="Nom"
+                                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Prénom :" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                        <TextField fx:id="prenomField"
+                                   promptText="Prénom"
+                                   GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                        <!-- Row 2 -->
+                        <Label text="Email :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="emailField"
+                                   promptText="Email"
+                                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Téléphone :" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                        <TextField fx:id="telephoneField"
+                                   promptText="Téléphone"
+                                   GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                        <!-- Row 3 -->
+                        <Label text="Adresse :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="adresseField"
+                                   promptText="Adresse"
+                                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="Ville :" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                        <TextField fx:id="villeField"
+                                   promptText="Ville"
+                                   GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+                        <!-- Row 4 -->
+                        <Label text="Code postal :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="codePostalField"
+                                   promptText="Code postal"
+                                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="Rôle :" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+                        <ComboBox fx:id="roleBox"
+                                  promptText="Sélectionner un rôle"
+                                  GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+
+                        <!-- Row 5 -->
+                        <Label text="Mot de passe :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <PasswordField fx:id="passwordField"
+                                       promptText="Mot de passe"
+                                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    </GridPane>
+
+                    <HBox spacing="10">
+                        <Button text="Ajouter"
+                                onAction="#ajouterUtilisateur"
+                                style="-fx-background-color:#2c7be5;
+                                       -fx-text-fill:white;
+                                       -fx-font-weight:bold;
+                                       -fx-background-radius:8;"/>
+
+                        <Button text="Modifier"
+                                onAction="#modifierUtilisateur"
+                                style="-fx-background-color:#f0ad4e;
+                                       -fx-text-fill:white;
+                                       -fx-font-weight:bold;
+                                       -fx-background-radius:8;"/>
+                    </HBox>
+
+                </VBox>
+
+                <!-- ================= TABLE CARD ================= -->
+                <VBox spacing="10"
+                      style="-fx-background-color:white;
+                             -fx-background-radius:12;
+                             -fx-padding:20;">
+
+                    <Label text="Liste des utilisateurs"
+                           style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+
+                    <TableView fx:id="table" prefHeight="300">
+
+                        <columns>
+                            <TableColumn fx:id="colNom" text="Nom" prefWidth="150"/>
+                            <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="150"/>
+                            <TableColumn fx:id="colRole" text="Rôle" prefWidth="120"/>
+                            <TableColumn fx:id="colAction" text="Action" prefWidth="80"/>
+                        </columns>
+
+                    </TableView>
+
+                </VBox>
+
+            </VBox>
+        </AnchorPane>
+    </center>
+
+</BorderPane>

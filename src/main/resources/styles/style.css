@@ -1,0 +1,17 @@
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2f4f2f;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: #ffffff;
+}
+
+.logout-button {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-text-fill: #2f4f2f;
+}
