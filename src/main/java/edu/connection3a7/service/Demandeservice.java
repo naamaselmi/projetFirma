@@ -102,7 +102,7 @@ public class Demandeservice implements IService<Demande> {
         return new ArrayList<>();
     }
 
-    // ================= MÉTHODES MÉTIER =================
+    // ================= MÉTHODES MÉTIER EXISTANTES =================
 
     /**
      * Récupère TOUTES les demandes d'un utilisateur
@@ -172,5 +172,156 @@ public class Demandeservice implements IService<Demande> {
             ps.executeUpdate();
             System.out.println("✅ Statut changé: Demande " + idDemande + " → " + nouveauStatut);
         }
+    }
+
+    // ================= NOUVELLES MÉTHODES POUR AUTO-ASSIGNATION =================
+
+    /**
+     * Récupère les demandes par statut
+     * @param statut Le statut recherché ("En attente", "Acceptée", "Terminée", etc.)
+     * @return Liste des demandes avec ce statut
+     */
+    public List<Demande> getDemandesByStatut(String statut) throws SQLException {
+        List<Demande> list = new ArrayList<>();
+        String sql = "SELECT * FROM demande WHERE statut = ? ORDER BY date_demande DESC";
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setString(1, statut);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Demande d = new Demande(
+                            rs.getInt("id_demande"),
+                            rs.getInt("id_utilisateur"),
+                            rs.getString("type_probleme"),
+                            rs.getString("description"),
+                            rs.getDate("date_demande"),
+                            rs.getString("statut"),
+                            rs.getInt("id_tech")
+                    );
+                    list.add(d);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Compte le nombre de demandes pour un technicien à une date donnée
+     * @param idTech L'ID du technicien
+     * @param date La date (java.sql.Date)
+     * @return Le nombre de demandes ce jour-là
+     */
+    public int compterDemandesParJour(int idTech, Date date) throws SQLException {
+        String sql = "SELECT COUNT(*) as nb FROM demande " +
+                "WHERE id_tech = ? AND date_demande = ? " +
+                "AND statut IN ('Acceptée', 'En attente')";
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, idTech);
+            ps.setDate(2, date);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("nb");
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Compte le nombre de demandes terminées pour un technicien
+     * @param idTech L'ID du technicien
+     * @return Le nombre de demandes terminées
+     */
+    public int compterDemandesTerminees(int idTech) throws SQLException {
+        String sql = "SELECT COUNT(*) as nb FROM demande " +
+                "WHERE id_tech = ? AND statut = 'Terminée'";
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, idTech);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("nb");
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Récupère une demande par son ID
+     * @param idDemande L'ID de la demande
+     * @return La demande trouvée ou null
+     */
+    public Demande getDemandeById(int idDemande) throws SQLException {
+        String sql = "SELECT * FROM demande WHERE id_demande = ?";
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, idDemande);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Demande(
+                            rs.getInt("id_demande"),
+                            rs.getInt("id_utilisateur"),
+                            rs.getString("type_probleme"),
+                            rs.getString("description"),
+                            rs.getDate("date_demande"),
+                            rs.getString("statut"),
+                            rs.getInt("id_tech")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Vérifie si un technicien est disponible pour une date donnée
+     * @param idTech L'ID du technicien
+     * @param date La date
+     * @param capaciteMax Capacité maximale par jour
+     * @return true si disponible
+     */
+    public boolean estDisponible(int idTech, Date date, int capaciteMax) throws SQLException {
+        int nbDemandes = compterDemandesParJour(idTech, date);
+        return nbDemandes < capaciteMax;
+    }
+
+    /**
+     * Récupère les statistiques des demandes par statut
+     * @return Map avec les compteurs par statut
+     */
+    public java.util.Map<String, Integer> getStatistiquesParStatut() throws SQLException {
+        java.util.Map<String, Integer> stats = new java.util.HashMap<>();
+        String sql = "SELECT statut, COUNT(*) as nb FROM demande GROUP BY statut";
+
+        try (Statement st = cnx.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                stats.put(rs.getString("statut"), rs.getInt("nb"));
+            }
+        }
+        return stats;
+    }
+
+    /**
+     * Récupère le nombre total de demandes
+     */
+    public int getTotalDemandes() throws SQLException {
+        String sql = "SELECT COUNT(*) as total FROM demande";
+
+        try (Statement st = cnx.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        }
+        return 0;
     }
 }

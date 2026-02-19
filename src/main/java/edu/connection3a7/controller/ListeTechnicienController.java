@@ -307,6 +307,7 @@ public class ListeTechnicienController implements Initializable {
     private void retournerAListe() {
         System.out.println("🔄 Bouton Retour cliqué - Page actualisée");
         chargerTechniciens();
+
     }
 
     private void afficherDetailsTechnicien(Technicien tech) {

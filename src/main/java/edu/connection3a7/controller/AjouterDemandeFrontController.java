@@ -2,8 +2,10 @@ package edu.connection3a7.controller;
 
 import edu.connection3a7.entities.Demande;
 import edu.connection3a7.entities.Technicien;
+import edu.connection3a7.service.AutoAssignationService;
 import edu.connection3a7.service.Demandeservice;
 import edu.connection3a7.service.Technicienserv;
+import edu.connection3a7.utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -51,13 +53,17 @@ public class AjouterDemandeFrontController implements Initializable {
     // ========== SERVICES ==========
     private final Demandeservice demandeService = new Demandeservice();
     private final Technicienserv technicienService = new Technicienserv();
+    private final AutoAssignationService autoService = new AutoAssignationService(); // NOUVEAU
 
     // ========== VARIABLES SESSION ==========
-    private int idUtilisateurConnecte = 1; // À remplacer par l'ID de session réel
-    private Technicien technicienChoisi = null; // Pour le technicien sélectionné depuis la liste front
+    private int idUtilisateurConnecte;
+    private Technicien technicienChoisi = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Récupérer l'ID de l'utilisateur connecté depuis SessionManager
+        this.idUtilisateurConnecte = SessionManager.getInstance().getIdUtilisateur();
+
         System.out.println("✅ AjouterDemandeFrontController initialisé");
         System.out.println("   Utilisateur connecté ID: " + idUtilisateurConnecte);
 
@@ -92,8 +98,8 @@ public class AjouterDemandeFrontController implements Initializable {
     private void initialiserComboBoxes() {
         // Types de problèmes
         ObservableList<String> typesProblemes = FXCollections.observableArrayList(
-                "Matériel", "Logiciel", "Réseau", "Installation",
-                "Dépannage", "Maintenance", "Autre"
+                "Réseau", "Logiciel", "Installation", "Maintenance",
+                "Matériel", "Dépannage", "Autre"
         );
         comboTypeProbleme.setItems(typesProblemes);
 
@@ -208,6 +214,7 @@ public class AjouterDemandeFrontController implements Initializable {
      */
     private void setDateAujourdhui() {
         txtDate.setText(LocalDate.now().toString());
+        txtDate.setEditable(false);
     }
 
     /**
@@ -217,7 +224,6 @@ public class AjouterDemandeFrontController implements Initializable {
         try {
             ObservableList<Technicien> techniciens = FXCollections.observableArrayList();
             for (Technicien t : technicienService.getdata()) {
-                // On garde tous les techniciens, mais on peut filtrer si besoin
                 techniciens.add(t);
             }
             comboTechniciens.setItems(techniciens);
@@ -247,11 +253,9 @@ public class AjouterDemandeFrontController implements Initializable {
         }
     }
 
-    /**
-     * Soumettre une demande
-     */
+    // ========== VERSION 1: SOUMISSION MANUELLE (technicien choisi) ==========
     @FXML
-    private void soumettreDemande() {
+    private void soumettreDemandeManuelle() {
         // Validation
         Technicien tech = comboTechniciens.getValue();
         String type = comboTypeProbleme.getValue();
@@ -292,6 +296,97 @@ public class AjouterDemandeFrontController implements Initializable {
                     "✅ Demande envoyée avec succès au technicien " + tech.getPrenom() + " " + tech.getNom());
 
             // Réinitialiser
+            annuler();
+            chargerMesDemandes();
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'envoi: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // ========== VERSION 2: SOUMISSION AVEC AUTO-ASSIGNATION ==========
+    @FXML
+    private void soumettreDemandeAuto() {
+        String type = comboTypeProbleme.getValue();
+        String description = txtDescription.getText();
+
+        if (type == null || type.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner le type de problème");
+            return;
+        }
+
+        if (description == null || description.trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez décrire votre problème");
+            return;
+        }
+
+        if (description.length() < 10) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "La description doit contenir au moins 10 caractères");
+            return;
+        }
+
+        try {
+            // 1. Créer la demande
+            Demande nouvelleDemande = new Demande();
+            nouvelleDemande.setIdUtilisateur(idUtilisateurConnecte);
+            nouvelleDemande.setTypeProbleme(type);
+            nouvelleDemande.setDescription(description);
+            nouvelleDemande.setDateDemande(Date.valueOf(LocalDate.now()));
+            nouvelleDemande.setStatut("En attente");
+
+            // 2. AUTO-ASSIGNATION AUTOMATIQUE
+            System.out.println("\n🚀 AUTO-ASSIGNATION EN COURS...");
+            var meilleur = autoService.trouverMeilleurTechnicien(nouvelleDemande);
+
+            StringBuilder message = new StringBuilder();
+
+            if (meilleur != null && meilleur.getScore() >= 50) {
+                // Assigner au meilleur technicien
+                nouvelleDemande.setIdTech(meilleur.getTechnicien().getId_tech());
+                nouvelleDemande.setStatut("Acceptée");
+
+                // Sauvegarder
+                demandeService.addentitiy(nouvelleDemande);
+
+                message.append("✅ Demande acceptée !\n\n")
+                        .append("👨‍🔧 Technicien: ").append(meilleur.getTechnicien().getPrenom())
+                        .append(" ").append(meilleur.getTechnicien().getNom()).append("\n")
+                        .append("📊 Score: ").append(String.format("%.1f", meilleur.getScore())).append("/100\n")
+                        .append("🔧 Spécialité: ").append(meilleur.getTechnicien().getSpecialite()).append("\n\n")
+                        .append("Il vous contactera sous 24h.");
+
+                System.out.println("✅ Assigné à " + meilleur.getTechnicien().getNom());
+
+            } else {
+                // Pas de technicien disponible ou score trop faible
+                nouvelleDemande.setStatut("En attente");
+                demandeService.addentitiy(nouvelleDemande);
+
+                message.append("⏳ Demande enregistrée.\n\n")
+                        .append("Aucun technicien n'est disponible actuellement.\n")
+                        .append("Votre demande a été mise en attente. Un technicien vous contactera dès que possible.");
+
+                System.out.println("⏳ Demande mise en attente - aucun technicien disponible");
+            }
+
+            // Afficher le résultat
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Résultat de la demande");
+            alert.setHeaderText(null);
+            alert.setContentText(message.toString());
+
+            // Ajouter une zone de texte détaillée si disponible
+            if (meilleur != null) {
+                TextArea textArea = new TextArea(meilleur.getDetailsString());
+                textArea.setEditable(false);
+                textArea.setPrefHeight(150);
+                alert.getDialogPane().setExpandableContent(textArea);
+            }
+
+            alert.showAndWait();
+
+            // Réinitialiser le formulaire
             annuler();
             chargerMesDemandes();
 
@@ -353,9 +448,6 @@ public class AjouterDemandeFrontController implements Initializable {
     }
 
     /**
-     * Déconnexion
-     */
-    /**
      * Retourne vers la liste des techniciens FRONT
      */
     @FXML
@@ -363,13 +455,8 @@ public class AjouterDemandeFrontController implements Initializable {
         try {
             System.out.println("🔄 Retour vers la liste FRONT");
 
-            // Chemin vers la liste des techniciens front
-            URL fxmlUrl = getClass().getResource("/ListeDesTechniciensfront.fxml");
+            URL fxmlUrl = getClass().getResource("/uploads/ListeDesTechniciensfront.fxml");
 
-            // Si non trouvé à la racine, essayer dans /uploads/
-            if (fxmlUrl == null) {
-                fxmlUrl = getClass().getResource("/uploads/ListeDesTechniciensfront.fxml");
-            }
 
             if (fxmlUrl == null) {
                 showAlert(Alert.AlertType.ERROR, "Erreur",
@@ -389,6 +476,10 @@ public class AjouterDemandeFrontController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner: " + e.getMessage());
         }
     }
+
+    /**
+     * Déconnexion
+     */
     @FXML
     private void deconnecter() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
@@ -410,26 +501,6 @@ public class AjouterDemandeFrontController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    /**
-     * Retour à la liste des techniciens
-     */
-    @FXML
-    private void retourListeTechniciens() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/uploads/ListeDesTechniciensfront.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) comboTechniciens.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Liste des techniciens");
-            stage.show();
-
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner à la liste");
-            e.printStackTrace();
         }
     }
 
