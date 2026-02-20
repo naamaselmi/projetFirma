@@ -1,10 +1,9 @@
 package edu.connection3a7.controller;
 
-import edu.connection3a7.entities.Avis;
 import edu.connection3a7.entities.Technicien;
 import edu.connection3a7.service.Avisservice;
 import edu.connection3a7.service.Technicienserv;
-import edu.connection3a7.utils.SessionManager;
+import edu.connection3a7.tools.SessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ListeDesTechniciensfront implements Initializable {

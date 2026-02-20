@@ -2,10 +2,9 @@ package edu.connection3a7.controller;
 
 import edu.connection3a7.entities.Demande;
 import edu.connection3a7.entities.Technicien;
-import edu.connection3a7.service.AutoAssignationService;
-import edu.connection3a7.service.Demandeservice;
-import edu.connection3a7.service.Technicienserv;
-import edu.connection3a7.utils.SessionManager;
+import edu.connection3a7.service.*;
+import edu.connection3a7.tools.MyConnection;
+import edu.connection3a7.tools.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,8 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -49,11 +47,18 @@ public class AjouterDemandeFrontController implements Initializable {
     @FXML private Button btnActualiser;
     @FXML private Button btnVoirDetails;
     @FXML private Button btnDeconnexion;
+    @FXML private Button btnSoumettreManuel;
+    @FXML private Button btnAutoAssigner;
 
     // ========== SERVICES ==========
     private final Demandeservice demandeService = new Demandeservice();
     private final Technicienserv technicienService = new Technicienserv();
-    private final AutoAssignationService autoService = new AutoAssignationService(); // NOUVEAU
+    private final AutoAssignationService autoService = new AutoAssignationService();
+    private final NotificationService notificationService = new NotificationService();
+    private final EmailService emailService = new EmailService();
+
+    // ========== CONNEXION BASE DE DONNÉES ==========
+    private Connection cnx;
 
     // ========== VARIABLES SESSION ==========
     private int idUtilisateurConnecte;
@@ -61,11 +66,15 @@ public class AjouterDemandeFrontController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Initialiser la connexion à la base de données
+        this.cnx = MyConnection.getInstance().getCnx();
+
         // Récupérer l'ID de l'utilisateur connecté depuis SessionManager
         this.idUtilisateurConnecte = SessionManager.getInstance().getIdUtilisateur();
 
         System.out.println("✅ AjouterDemandeFrontController initialisé");
         System.out.println("   Utilisateur connecté ID: " + idUtilisateurConnecte);
+        System.out.println("   📧 Service email activé");
 
         // Initialisation des composants
         initialiserComboBoxes();
@@ -150,7 +159,8 @@ public class AjouterDemandeFrontController implements Initializable {
                 "🔧 Spécialité: " + tech.getSpecialite() +
                         " | 📞 Tél: " + (tech.getTelephone() != null ? tech.getTelephone() : "Non renseigné") +
                         " | 📍 " + (tech.getLocalisation() != null ? tech.getLocalisation() : "Non renseignée") +
-                        " | " + dispo
+                        " | " + dispo +
+                        " | 📧 Email: " + tech.getEmail()
         );
     }
 
@@ -253,7 +263,49 @@ public class AjouterDemandeFrontController implements Initializable {
         }
     }
 
-    // ========== VERSION 1: SOUMISSION MANUELLE (technicien choisi) ==========
+    // ========== RÉCUPÉRATION DE L'EMAIL DU CLIENT ==========
+
+    /**
+     * Récupère l'email du client connecté depuis la base de données
+     * @return L'email du client ou un email par défaut
+     */
+    private String getEmailClient() {
+        // Vérifier que la connexion est initialisée
+        if (cnx == null) {
+            cnx = MyConnection.getInstance().getCnx();
+        }
+
+        try {
+            String sql = "SELECT email FROM utilisateur WHERE id_utilisateur = ?";
+            PreparedStatement ps = cnx.prepareStatement(sql);
+            ps.setInt(1, idUtilisateurConnecte);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String email = rs.getString("email");
+                System.out.println("📧 Email client récupéré: " + email);
+                rs.close();
+                ps.close();
+                return email;
+            } else {
+                System.out.println("⚠️ Aucun email trouvé pour l'utilisateur " + idUtilisateurConnecte);
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur lors de la récupération de l'email: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Email par défaut si la requête échoue
+        System.out.println("📧 Utilisation de l'email par défaut: molkaajengui@gmail.com");
+        return "molkaajengui@gmail.com";
+    }
+
+    // ========== SOUMISSION MANUELLE ==========
+
     @FXML
     private void soumettreDemandeManuelle() {
         // Validation
@@ -292,8 +344,14 @@ public class AjouterDemandeFrontController implements Initializable {
 
             demandeService.addentitiy(demande);
 
+            // 🔥 ENVOI DES EMAILS AUTOMATIQUES
+            String emailClient = getEmailClient();
+            notificationService.envoyerConfirmationClient(demande, emailClient);
+            notificationService.envoyerNotificationTechnicien(tech, demande);
+
             showAlert(Alert.AlertType.INFORMATION, "Succès",
-                    "✅ Demande envoyée avec succès au technicien " + tech.getPrenom() + " " + tech.getNom());
+                    "✅ Demande envoyée avec succès au technicien " + tech.getPrenom() + " " + tech.getNom() +
+                            "\n📧 Un email de confirmation vous a été envoyé à: " + emailClient);
 
             // Réinitialiser
             annuler();
@@ -305,7 +363,8 @@ public class AjouterDemandeFrontController implements Initializable {
         }
     }
 
-    // ========== VERSION 2: SOUMISSION AVEC AUTO-ASSIGNATION ==========
+    // ========== SOUMISSION AVEC AUTO-ASSIGNATION ==========
+
     @FXML
     private void soumettreDemandeAuto() {
         String type = comboTypeProbleme.getValue();
@@ -335,7 +394,7 @@ public class AjouterDemandeFrontController implements Initializable {
             nouvelleDemande.setDateDemande(Date.valueOf(LocalDate.now()));
             nouvelleDemande.setStatut("En attente");
 
-            // 2. AUTO-ASSIGNATION AUTOMATIQUE
+            // 2. AUTO-ASSIGNATION
             System.out.println("\n🚀 AUTO-ASSIGNATION EN COURS...");
             var meilleur = autoService.trouverMeilleurTechnicien(nouvelleDemande);
 
@@ -343,31 +402,48 @@ public class AjouterDemandeFrontController implements Initializable {
 
             if (meilleur != null && meilleur.getScore() >= 50) {
                 // Assigner au meilleur technicien
-                nouvelleDemande.setIdTech(meilleur.getTechnicien().getId_tech());
+                Technicien techChoisi = meilleur.getTechnicien();
+                nouvelleDemande.setIdTech(techChoisi.getId_tech());
                 nouvelleDemande.setStatut("Acceptée");
 
                 // Sauvegarder
                 demandeService.addentitiy(nouvelleDemande);
 
-                message.append("✅ Demande acceptée !\n\n")
-                        .append("👨‍🔧 Technicien: ").append(meilleur.getTechnicien().getPrenom())
-                        .append(" ").append(meilleur.getTechnicien().getNom()).append("\n")
-                        .append("📊 Score: ").append(String.format("%.1f", meilleur.getScore())).append("/100\n")
-                        .append("🔧 Spécialité: ").append(meilleur.getTechnicien().getSpecialite()).append("\n\n")
-                        .append("Il vous contactera sous 24h.");
+                // 🔥 ENVOI DES EMAILS AUTOMATIQUES
+                String emailClient = getEmailClient();
+                notificationService.envoyerConfirmationClient(nouvelleDemande, emailClient);
+                notificationService.envoyerNotificationTechnicien(techChoisi, nouvelleDemande);
 
-                System.out.println("✅ Assigné à " + meilleur.getTechnicien().getNom());
+                message.append("✅ Demande acceptée !\n\n")
+                        .append("👨‍🔧 Technicien: ").append(techChoisi.getPrenom())
+                        .append(" ").append(techChoisi.getNom()).append("\n")
+                        .append("📊 Score: ").append(String.format("%.1f", meilleur.getScore())).append("/100\n")
+                        .append("🔧 Spécialité: ").append(techChoisi.getSpecialite()).append("\n\n")
+                        .append("📧 Un email de confirmation vous a été envoyé à: ").append(emailClient).append("\n")
+                        .append("Le technicien a également été notifié.");
+
+                System.out.println("✅ Assigné à " + techChoisi.getNom());
+                System.out.println("📧 Emails envoyés - Client et technicien notifiés");
 
             } else {
-                // Pas de technicien disponible ou score trop faible
+                // Pas de technicien disponible
                 nouvelleDemande.setStatut("En attente");
                 demandeService.addentitiy(nouvelleDemande);
 
+                // 🔥 ENVOI EMAIL D'ATTENTE AU CLIENT
+                String emailClient = getEmailClient();
+                emailService.envoyerEmail(
+                        emailClient,
+                        "⏳ Demande en attente - FIRMA",
+                        "Bonjour,\n\nVotre demande a été enregistrée mais aucun technicien n'est disponible pour le moment.\n\n" +
+                                "Vous recevrez une notification dès qu'un technicien sera assigné.\n\nCordialement,\nL'équipe FIRMA"
+                );
+
                 message.append("⏳ Demande enregistrée.\n\n")
                         .append("Aucun technicien n'est disponible actuellement.\n")
-                        .append("Votre demande a été mise en attente. Un technicien vous contactera dès que possible.");
+                        .append("Votre demande a été mise en attente. Vous recevrez un email dès qu'un technicien sera disponible.");
 
-                System.out.println("⏳ Demande mise en attente - aucun technicien disponible");
+                System.out.println("⏳ Demande mise en attente - email envoyé au client");
             }
 
             // Afficher le résultat
@@ -456,7 +532,6 @@ public class AjouterDemandeFrontController implements Initializable {
             System.out.println("🔄 Retour vers la liste FRONT");
 
             URL fxmlUrl = getClass().getResource("/uploads/ListeDesTechniciensfront.fxml");
-
 
             if (fxmlUrl == null) {
                 showAlert(Alert.AlertType.ERROR, "Erreur",

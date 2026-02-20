@@ -35,12 +35,15 @@
             <artifactId>javafx-fxml</artifactId>
             <version>21.0.4</version>
         </dependency>
+
+        <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -48,7 +51,16 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- 🔥 NOUVEAU : JavaMail API pour envoyer des emails -->
+        <!-- Source: https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -56,13 +68,10 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <!-- Remplace par ta classe principale -->
                     <mainClass>edu.connection3a7.test.Mainfx</mainClass>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>

@@ -2,7 +2,7 @@ package edu.connection3a7.controller;
 
 import edu.connection3a7.entities.Avis;
 import edu.connection3a7.service.Avisservice;
-import edu.connection3a7.utils.SessionManager;
+import edu.connection3a7.tools.SessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
