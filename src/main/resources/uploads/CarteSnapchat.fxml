@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.connection3a7.controller.CarteSnapchatController"
+      prefWidth="900" prefHeight="700">
+
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="📍 Carte des techniciens"
+               style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1a961e;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblStatut"
+               style="-fx-background-color: #f0f0f0; -fx-padding: 5 15; -fx-background-radius: 20;"/>
+        <Button text="🌍 Actualiser" onAction="#actualiser"
+                style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-background-radius: 20;"/>
+    </HBox>
+
+    <WebView fx:id="webView" VBox.vgrow="ALWAYS" prefHeight="600"/>
+
+    <HBox alignment="CENTER">
+        <ToggleButton fx:id="btnPartagerPosition"
+                      text="🌍 Partager ma position"
+                      style="-fx-background-color: #1a961e; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 25; -fx-padding: 10 20;"/>
+    </HBox>
+
+    <Label text="💡 Activez le partage pour apparaître sur la carte (comme Snapchat)"
+           style="-fx-text-fill: gray; -fx-font-size: 11; -fx-alignment: center;"/>
+
+</VBox>

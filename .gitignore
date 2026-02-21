@@ -1,3 +1,4 @@
+### EXISTANT - À GARDER ###
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -36,3 +37,60 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### ===== NOUVELLES LIGNES À AJOUTER ===== ###
+
+### 🔥 FICHIERS DE CONFIGURATION (NE PAS PUSHER) ###
+# Fichiers de propriétés avec secrets
+config.properties
+application.properties
+*.properties
+!*.properties.example
+!*.properties.sample
+
+### 🔥 FICHIERS DE CLÉS ET CERTIFICATS ###
+*.key
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.cert
+*.crt
+*.pem
+
+### 🔥 FICHIERS DE LOGS ###
+*.log
+*.log.*
+logs/
+
+### 🔥 FICHIERS TEMPORAIRES ###
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+### 🔥 DOSSIERS DE CACHE ###
+.mvn/
+.m2/
+.h2.db
+.trace.db
+
+### 🔥 FICHIERS DE BASE DE DONNÉES LOCALES ###
+*.db
+*.sqlite
+*.sqlite3
+*.mdb
+
+### 🔥 FICHIERS SPÉCIFIQUES À VOTRE PROJET ###
+# Configuration avec secrets
+src/main/resources/config.properties
+src/main/resources/application.properties
+!src/main/resources/config.properties.example
+!src/main/resources/application.properties.example
+
+### 🔥 RAPPEL - PROTÉGER CES FICHIERS ###
+# Ces fichiers ne doivent JAMAIS être commités :
+# - config.properties (contient mots de passe)
+# - *.key (clés privées)
+# - *.log (logs avec données sensibles)

@@ -1,0 +1,16 @@
+# ⚠️ MODÈLE DE CONFIGURATION - NE METTEZ PAS DE VRAIS MOTS DE PASSE ICI
+# Copiez ce fichier vers config.properties et remplissez avec vos vraies données
+
+# === BASE DE DONNÉES ===
+db.url=jdbc:mysql://localhost:3306/ma_base
+db.username=root
+db.password=123456
+
+# === EMAIL ===
+email.host=smtp.gmail.com
+email.port=587
+email.username=votre.email@gmail.com
+email.password=votre-mot-de-passe-app
+
+# === GOOGLE MAPS ===
+google.maps.api.key=VOTRE_CLE_API_ICI

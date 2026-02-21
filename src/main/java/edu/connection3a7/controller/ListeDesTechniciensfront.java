@@ -36,6 +36,8 @@ public class ListeDesTechniciensfront implements Initializable {
     @FXML private Button btnCreerDemande;
     @FXML private Label lblInfo;
     @FXML private Button btnRetour;
+    @FXML private Button btnTestCarte;
+
 
     private Technicienserv technicienService = new Technicienserv();
     private Avisservice avisService = new Avisservice();
@@ -498,7 +500,19 @@ public class ListeDesTechniciensfront implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'afficher les avis");
         }
     }
-
+    @FXML
+    private void ouvrirCarte() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/uploads/CarteSnapchat.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("🗺️ Carte des techniciens");
+            stage.setScene(new Scene(root, 900, 700));
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la carte: " + e.getMessage());
+        }
+    }
     @FXML
     private void creerDemande() {
         if (technicienSelectionne == null) {

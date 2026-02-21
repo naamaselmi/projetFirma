@@ -44,7 +44,6 @@
                     <padding><Insets left="15.0"/></padding>
                 </Button>
 
-
                 <Button onAction="#retournerVersBack"
                         text="📋  Liste Techniciens"
                         style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand;"
@@ -82,15 +81,28 @@
                             </children>
                         </HBox>
 
-                        <!-- BARRE DE RECHERCHE -->
+                        <!-- BARRE DE RECHERCHE AVEC BOUTONS -->
                         <HBox spacing="15.0" alignment="CENTER_LEFT">
                             <children>
                                 <Label text="🔍 Recherche :" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
                                 <TextField fx:id="searchField" promptText="Nom, prénom ou spécialité..."
                                            HBox.hgrow="ALWAYS" prefHeight="40.0"
                                            style="-fx-background-radius: 25; -fx-padding: 0 20; -fx-font-size: 14; -fx-border-color: #ccc; -fx-border-radius: 25;"/>
+
+                                <!-- Bouton Actualiser (vert) -->
                                 <Button fx:id="refreshButton" text="🔄 Actualiser"
                                         style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20;"/>
+
+                                <!-- 🔥 NOUVEAU BOUTON TEST CARTE (bleu) -->
+                                <Button fx:id="btnTestCarte"
+                                        text="🗺️ Tester carte"
+                                        onAction="#ouvrirCarte"
+                                        style="-fx-background-color: #3498db;
+                                               -fx-text-fill: white;
+                                               -fx-font-weight: bold;
+                                               -fx-background-radius: 25;
+                                               -fx-cursor: hand;
+                                               -fx-padding: 8 20;"/>
                             </children>
                         </HBox>
 

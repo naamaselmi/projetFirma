@@ -56,4 +56,10 @@ public class SessionManager {
         technicienConnecte = null;
         role = null;
     }
+    public int getIdTechnicien() {
+        if (technicienConnecte != null) {
+            return technicienConnecte.getId_tech(); // ou getIdTechnicien() selon ta classe
+        }
+        return 0; // ou -1 si tu préfères
+    }
 }
