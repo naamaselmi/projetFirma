@@ -2,6 +2,7 @@ package edu.connection3a7.service;
 
 import edu.connection3a7.entities.Technicien;
 import edu.connection3a7.tools.MyConnection;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,8 +16,7 @@ public class LocalisationTechnicienService {
         this.cnx = MyConnection.getInstance().getCnx();
     }
 
-    // ========== CLASSE POUR LA POSITION ==========
-
+    // ===================== Classe interne PositionTechnicien =====================
     public static class PositionTechnicien {
         private Technicien technicien;
         private double latitude;
@@ -28,20 +28,19 @@ public class LocalisationTechnicienService {
             this.technicien = technicien;
         }
 
+        // Actif si partage activé ET coordonnées valides
         public boolean estActif() {
-            if (!partageActif) return false;
-            if (derniereMaj == null) return false;
-            // ✅ Augmenté à 30 minutes
-            return derniereMaj.isAfter(LocalDateTime.now().minusMinutes(30));
+            return partageActif && latitude != 0.0 && longitude != 0.0;
         }
 
+        // Statut affiché côté front
         public String getStatut() {
-            if (!partageActif) return "🔴 Hors ligne";
-            if (!estActif()) return "🟡 Inactif";
-            return "🟢 En ligne";
+            if (!partageActif) return "Hors ligne";
+            if (latitude == 0.0 && longitude == 0.0) return "Position inconnue";
+            return "En ligne";
         }
 
-        // Getters et setters
+        // ===== Getters / Setters =====
         public Technicien getTechnicien() { return technicien; }
         public double getLatitude() { return latitude; }
         public void setLatitude(double latitude) { this.latitude = latitude; }
@@ -53,45 +52,41 @@ public class LocalisationTechnicienService {
         public void setDerniereMaj(LocalDateTime derniereMaj) { this.derniereMaj = derniereMaj; }
     }
 
-    // ========== MÉTHODES ==========
-
+    // ===================== Activer / Désactiver le partage =====================
     public void activerPartage(int idTech, boolean actif) {
         String sql = "UPDATE technicien SET partage_position = ?, derniere_maj_position = ? WHERE id_tech = ?";
-
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setBoolean(1, actif);
             ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(3, idTech);
             ps.executeUpdate();
-            System.out.println("📍 Technicien " + idTech + " partage: " + (actif ? "ACTIVÉ" : "DÉSACTIVÉ"));
+            System.out.println("Technicien " + idTech + " partage: " + (actif ? "ACTIVE" : "DESACTIVE"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    // ===================== Mettre à jour la position =====================
     public void mettreAJourPosition(int idTech, double latitude, double longitude) {
         String sql = "UPDATE technicien SET latitude = ?, longitude = ?, derniere_maj_position = ? WHERE id_tech = ?";
-
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setDouble(1, latitude);
             ps.setDouble(2, longitude);
             ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(4, idTech);
             ps.executeUpdate();
-            System.out.println("📍 Position mise à jour pour technicien " + idTech);
+            System.out.println("Position mise à jour pour technicien " + idTech);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<PositionTechnicien> getTechniciensAvecPosition() throws SQLException {
+    // ===================== Récupérer les techniciens avec position =====================
+    public List<PositionTechnicien> getTechniciensAvecPosition() {
         List<PositionTechnicien> positions = new ArrayList<>();
+        System.out.println("\nRECHERCHE DES TECHNICIENS EN LIGNE...");
 
-        // ✅ Modifié : 30 minutes au lieu de 5
-        String sql = "SELECT * FROM technicien WHERE partage_position = TRUE " +
-                "AND derniere_maj_position > DATE_SUB(NOW(), INTERVAL 30 MINUTE)";
-
-        System.out.println("🔍 SQL: " + sql);
+        String sql = "SELECT * FROM technicien"; // On récupère tous les techniciens
 
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -107,28 +102,27 @@ public class LocalisationTechnicienService {
                 pos.setLatitude(rs.getDouble("latitude"));
                 pos.setLongitude(rs.getDouble("longitude"));
                 pos.setPartageActif(rs.getBoolean("partage_position"));
-                pos.setDerniereMaj(rs.getTimestamp("derniere_maj_position").toLocalDateTime());
 
-                positions.add(pos);
-                System.out.println("✅ Technicien trouvé: " + t.getPrenom() + " " + t.getNom());
+                Timestamp ts = rs.getTimestamp("derniere_maj_position");
+                if (ts != null) {
+                    pos.setDerniereMaj(ts.toLocalDateTime());
+                }
+
+                // 🔹 Filtrage côté Java pour ne garder que les techniciens actifs avec position valide
+                if (pos.estActif()) {
+                    positions.add(pos);
+                    System.out.println("Technicien actif: " + t.getPrenom() + " " + t.getNom()
+                            + " | LAT=" + pos.getLatitude() + " | LNG=" + pos.getLongitude());
+                }
             }
-        }
 
-        System.out.println("📍 Total techniciens en ligne: " + positions.size());
-        return positions;
-    }
+            System.out.println("TOTAL: " + positions.size() + " technicien(s) visibles sur la carte");
 
-    public void nettoyerPositionsExpirees() {
-        String sql = "UPDATE technicien SET partage_position = FALSE " +
-                "WHERE derniere_maj_position < DATE_SUB(NOW(), INTERVAL 30 MINUTE)";
-
-        try (Statement st = cnx.createStatement()) {
-            int rows = st.executeUpdate(sql);
-            if (rows > 0) {
-                System.out.println("🧹 " + rows + " position(s) expirée(s) nettoyée(s)");
-            }
         } catch (SQLException e) {
+            System.out.println("ERREUR SQL: " + e.getMessage());
             e.printStackTrace();
         }
+
+        return positions;
     }
 }

@@ -520,10 +520,18 @@ public class ListeDesTechniciensfront implements Initializable {
         }
     }
     @FXML
+
     private void ouvrirCarte() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/uploads/CarteSnapchat.fxml"));
             Parent root = loader.load();
+
+            // ✅ Passer l'ID du technicien sélectionné
+            CarteSnapchatController carteController = loader.getController();
+            if (technicienSelectionne != null) {
+                carteController.setIdTechnicien(technicienSelectionne.getId_tech());
+            }
+
             Stage stage = new Stage();
             stage.setTitle("🗺️ Carte des techniciens");
             stage.setScene(new Scene(root, 900, 700));

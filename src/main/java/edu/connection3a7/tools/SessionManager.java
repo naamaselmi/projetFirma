@@ -27,10 +27,9 @@ public class SessionManager {
     // Pour un technicien
     public void setTechnicienConnecte(Technicien tech) {
         this.technicienConnecte = tech;
-        this.idUtilisateurConnecte = tech.getId_utilisateur();
+        this.idUtilisateurConnecte = tech.getId_tech(); // IMPORTANT
         this.role = "technicien";
     }
-
     public Integer getIdUtilisateur() {
         return idUtilisateurConnecte;
     }

@@ -22,6 +22,7 @@ public class CarteSnapchatController {
 
         webView.getEngine().setOnAlert(e ->
                 System.out.println("JS ALERT: " + e.getData())
+
         );
 
         webView.getEngine().getLoadWorker().exceptionProperty()
@@ -38,8 +39,14 @@ public class CarteSnapchatController {
         System.out.println("🗺️ Initialisation de la carte OpenStreetMap");
 
         verifierStatutPartage();
+
         chargerCarte();
         btnPartagerPosition.setOnAction(e -> togglePartage());
+    }
+    public void setIdTechnicien(int id) {
+        this.idTechnicienConnecte = id;
+        System.out.println("ID technicien recu: " + id);
+        verifierStatutPartage();
     }
 
     private void verifierStatutPartage() {
@@ -109,12 +116,19 @@ public class CarteSnapchatController {
             );
 
             markers.append(String.format("""
-                var marker = L.marker([%f, %f], {icon: L.icon({iconUrl: '%s', iconSize: [25, 41]})}).addTo(map);
-                marker.bindPopup('%s');
-                """,
-                    pos.getLatitude(), pos.getLongitude(),
+    var marker = L.marker([%f, %f], {
+        icon: L.icon({
+            iconUrl: '%s',
+            iconSize: [25, 41]
+        })
+    }).addTo(map);
+
+    marker.bindPopup("%s");
+    """,
+                    pos.getLatitude(),
+                    pos.getLongitude(),
                     icone,
-                    info
+                    info.replace("\"", "\\\"")
             ));
         }
 
