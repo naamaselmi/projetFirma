@@ -1,6 +1,7 @@
 package edu.connection3a7.controller;
 
 import edu.connection3a7.entities.Technicien;
+import edu.connection3a7.service.LocalisationTechnicienService;
 import edu.connection3a7.service.Technicienserv;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,6 +37,7 @@ public class ListeTechnicienController implements Initializable {
     @FXML private Label lblInfo;
     @FXML private Button btnGererDemandes;
     @FXML private Button btnRetour;
+    @FXML private Button btnActiverPosition;
 
     private Technicienserv service = new Technicienserv();
     private static final String IMAGE_PATH = "src/main/resources/images/";
@@ -56,7 +58,72 @@ public class ListeTechnicienController implements Initializable {
             btnRetour.setOnAction(e -> retournerAListe());
         }
 
+        if (btnActiverPosition != null) {
+            btnActiverPosition.setOnAction(e -> activerPosition());
+        }
+
         searchField.textProperty().addListener((obs, oldVal, newVal) -> filtrerTechniciens(newVal));
+    }
+
+    /**
+     * Active la position d'un technicien sur la carte
+     */
+    @FXML
+    private void activerPosition() {
+        try {
+            // Demander l'ID du technicien
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("📍 Activation de position");
+            dialog.setHeaderText("Activer votre position sur la carte");
+            dialog.setContentText("Entrez votre ID de technicien:");
+
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                String input = result.get();
+                if (input.isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez entrer un ID");
+                    return;
+                }
+
+                int idTech = Integer.parseInt(input);
+
+                // ✅ CORRECTION ICI : Appel sur l'instance, pas sur la classe
+                Technicien tech = service.getTechnicienById(idTech);
+
+                if (tech == null) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Technicien introuvable avec l'ID " + idTech);
+                    return;
+                }
+
+                // Activer le partage de position
+                LocalisationTechnicienService locService = new LocalisationTechnicienService();
+                locService.activerPartage(idTech, true);
+
+                // Position par défaut (Tunis)
+                locService.mettreAJourPosition(idTech, 36.8065, 10.1815);
+
+                // Message de confirmation
+                Alert confirm = new Alert(Alert.AlertType.INFORMATION);
+                confirm.setTitle("✅ Succès");
+                confirm.setHeaderText("Position activée !");
+                confirm.setContentText("Technicien: " + tech.getPrenom() + " " + tech.getNom() +
+                        "\nID: " + idTech +
+                        "\n\nVous apparaissez maintenant sur la carte.");
+                confirm.showAndWait();
+
+                System.out.println("📍 Position activée pour " + tech.getPrenom() + " " + tech.getNom());
+            }
+
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "L'ID doit être un nombre");
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur SQL", e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void chargerTechniciens() {
@@ -307,7 +374,6 @@ public class ListeTechnicienController implements Initializable {
     private void retournerAListe() {
         System.out.println("🔄 Bouton Retour cliqué - Page actualisée");
         chargerTechniciens();
-
     }
 
     private void afficherDetailsTechnicien(Technicien tech) {
@@ -396,7 +462,9 @@ public class ListeTechnicienController implements Initializable {
         Label dispoLabel = new Label(tech.isDisponibilite() ? "✅ Disponible" : "❌ Non disponible");
         dispoLabel.setStyle(tech.isDisponibilite() ? "-fx-text-fill: green; -fx-font-weight: bold;" : "-fx-text-fill: red; -fx-font-weight: bold;");
         grid.add(new Label("📊 Disponibilité :"), 0, row);
-        grid.add(dispoLabel, 1, row);
+        grid.add(dispoLabel, 1, row++);
+
+        root.getChildren().add(grid);
 
         Button fermerBtn = new Button("FERMER");
         fermerBtn.setStyle(
@@ -410,7 +478,10 @@ public class ListeTechnicienController implements Initializable {
         );
         fermerBtn.setOnAction(e -> popupStage.close());
 
-        root.getChildren().addAll(grid, fermerBtn);
+        HBox buttonBox = new HBox();
+        buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
+        buttonBox.getChildren().add(fermerBtn);
+        root.getChildren().add(buttonBox);
 
         Scene scene = new Scene(root, 500, 600);
         popupStage.setScene(scene);
@@ -471,7 +542,6 @@ public class ListeTechnicienController implements Initializable {
     private void ouvrirAjoutTechnicien() {
         try {
             System.out.println("🔄 Ouverture du formulaire d'ajout");
-            System.out.println("🔍 Test: La méthode est appelée !");
 
             URL fxmlUrl = getClass().getResource("/AjouterTechnicien.fxml");
 

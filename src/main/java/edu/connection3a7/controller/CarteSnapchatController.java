@@ -19,6 +19,19 @@ public class CarteSnapchatController {
 
     @FXML
     public void initialize() {
+
+        webView.getEngine().setOnAlert(e ->
+                System.out.println("JS ALERT: " + e.getData())
+        );
+
+        webView.getEngine().getLoadWorker().exceptionProperty()
+                .addListener((obs, oldEx, ex) -> {
+                    if (ex != null) {
+                        System.out.println("WEBVIEW ERROR:");
+                        ex.printStackTrace();
+                    }
+                });
+
         locService = new LocalisationTechnicienService();
         idTechnicienConnecte = SessionManager.getInstance().getIdTechnicien();
 
@@ -52,9 +65,8 @@ public class CarteSnapchatController {
         locService.activerPartage(idTechnicienConnecte, actif);
 
         if (actif) {
-            // Simuler une position (Tunis)
             locService.mettreAJourPosition(idTechnicienConnecte, 36.8065, 10.1815);
-            chargerCarte(); // Rafraîchir la carte avec la nouvelle position
+            chargerCarte();
         }
     }
 
@@ -83,6 +95,7 @@ public class CarteSnapchatController {
         }
 
         for (var pos : positions) {
+            // ✅ Utilisation de la méthode estActif() qui existe dans PositionTechnicien
             String icone = pos.estActif() ?
                     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" :
                     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png";
@@ -109,21 +122,39 @@ public class CarteSnapchatController {
             <!DOCTYPE html>
             <html>
             <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <script>
+                    window.L_DISABLE_3D = true;
+                    window.L_NO_TOUCH = true;
+                </script>
                 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
                 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
                 <style>
+                    html, body { height: 100%%; margin: 0; padding: 0; }
                     #map { height: 600px; width: 100%%; }
                 </style>
             </head>
             <body>
                 <div id="map"></div>
                 <script>
-                    var map = L.map('map').setView([36.8065, 10.1815], 12);
-                    // ✅ HTTP au lieu de HTTPS
-                    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap'
+                    var map = L.map('map', {
+                        zoomAnimation: false,
+                        fadeAnimation: false,
+                        markerZoomAnimation: false,
+                        preferCanvas: true,
+                        zoomSnap: 1
+                    }).setView([36.8065, 10.1815], 12);
+ 
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap',
+                        updateWhenZooming: false,
+                        updateWhenIdle: true,
+                        keepBuffer: 1
                     }).addTo(map);
-                    
+ 
+                    setTimeout(function () { map.invalidateSize(true); }, 150);
+ 
                     %s
                 </script>
             </body>
@@ -136,21 +167,39 @@ public class CarteSnapchatController {
             <!DOCTYPE html>
             <html>
             <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <script>
+                    window.L_DISABLE_3D = true;
+                    window.L_NO_TOUCH = true;
+                </script>
                 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
                 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
                 <style>
-                    #map { height: 600px; width: 100%%; }
+                    html, body { height: 100%; margin: 0; padding: 0; }
+                    #map { height: 600px; width: 100%; }
                 </style>
             </head>
             <body>
                 <div id="map"></div>
                 <script>
-                    var map = L.map('map').setView([36.8065, 10.1815], 12);
-                    // ✅ HTTP au lieu de HTTPS
-                    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap'
+                    var map = L.map('map', {
+                        zoomAnimation: false,
+                        fadeAnimation: false,
+                        markerZoomAnimation: false,
+                        preferCanvas: true,
+                        zoomSnap: 1
+                    }).setView([36.8065, 10.1815], 12);
+ 
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap',
+                        updateWhenZooming: false,
+                        updateWhenIdle: true,
+                        keepBuffer: 1
                     }).addTo(map);
-                    
+ 
+                    setTimeout(function () { map.invalidateSize(true); }, 150);
+ 
                     L.marker([36.8065, 10.1815]).addTo(map)
                         .bindPopup('Tunis<br>Aucun technicien en ligne');
                 </script>

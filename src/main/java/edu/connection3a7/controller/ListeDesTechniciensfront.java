@@ -71,6 +71,25 @@ public class ListeDesTechniciensfront implements Initializable {
      * Retourne vers la liste des techniciens BACK
      */
     @FXML
+    private void ouvrirLoginTechnicien() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/uploads/LoginTechnicien.fxml")
+            );
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("🔧 Connexion Technicien");
+            stage.setScene(new Scene(root, 400, 500));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible d'ouvrir la page de connexion: " + e.getMessage());
+        }
+    }
+    @FXML
     private void retournerVersBack() {
         try {
             System.out.println("🔄 Retour vers la liste BACK");

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.connection3a7.controller.ListeTechnicienController">
+<HBox prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.connection3a7.controller.ListeTechnicienController">
 
     <!-- ===== SIDEBAR ===== -->
     <VBox prefWidth="280.0" spacing="20.0" style="-fx-background-color: #1a961e; -fx-border-color: #BDDB9A; -fx-border-width: 0 2 0 0;">
@@ -25,7 +25,7 @@
         </padding>
 
         <children>
-            <!-- LOGO -->
+            <!-- LOGO UNIQUE -->
             <VBox alignment="CENTER" spacing="15.0">
                 <children>
                     <ImageView fitHeight="90.0" fitWidth="90.0" preserveRatio="true">
@@ -39,32 +39,11 @@
                     <DropShadow color="#0000001a" radius="5.0" />
                 </effect>
             </VBox>
-            <!-- LOGO DE L'APPLICATION -->
-            <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 0 0 20 0;">
-                <children>
-                    <ImageView fx:id="logoImage" fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
-                        <image>
-                            <Image url="@../images/o.png" />
-                        </image>
-                    </ImageView>
-                    <Label style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 20;" text="FIRMA" />
-                </children>
-                <effect>
-                    <DropShadow color="#0000001a" radius="5.0" />
-                </effect>
-            </VBox>
 
             <Separator style="-fx-background-color: #BDDB9A;" />
 
             <!-- BOUTON ACCUEIL -->
             <Button alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 10;" text="🏠  ACCUEIL">
-                <graphic>
-                    <ImageView fitHeight="24" fitWidth="24">
-                        <image>
-                            <Image url="@../images/avatar.png" />
-                        </image>
-                    </ImageView>
-                </graphic>
                 <padding><Insets left="20.0" /></padding>
             </Button>
 
@@ -81,15 +60,12 @@
                 <padding><Insets left="20.0" /></padding>
             </Button>
 
-            <!-- ✅ BOUTON GÉRER DEMANDES (TRÈS CLAIR) -->
-            <Button fx:id="btnGererDemandes" alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="240.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-border-color: #FFD700; -fx-border-width: 0 0 0 5;" text="🔧  GÉRER DEMANDES">
+            <!-- BOUTON GÉRER DEMANDES -->
+            <Button fx:id="btnGererDemandes" alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="240.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;" text="🔧  GÉRER DEMANDES">
                 <padding><Insets left="20.0" /></padding>
                 <tooltip>
                     <Tooltip text="Accéder à la gestion des demandes des techniciens" />
                 </tooltip>
-                <effect>
-                    <DropShadow color="#00000040" radius="5.0" />
-                </effect>
             </Button>
 
             <Region VBox.vgrow="ALWAYS" />
@@ -116,12 +92,26 @@
                         </font>
                     </Label>
 
-                    <!-- BARRE DE RECHERCHE -->
+                    <!-- BARRE DE RECHERCHE + BOUTONS ACTIONS -->
                     <HBox alignment="CENTER_LEFT" spacing="15.0">
                         <children>
                             <Label style="-fx-font-weight: bold; -fx-font-size: 16;" text="🔍 RECHERCHE :" />
                             <TextField fx:id="searchField" prefHeight="45.0" promptText="Nom, prénom ou spécialité..." style="-fx-background-radius: 25; -fx-padding: 0 20; -fx-font-size: 14; -fx-border-color: #ccc; -fx-border-radius: 25;" HBox.hgrow="ALWAYS" />
+
+                            <!-- BOUTON ACTUALISER -->
                             <Button fx:id="refreshButton" prefHeight="45.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 10 25; -fx-font-size: 14;" text="🔄 ACTUALISER" />
+
+                            <!-- 🔥 NOUVEAU BOUTON ACTIVER POSITION -->
+                            <Button fx:id="btnActiverPosition"
+                                    text="📍 ACTIVER POSITION"
+                                    onAction="#activerPosition"
+                                    style="-fx-background-color: #3498db;
+                                           -fx-text-fill: white;
+                                           -fx-font-weight: bold;
+                                           -fx-background-radius: 25;
+                                           -fx-cursor: hand;
+                                           -fx-padding: 10 20;
+                                           -fx-font-size: 14;"/>
                         </children>
                     </HBox>
 

@@ -44,7 +44,68 @@ public class Technicienserv implements IService<Technicien> {
             System.out.println("✅ Technicien ajouté → ID: " + technicien.getId_tech());
         }
     }
+    public Technicien getTechnicienByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM technicien WHERE email = ?";
 
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Technicien t = new Technicien();
+                t.setId_tech(rs.getInt("id_tech"));
+                t.setNom(rs.getString("nom"));
+                t.setPrenom(rs.getString("prenom"));
+                t.setEmail(rs.getString("email"));
+                t.setPassword(rs.getString("password"));  // ✅ Maintenant ça marche !
+                t.setSpecialite(rs.getString("specialite"));
+                t.setTelephone(rs.getString("telephone"));
+                t.setDisponibilite(rs.getBoolean("disponibilite"));
+                return t;
+            }
+        }
+        return null;
+    }
+    /**
+     * Récupère un technicien par son ID
+     * @param id L'ID du technicien
+     * @return Le technicien trouvé ou null
+     */
+    public Technicien getTechnicienById(int id) throws SQLException {
+        String sql = "SELECT * FROM technicien WHERE id_tech = ?";
+
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Technicien t = new Technicien();
+                t.setId_tech(rs.getInt("id_tech"));
+                t.setNom(rs.getString("nom"));
+                t.setPrenom(rs.getString("prenom"));
+                t.setEmail(rs.getString("email"));
+                t.setSpecialite(rs.getString("specialite"));
+                t.setTelephone(rs.getString("telephone"));
+                t.setDisponibilite(rs.getBoolean("disponibilite"));
+                t.setLocalisation(rs.getString("localisation"));
+                t.setImage(rs.getString("image"));
+                t.setCin(rs.getString("cin"));
+                t.setAge(rs.getInt("age"));
+                t.setDateNaissance(rs.getDate("date_naissance") != null ?
+                        rs.getDate("date_naissance").toLocalDate() : null);
+
+                // 🔥 Si tu as ajouté le champ password
+                try {
+                    t.setPassword(rs.getString("password"));
+                } catch (SQLException e) {
+                    // La colonne password n'existe pas encore
+                }
+
+                return t;
+            }
+        }
+        return null;
+    }
     @Override
     public void update(Technicien technicien) throws SQLException {
         String sql = "UPDATE technicien SET " +

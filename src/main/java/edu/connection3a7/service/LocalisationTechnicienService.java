@@ -31,7 +31,8 @@ public class LocalisationTechnicienService {
         public boolean estActif() {
             if (!partageActif) return false;
             if (derniereMaj == null) return false;
-            return derniereMaj.isAfter(LocalDateTime.now().minusMinutes(5));
+            // ✅ Augmenté à 30 minutes
+            return derniereMaj.isAfter(LocalDateTime.now().minusMinutes(30));
         }
 
         public String getStatut() {
@@ -53,15 +54,6 @@ public class LocalisationTechnicienService {
     }
 
     // ========== MÉTHODES ==========
-
-    /**
-     * Met à jour les colonnes dans la table technicien
-     * Ajoutez ces colonnes si elles n'existent pas :
-     * ALTER TABLE technicien ADD COLUMN latitude DOUBLE;
-     * ALTER TABLE technicien ADD COLUMN longitude DOUBLE;
-     * ALTER TABLE technicien ADD COLUMN partage_position BOOLEAN DEFAULT FALSE;
-     * ALTER TABLE technicien ADD COLUMN derniere_maj_position TIMESTAMP;
-     */
 
     public void activerPartage(int idTech, boolean actif) {
         String sql = "UPDATE technicien SET partage_position = ?, derniere_maj_position = ? WHERE id_tech = ?";
@@ -95,8 +87,11 @@ public class LocalisationTechnicienService {
     public List<PositionTechnicien> getTechniciensAvecPosition() throws SQLException {
         List<PositionTechnicien> positions = new ArrayList<>();
 
+        // ✅ Modifié : 30 minutes au lieu de 5
         String sql = "SELECT * FROM technicien WHERE partage_position = TRUE " +
-                "AND derniere_maj_position > DATE_SUB(NOW(), INTERVAL 5 MINUTE)";
+                "AND derniere_maj_position > DATE_SUB(NOW(), INTERVAL 30 MINUTE)";
+
+        System.out.println("🔍 SQL: " + sql);
 
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -115,15 +110,17 @@ public class LocalisationTechnicienService {
                 pos.setDerniereMaj(rs.getTimestamp("derniere_maj_position").toLocalDateTime());
 
                 positions.add(pos);
+                System.out.println("✅ Technicien trouvé: " + t.getPrenom() + " " + t.getNom());
             }
         }
 
+        System.out.println("📍 Total techniciens en ligne: " + positions.size());
         return positions;
     }
 
     public void nettoyerPositionsExpirees() {
         String sql = "UPDATE technicien SET partage_position = FALSE " +
-                "WHERE derniere_maj_position < DATE_SUB(NOW(), INTERVAL 10 MINUTE)";
+                "WHERE derniere_maj_position < DATE_SUB(NOW(), INTERVAL 30 MINUTE)";
 
         try (Statement st = cnx.createStatement()) {
             int rows = st.executeUpdate(sql);

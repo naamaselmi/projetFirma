@@ -19,6 +19,7 @@ public class Technicien {
     private StringProperty cin;
     private IntegerProperty age;
     private ObjectProperty<LocalDate> dateNaissance;
+    private StringProperty password;  // 🔥 NOUVEAU CHAMP
 
     public Technicien() {
         this.id_tech = new SimpleIntegerProperty();
@@ -34,12 +35,13 @@ public class Technicien {
         this.cin = new SimpleStringProperty();
         this.age = new SimpleIntegerProperty();
         this.dateNaissance = new SimpleObjectProperty<>();
+        this.password = new SimpleStringProperty();  // 🔥 INITIALISATION
     }
 
     public Technicien(Integer id_tech, Integer id_utilisateur, String nom, String prenom,
                       String email, String specialite, String telephone,
                       boolean disponibilite, String localisation, String image,
-                      String cin, int age, LocalDate dateNaissance) {
+                      String cin, int age, LocalDate dateNaissance, String password) {
         this();
         this.id_tech.set(id_tech);
         this.id_utilisateur.set(id_utilisateur);
@@ -54,6 +56,7 @@ public class Technicien {
         this.cin.set(cin);
         this.age.set(age);
         this.dateNaissance.set(dateNaissance);
+        this.password.set(password);  // 🔥 AJOUT
     }
 
     // ====== Getters & Setters ======
@@ -109,6 +112,11 @@ public class Technicien {
     public void setDateNaissance(LocalDate date) { this.dateNaissance.set(date); }
     public ObjectProperty<LocalDate> dateNaissanceProperty() { return dateNaissance; }
 
+    // 🔥 NOUVEAUX GETTER/SETTER POUR PASSWORD
+    public String getPassword() { return password.get(); }
+    public void setPassword(String password) { this.password.set(password); }
+    public StringProperty passwordProperty() { return password; }
+
     // ===== EQUALS and HASHCODE =====
     @Override
     public boolean equals(Object o) {
@@ -131,6 +139,7 @@ public class Technicien {
                 ", nom='" + getNom() + '\'' +
                 ", prenom='" + getPrenom() + '\'' +
                 ", specialite='" + getSpecialite() + '\'' +
+                ", email='" + getEmail() + '\'' +
                 ", disponibilite=" + isDisponibilite() +
                 '}';
     }

@@ -93,11 +93,21 @@
                                 <Button fx:id="refreshButton" text="🔄 Actualiser"
                                         style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 8 20;"/>
 
-                                <!-- 🔥 NOUVEAU BOUTON TEST CARTE (bleu) -->
+                                <!-- Bouton Tester carte (bleu) -->
                                 <Button fx:id="btnTestCarte"
                                         text="🗺️ Tester carte"
                                         onAction="#ouvrirCarte"
                                         style="-fx-background-color: #3498db;
+                                               -fx-text-fill: white;
+                                               -fx-font-weight: bold;
+                                               -fx-background-radius: 25;
+                                               -fx-cursor: hand;
+                                               -fx-padding: 8 20;"/>
+
+                                <!-- 🔥 NOUVEAU BOUTON CONNEXION TECHNICIEN (vert) -->
+                                <Button text="🔧 Connexion Technicien"
+                                        onAction="#ouvrirLoginTechnicien"
+                                        style="-fx-background-color: #1a961e;
                                                -fx-text-fill: white;
                                                -fx-font-weight: bold;
                                                -fx-background-radius: 25;
