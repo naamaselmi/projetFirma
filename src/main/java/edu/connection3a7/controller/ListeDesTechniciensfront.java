@@ -526,10 +526,17 @@ public class ListeDesTechniciensfront implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/uploads/CarteSnapchat.fxml"));
             Parent root = loader.load();
 
-            // ✅ Passer l'ID du technicien sélectionné
+            // Priorité au technicien connecté en session, sinon technicien sélectionné.
             CarteSnapchatController carteController = loader.getController();
+            int idTechSession = SessionManager.getInstance().getIdTechnicien();
+            if (idTechSession > 0) {
+                carteController.setIdTechnicien(idTechSession);
+            }
             if (technicienSelectionne != null) {
-                carteController.setIdTechnicien(technicienSelectionne.getId_tech());
+                carteController.setTechnicienCible(
+                        technicienSelectionne.getId_tech(),
+                        technicienSelectionne.getPrenom() + " " + technicienSelectionne.getNom()
+                );
             }
 
             Stage stage = new Stage();

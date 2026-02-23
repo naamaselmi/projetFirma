@@ -1,6 +1,9 @@
 package edu.connection3a7.controller;
 
 import edu.connection3a7.entities.Technicien;
+import edu.connection3a7.entities.Coordonnees;
+import edu.connection3a7.service.GeocodageService;
+import edu.connection3a7.service.LocalisationTechnicienService;
 import edu.connection3a7.service.Technicienserv;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +26,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -55,6 +59,8 @@ public class AjouterTechnicienController implements Initializable {
 
     // ========== SERVICES ==========
     private Technicienserv service = new Technicienserv();
+    private GeocodageService geocodageService = new GeocodageService();
+    private LocalisationTechnicienService localisationService = new LocalisationTechnicienService();
 
     // ========== VARIABLES ==========
     private File selectedImageFile;
@@ -256,6 +262,7 @@ public class AjouterTechnicienController implements Initializable {
         tech.setImage(nomImage);
 
         service.addentitiy(tech);
+        mettreAJourCoordonneesDepuisAdresse(tech.getId_tech(), tech.getLocalisation());
 
         showAlert(Alert.AlertType.INFORMATION, "Succès",
                 "✅ Technicien ajouté avec succès !\nID: " + tech.getId_tech() +
@@ -278,6 +285,10 @@ public class AjouterTechnicienController implements Initializable {
         technicienAModifier.setImage(nomImage);
 
         service.update(technicienAModifier);
+        mettreAJourCoordonneesDepuisAdresse(
+                technicienAModifier.getId_tech(),
+                technicienAModifier.getLocalisation()
+        );
 
         showAlert(Alert.AlertType.INFORMATION, "Succès",
                 "✅ Technicien modifié avec succès !\n" +
@@ -326,6 +337,23 @@ public class AjouterTechnicienController implements Initializable {
             return false;
         }
         return true;
+    }
+
+    private void mettreAJourCoordonneesDepuisAdresse(int idTech, String adresse) {
+        Optional<Coordonnees> resultat = geocodageService.geocoderAdresse(adresse);
+        if (resultat.isEmpty()) {
+            System.out.println("⚠️ Adresse non géocodée pour le technicien " + idTech + ": " + adresse);
+            return;
+        }
+
+        Coordonnees coordonnees = resultat.get();
+        localisationService.mettreAJourPosition(idTech, coordonnees.getLatitude(), coordonnees.getLongitude());
+        System.out.println(String.format(
+                "✅ Coordonnées mises à jour (tech %d): LAT=%.6f | LNG=%.6f",
+                idTech,
+                coordonnees.getLatitude(),
+                coordonnees.getLongitude()
+        ));
     }
 
     public void setTechnicienAModifier(Technicien tech) {

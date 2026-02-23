@@ -27,12 +27,12 @@
     <WebView fx:id="webView" VBox.vgrow="ALWAYS" prefHeight="600"/>
 
     <HBox alignment="CENTER">
-        <ToggleButton fx:id="btnPartagerPosition"
-                      text="🌍 Partager ma position"
-                      style="-fx-background-color: #1a961e; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 25; -fx-padding: 10 20;"/>
+        <Button fx:id="btnPartagerPosition"
+                text="🧭 Voir itinéraire"
+                style="-fx-background-color: #1a961e; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 25; -fx-padding: 10 20;"/>
     </HBox>
 
-    <Label text="💡 Activez le partage pour apparaître sur la carte (comme Snapchat)"
+    <Label text="💡 Sélectionnez un technicien puis cliquez sur Voir itinéraire"
            style="-fx-text-fill: gray; -fx-font-size: 11; -fx-alignment: center;"/>
 
 </VBox>

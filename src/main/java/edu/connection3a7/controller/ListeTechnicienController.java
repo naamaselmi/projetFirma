@@ -100,8 +100,6 @@ public class ListeTechnicienController implements Initializable {
                 LocalisationTechnicienService locService = new LocalisationTechnicienService();
                 locService.activerPartage(idTech, true);
 
-                // Position par défaut (Tunis)
-                locService.mettreAJourPosition(idTech, 36.8065, 10.1815);
 
                 // Message de confirmation
                 Alert confirm = new Alert(Alert.AlertType.INFORMATION);
