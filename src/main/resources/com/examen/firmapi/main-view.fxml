@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.examen.firmapi.controllers.MainController">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.examen.firmapi.controllers.MainController"
+            style="-fx-background-color: #f4f6f9;">
 
-  <Label fx:id="welcomeText"
-         layoutX="20"
-         layoutY="20"
-         style="-fx-font-size: 20px;" />
+  <!-- 🔵 TOP HEADER -->
+  <top>
+    <HBox alignment="CENTER_RIGHT"
+          spacing="20"
+          style="-fx-background-color: #CEEFAB;"
+          prefHeight="60">
 
-</AnchorPane>
+      <padding>
+        <Insets right="20"/>
+      </padding>
+
+      <Label text="FIRMA"
+             style="-fx-text-fill: white;
+                          -fx-font-size: 22px;
+                          -fx-font-weight: bold;" />
+
+      <Pane HBox.hgrow="ALWAYS"/>
+
+      <Button fx:id="logoutButton"
+              text="Déconnexion"
+              onAction="#logout"
+              style="-fx-background-color: #b66060;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 20;
+                           -fx-padding: 8 20 8 20;" />
+    </HBox>
+  </top>
+
+  <!-- 🟢 CENTER CONTENT -->
+  <center>
+    <VBox alignment="CENTER" spacing="20">
+
+      <Label fx:id="welcomeText"
+             style="-fx-font-size: 28px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #2f4f2f;" />
+
+      <Label text="update this later"
+             style="-fx-font-size: 16px;
+                          -fx-text-fill: #7f8c8d;" />
+    </VBox>
+  </center>
+
+</BorderPane>

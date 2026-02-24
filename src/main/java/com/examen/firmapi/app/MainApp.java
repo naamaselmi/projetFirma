@@ -10,7 +10,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(
-                MainApp.class.getResource("/com/examen/firmapi/utilisateur-view.fxml")
+                MainApp.class.getResource("/com/examen/firmapi/auth-view.fxml")
         );
 
         Scene scene = new Scene(loader.load(), 800, 500);

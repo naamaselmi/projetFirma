@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      alignment="CENTER"
+      spacing="15"
+      style="-fx-padding:40; -fx-background-color:#FFFFFF; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5); -fx-background-radius:15;">
+
+    <Label text="Login" style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#4A4A4A;"/>
+
+    <TextField fx:id="emailField" promptText="Email"
+               style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <PasswordField fx:id="passwordField" promptText="Mot de passe"
+                   style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+
+    <Button fx:id="loginBtn" text="Se connecter"
+            style="-fx-background-color: #A8E6CF; -fx-text-fill:#2F4F4F; -fx-font-weight:bold; -fx-background-radius:10; -fx-padding:8 20;"/>
+</VBox>

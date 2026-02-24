@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      alignment="CENTER"
+      spacing="12"
+      style="-fx-padding:40; -fx-background-color:#FFFFFF; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5); -fx-background-radius:15;">
+
+    <Label text="Créer un compte" style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#4A4A4A;"/>
+
+    <TextField fx:id="nomField" promptText="Nom" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <TextField fx:id="prenomField" promptText="Prénom" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <TextField fx:id="emailField" promptText="Email" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <PasswordField fx:id="passwordField" promptText="Mot de passe" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <TextField fx:id="telephoneField" promptText="Téléphone" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <TextField fx:id="adresseField" promptText="Adresse" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <TextField fx:id="villeField" promptText="Ville" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+    <TextField fx:id="codePostalField" promptText="Code postal" style="-fx-background-radius:8; -fx-border-radius:8; -fx-padding:8;"/>
+
+    <Button fx:id="signupBtn" text="S'inscrire"
+            style="-fx-background-color:#FFD3B6; -fx-text-fill:#2F4F4F; -fx-font-weight:bold; -fx-background-radius:10; -fx-padding:8 20;"/>
+</VBox>

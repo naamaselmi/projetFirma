@@ -35,8 +35,13 @@
 
 <!--            <VBox VBox.vgrow="ALWAYS"/>-->
 
-<!--            <Button text="Déconnecter"-->
-<!--                    style="-fx-background-color:white; -fx-background-radius:8;"/>-->
+            <Button fx:id="logoutButton"
+                    text="Déconnexion"
+                    onAction="#logout"
+                    style="-fx-background-color:#b66060;
+                       -fx-font-weight:bold;
+                       -fx-background-radius:15;"
+            />
         </VBox>
     </left>
 

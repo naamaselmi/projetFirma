@@ -14,6 +14,8 @@ import javafx.scene.image.ImageView;
 
 import java.util.Date;
 import java.util.Optional;
+import com.examen.firmapi.utils.LogoutUtil;
+import javafx.stage.Stage;
 
 public class UtilisateurController {
 
@@ -42,6 +44,16 @@ public class UtilisateurController {
     private final UtilisateurService service = new UtilisateurService();
 
     private Utilisateur selectedUtilisateur = null;
+
+    @FXML
+    private Button logoutButton;
+
+    @FXML
+    private void logout() {
+
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        LogoutUtil.logout(stage);
+    }
 
     @FXML
     public void initialize() {

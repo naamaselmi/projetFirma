@@ -3,10 +3,13 @@ package com.examen.firmapi.services;
 import com.examen.firmapi.entities.Role;
 import com.examen.firmapi.entities.Utilisateur;
 import com.examen.firmapi.utils.DBConnection;
+import com.examen.firmapi.utils.TempPasswordStore;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class UtilisateurService {
 
@@ -159,7 +162,6 @@ public class UtilisateurService {
         }
     }
 
-
     // ✅ READ
     public List<Utilisateur> afficherUtilisateurs() {
         List<Utilisateur> list = new ArrayList<>();
@@ -203,6 +205,39 @@ public class UtilisateurService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // LOGIN
+    public Utilisateur login(String email, String password) {
+
+        String sql = "SELECT * FROM utilisateurs WHERE email = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                String hashedPassword = rs.getString("mot_de_passe");
+
+                if (BCrypt.checkpw(password, hashedPassword)) {
+
+                    Utilisateur u = new Utilisateur();
+                    u.setId_utilisateur(rs.getInt("id_utilisateur"));
+                    u.setNom(rs.getString("nom"));
+                    u.setPrenom(rs.getString("prenom"));
+                    u.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
+
+                    return u;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
 
