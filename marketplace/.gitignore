@@ -1,19 +1,22 @@
+# ── Build output ──────────────────────────────────────────────────────────────
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-.kotlin
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+dist/
+nbdist/
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+# ── IntelliJ IDEA ─────────────────────────────────────────────────────────────
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
 
-### Eclipse ###
+# ── Eclipse ───────────────────────────────────────────────────────────────────
 .apt_generated
 .classpath
 .factorypath
@@ -22,21 +25,36 @@ target/
 .springBeans
 .sts4-cache
 
-### NetBeans ###
+# ── NetBeans ──────────────────────────────────────────────────────────────────
 /nbproject/private/
 /nbbuild/
-/dist/
-/nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# ── VS Code ───────────────────────────────────────────────────────────────────
 .vscode/
 
-### Mac OS ###
+# ── OS files ──────────────────────────────────────────────────────────────────
 .DS_Store
+Thumbs.db
+.kotlin
 
-### Stripe API Keys ###
+# ── Sensitive credentials (NEVER commit these) ────────────────────────────────
+# Contains Gmail App Password used for sending emails
+src/main/java/marketplace/service/EmailService.java
+
+# Contains Stripe Secret API Key
 src/main/java/marketplace/service/StripeService.java
+
+# External config files with secrets
+email.properties
+stripe.properties
+*.env
+.env*
+
+# ── Generated files ───────────────────────────────────────────────────────────
+# PDF receipts generated at runtime
+receipts/
+
+# Logs
+*.log
+logs/

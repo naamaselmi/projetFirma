@@ -23,7 +23,8 @@ public class CommandeService implements IService<Commande> {
                 "statut_livraison, adresse_livraison, ville_livraison, notes) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        PreparedStatement pst = DB_connection.getInstance().getConnection().prepareStatement(requete);
+        PreparedStatement pst = DB_connection.getInstance().getConnection().prepareStatement(
+                requete, Statement.RETURN_GENERATED_KEYS);
         pst.setInt(1, commande.getUtilisateurId());
         pst.setBigDecimal(2, commande.getMontantTotal());
         pst.setString(3, commande.getStatutPaiement().getValue());
@@ -33,7 +34,30 @@ public class CommandeService implements IService<Commande> {
         pst.setString(7, commande.getNotes());
 
         pst.executeUpdate();
-        System.out.println("Commande added (numero will be auto-generated)");
+
+        // Retrieve and set the auto-generated primary key
+        try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                commande.setId(generatedKeys.getInt(1));
+            }
+        }
+        System.out.println("Commande added with id: " + commande.getId());
+
+        // Fetch back DB-computed fields (numero_commande, date_commande)
+        String fetchQuery = "SELECT numero_commande, date_commande FROM commandes WHERE id = ?";
+        try (PreparedStatement fetchStmt = DB_connection.getInstance().getConnection()
+                .prepareStatement(fetchQuery)) {
+            fetchStmt.setInt(1, commande.getId());
+            try (ResultSet rs2 = fetchStmt.executeQuery()) {
+                if (rs2.next()) {
+                    commande.setNumeroCommande(rs2.getString("numero_commande"));
+                    Timestamp ts = rs2.getTimestamp("date_commande");
+                    if (ts != null) {
+                        commande.setDateCommande(ts.toLocalDateTime());
+                    }
+                }
+            }
+        }
     }
 
     @Override

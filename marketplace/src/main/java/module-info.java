@@ -9,6 +9,10 @@ module com.example.marketplace {
     requires java.sql;
     requires stripe.java;
     requires com.google.gson;
+    requires java.mail;
+    requires kernel;
+    requires layout;
+    requires io;
 
     // Open GUI packages to JavaFX for FXML loading
     opens marketplace.GUI.Application to javafx.fxml, javafx.graphics;
