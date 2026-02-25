@@ -226,7 +226,17 @@
                            <Insets bottom="10.0" left="20.0" right="20.0" top="15.0" />
                         </padding>
                         <children>
-                           <Button mnemonicParsing="false" onAction="#handleRefresh" styleClass="action-button" text="Actualiser" />
+                           <TextField fx:id="txtSearchList" promptText="🔍 Rechercher (nom, marque, modèle, immatriculation...)" prefWidth="400.0" HBox.hgrow="ALWAYS">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </TextField>
+                           <Label text="Recherche en temps réel" style="-fx-text-fill: #666; -fx-font-size: 12px;" />
+                           <Button mnemonicParsing="false" onAction="#handleRefresh" styleClass="action-button" text="Actualiser">
+                              <HBox.margin>
+                                 <Insets left="20.0" />
+                              </HBox.margin>
+                           </Button>
                         </children>
                      </HBox>
                   </top>

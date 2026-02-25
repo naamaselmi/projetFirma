@@ -16,6 +16,7 @@ import marketplace.entities.Utilisateur;
 import marketplace.service.CommandeService;
 import marketplace.service.UtilisateurService;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.stage.FileChooser;
 
 public class CommandeAdminController implements Initializable {
 
@@ -390,32 +392,39 @@ public class CommandeAdminController implements Initializable {
 
     @FXML
     void handleExport() {
-        try {
-            String fileName = "commandes_export_" + System.currentTimeMillis() + ".csv";
-            FileWriter writer = new FileWriter(fileName);
-            
-            writer.write("ID;Numéro;Client;Montant;Paiement;Livraison;Adresse;Ville;Date\n");
-            
-            for (Commande c : filteredList) {
-                writer.write(String.format("%d;%s;%s;%s;%s;%s;%s;%s;%s\n",
-                    c.getId(),
-                    c.getNumeroCommande(),
-                    getUserName(c.getUtilisateurId()),
-                    c.getMontantTotal(),
-                    getPaymentStatusDisplay(c.getStatutPaiement()),
-                    getDeliveryStatusDisplay(c.getStatutLivraison()),
-                    c.getAdresseLivraison() != null ? c.getAdresseLivraison() : "",
-                    c.getVilleLivraison() != null ? c.getVilleLivraison() : "",
-                    c.getDateCommande() != null ? c.getDateCommande().format(DATE_FORMAT) : ""
-                ));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Exporter les commandes en CSV");
+        fileChooser.setInitialFileName("commandes_export_" + System.currentTimeMillis() + ".csv");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Fichiers CSV", "*.csv")
+        );
+        
+        File file = fileChooser.showSaveDialog(commandeTable.getScene().getWindow());
+        
+        if (file != null) {
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write("ID;Numéro;Client;Montant;Paiement;Livraison;Adresse;Ville;Date\n");
+                
+                for (Commande c : filteredList) {
+                    writer.write(String.format("%d;%s;%s;%s;%s;%s;%s;%s;%s\n",
+                        c.getId(),
+                        c.getNumeroCommande(),
+                        getUserName(c.getUtilisateurId()),
+                        c.getMontantTotal(),
+                        getPaymentStatusDisplay(c.getStatutPaiement()),
+                        getDeliveryStatusDisplay(c.getStatutLivraison()),
+                        c.getAdresseLivraison() != null ? c.getAdresseLivraison() : "",
+                        c.getVilleLivraison() != null ? c.getVilleLivraison() : "",
+                        c.getDateCommande() != null ? c.getDateCommande().format(DATE_FORMAT) : ""
+                    ));
+                }
+                
+                showAlert(Alert.AlertType.INFORMATION, "Export réussi", 
+                    "Fichier exporté: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                    "Erreur lors de l'export: " + e.getMessage());
             }
-            
-            writer.close();
-            showAlert(Alert.AlertType.INFORMATION, "Export réussi", 
-                "Fichier exporté: " + fileName);
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
-                "Erreur lors de l'export: " + e.getMessage());
         }
     }
 

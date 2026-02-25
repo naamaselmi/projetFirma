@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -19,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1030.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.TerrainController">
+<BorderPane prefHeight="720.0" prefWidth="1030.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="marketplace.GUI.Controller.TerrainController">
    <center>
       <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -60,7 +61,14 @@
                           <TextField fx:id="txtSuperficie" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                           
                           <Label styleClass="form-label" text="Ville:" GridPane.rowIndex="3" />
-                          <TextField fx:id="txtVille" maxWidth="300.0" promptText="Ville" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                          <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                             <children>
+                                <TextField fx:id="txtVille" maxWidth="300.0" promptText="Ville" HBox.hgrow="ALWAYS" />
+                                <Button onAction="#handleOpenMapCreate" styleClass="action-button" text="🗺️">
+                                   <tooltip><Tooltip text="Sélectionner l'adresse sur la carte" /></tooltip>
+                                </Button>
+                             </children>
+                          </HBox>
                           
                           <Label styleClass="form-label" text="Adresse:" GridPane.rowIndex="4" />
                           <TextField fx:id="txtAdresse" promptText="Adresse complète" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -145,7 +153,14 @@
                           <TextField fx:id="txtSuperficieModif" maxWidth="200.0" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                           
                           <Label styleClass="form-label" text="Ville:" GridPane.rowIndex="3" />
-                          <TextField fx:id="txtVilleModif" maxWidth="300.0" promptText="Ville" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                          <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                             <children>
+                                <TextField fx:id="txtVilleModif" maxWidth="300.0" promptText="Ville" HBox.hgrow="ALWAYS" />
+                                <Button onAction="#handleOpenMapModif" styleClass="action-button" text="🗺️">
+                                   <tooltip><Tooltip text="Sélectionner l'adresse sur la carte" /></tooltip>
+                                </Button>
+                             </children>
+                          </HBox>
                           
                           <Label styleClass="form-label" text="Adresse:" GridPane.rowIndex="4" />
                           <TextField fx:id="txtAdresseModif" promptText="Adresse complète" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -210,7 +225,17 @@
                            <Insets bottom="10.0" left="20.0" right="20.0" top="15.0" />
                         </padding>
                         <children>
-                           <Button mnemonicParsing="false" onAction="#handleRefresh" styleClass="action-button" text="Actualiser" />
+                           <TextField fx:id="txtSearchList" promptText="🔍 Rechercher (titre, ville, adresse...)" prefWidth="350.0" HBox.hgrow="ALWAYS">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </TextField>
+                           <Label text="Recherche en temps réel" style="-fx-text-fill: #666; -fx-font-size: 12px;" />
+                           <Button mnemonicParsing="false" onAction="#handleRefresh" styleClass="action-button" text="Actualiser">
+                              <HBox.margin>
+                                 <Insets left="20.0" />
+                              </HBox.margin>
+                           </Button>
                         </children>
                      </HBox>
                   </top>

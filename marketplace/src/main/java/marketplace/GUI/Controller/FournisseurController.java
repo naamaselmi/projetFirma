@@ -10,9 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import marketplace.entities.Fournisseur;
 import marketplace.service.FournisseurService;
+import marketplace.tools.MapPicker;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -63,19 +65,50 @@ public class FournisseurController implements Initializable {
     @FXML private TableColumn<Fournisseur, String> colTelephone;
     @FXML private TableColumn<Fournisseur, Boolean> colActif;
     @FXML private TableColumn<Fournisseur, Void> colActions;
-
+    
+    @FXML private TextField txtSearchList;
     private List<Fournisseur> allFournisseurs;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTable();
         loadTableData();
+        setupSearchFilter();
 
         mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == tabListe) {
                 loadTableData();
             }
         });
+    }
+    
+    private void setupSearchFilter() {
+        if (txtSearchList != null) {
+            txtSearchList.textProperty().addListener((observable, oldValue, newValue) -> {
+                filterTable(newValue);
+            });
+        }
+    }
+    
+    private void filterTable(String query) {
+        if (allFournisseurs == null) return;
+        
+        if (query == null || query.trim().isEmpty()) {
+            tableFournisseurs.getItems().setAll(allFournisseurs);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            List<Fournisseur> filtered = allFournisseurs.stream()
+                .filter(f -> 
+                    (f.getNomEntreprise() != null && f.getNomEntreprise().toLowerCase().contains(lowerQuery)) ||
+                    (f.getContactNom() != null && f.getContactNom().toLowerCase().contains(lowerQuery)) ||
+                    (f.getEmail() != null && f.getEmail().toLowerCase().contains(lowerQuery)) ||
+                    (f.getTelephone() != null && f.getTelephone().toLowerCase().contains(lowerQuery)) ||
+                    (f.getVille() != null && f.getVille().toLowerCase().contains(lowerQuery)) ||
+                    String.valueOf(f.getId()).contains(lowerQuery)
+                )
+                .collect(java.util.stream.Collectors.toList());
+            tableFournisseurs.getItems().setAll(filtered);
+        }
     }
 
     private void setupTable() {
@@ -428,5 +461,35 @@ public class FournisseurController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    
+    @FXML
+    private void handleOpenMapCreate(ActionEvent event) {
+        MapPicker mapPicker = new MapPicker();
+        MapPicker.AddressResult result = mapPicker.showAndWait(
+            (Stage) txtVille.getScene().getWindow(),
+            txtAdresse.getText(),
+            txtVille.getText()
+        );
+        
+        if (result.isConfirmed()) {
+            txtAdresse.setText(result.getAddress());
+            txtVille.setText(result.getCity());
+        }
+    }
+    
+    @FXML
+    private void handleOpenMapModif(ActionEvent event) {
+        MapPicker mapPicker = new MapPicker();
+        MapPicker.AddressResult result = mapPicker.showAndWait(
+            (Stage) txtVilleModif.getScene().getWindow(),
+            txtAdresseModif.getText(),
+            txtVilleModif.getText()
+        );
+        
+        if (result.isConfirmed()) {
+            txtAdresseModif.setText(result.getAddress());
+            txtVilleModif.setText(result.getCity());
+        }
     }
 }

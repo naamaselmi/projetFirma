@@ -14,12 +14,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import marketplace.entities.Categorie;
 import marketplace.entities.ProductType;
 import marketplace.entities.Terrain;
 import marketplace.service.CategorieService;
 import marketplace.service.TerrainService;
+import marketplace.tools.MapPicker;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -68,6 +70,7 @@ public class TerrainController implements Initializable {
     private Terrain currentEditingTerrain;
 
     // --- LIST Tab ---
+    @FXML private TextField txtSearchList;
     @FXML private TableView<Terrain> tableTerrains;
     @FXML private TableColumn<Terrain, Integer> colId;
     @FXML private TableColumn<Terrain, String> colImage;
@@ -76,18 +79,49 @@ public class TerrainController implements Initializable {
     @FXML private TableColumn<Terrain, BigDecimal> colSuperficie;
     @FXML private TableColumn<Terrain, BigDecimal> colPrixAnnee;
     @FXML private TableColumn<Terrain, Void> colActions;
+    
+    private List<Terrain> allTerrains;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadComboBoxes();
         setupTable();
         loadTableData();
+        setupSearchFilter();
 
         mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == tabListe) {
                 loadTableData();
             }
         });
+    }
+    
+    private void setupSearchFilter() {
+        if (txtSearchList != null) {
+            txtSearchList.textProperty().addListener((observable, oldValue, newValue) -> {
+                filterTable(newValue);
+            });
+        }
+    }
+    
+    private void filterTable(String query) {
+        if (allTerrains == null) return;
+        
+        if (query == null || query.trim().isEmpty()) {
+            tableTerrains.getItems().setAll(allTerrains);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            List<Terrain> filtered = allTerrains.stream()
+                .filter(t -> 
+                    (t.getTitre() != null && t.getTitre().toLowerCase().contains(lowerQuery)) ||
+                    (t.getVille() != null && t.getVille().toLowerCase().contains(lowerQuery)) ||
+                    (t.getAdresse() != null && t.getAdresse().toLowerCase().contains(lowerQuery)) ||
+                    (t.getDescription() != null && t.getDescription().toLowerCase().contains(lowerQuery)) ||
+                    String.valueOf(t.getId()).contains(lowerQuery)
+                )
+                .collect(java.util.stream.Collectors.toList());
+            tableTerrains.getItems().setAll(filtered);
+        }
     }
 
     private void loadComboBoxes() {
@@ -196,11 +230,15 @@ public class TerrainController implements Initializable {
 
     private void loadTableData() {
         try {
-            List<Terrain> list = terrainService.getEntities();
-            System.out.println("Terrains chargés: " + list.size());
+            allTerrains = terrainService.getEntities();
+            System.out.println("Terrains chargés: " + allTerrains.size());
             tableTerrains.getItems().clear();
-            tableTerrains.getItems().addAll(list);
+            tableTerrains.getItems().addAll(allTerrains);
             tableTerrains.refresh();
+            
+            if (txtSearchList != null) {
+                txtSearchList.clear();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la liste des terrains.");
@@ -480,6 +518,36 @@ public class TerrainController implements Initializable {
         java.io.File file = fileChooser.showOpenDialog(txtImageModif.getScene().getWindow());
         if (file != null) {
             txtImageModif.setText(file.toURI().toString());
+        }
+    }
+    
+    @FXML
+    private void handleOpenMapCreate(ActionEvent event) {
+        MapPicker mapPicker = new MapPicker();
+        MapPicker.AddressResult result = mapPicker.showAndWait(
+            (Stage) txtVille.getScene().getWindow(),
+            txtAdresse.getText(),
+            txtVille.getText()
+        );
+        
+        if (result.isConfirmed()) {
+            txtAdresse.setText(result.getAddress());
+            txtVille.setText(result.getCity());
+        }
+    }
+    
+    @FXML
+    private void handleOpenMapModif(ActionEvent event) {
+        MapPicker mapPicker = new MapPicker();
+        MapPicker.AddressResult result = mapPicker.showAndWait(
+            (Stage) txtVilleModif.getScene().getWindow(),
+            txtAdresseModif.getText(),
+            txtVilleModif.getText()
+        );
+        
+        if (result.isConfirmed()) {
+            txtAdresseModif.setText(result.getAddress());
+            txtVilleModif.setText(result.getCity());
         }
     }
 }

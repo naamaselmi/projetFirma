@@ -72,6 +72,7 @@ public class VehiculeController implements Initializable {
     private Vehicule currentEditingVehicule;
 
     // --- LIST Tab ---
+    @FXML private TextField txtSearchList;
     @FXML private TableView<Vehicule> tableVehicules;
     @FXML private TableColumn<Vehicule, Integer> colId;
     @FXML private TableColumn<Vehicule, String> colImage;
@@ -80,18 +81,49 @@ public class VehiculeController implements Initializable {
     @FXML private TableColumn<Vehicule, String> colModele;
     @FXML private TableColumn<Vehicule, BigDecimal> colPrixJour;
     @FXML private TableColumn<Vehicule, Void> colActions;
+    
+    private List<Vehicule> allVehicules;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadComboBoxes();
         setupTable();
         loadTableData();
+        setupSearchFilter();
 
         mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == tabListe) {
                 loadTableData();
             }
         });
+    }
+    
+    private void setupSearchFilter() {
+        if (txtSearchList != null) {
+            txtSearchList.textProperty().addListener((observable, oldValue, newValue) -> {
+                filterTable(newValue);
+            });
+        }
+    }
+    
+    private void filterTable(String query) {
+        if (allVehicules == null) return;
+        
+        if (query == null || query.trim().isEmpty()) {
+            tableVehicules.getItems().setAll(allVehicules);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            List<Vehicule> filtered = allVehicules.stream()
+                .filter(v -> 
+                    (v.getNom() != null && v.getNom().toLowerCase().contains(lowerQuery)) ||
+                    (v.getMarque() != null && v.getMarque().toLowerCase().contains(lowerQuery)) ||
+                    (v.getModele() != null && v.getModele().toLowerCase().contains(lowerQuery)) ||
+                    (v.getImmatriculation() != null && v.getImmatriculation().toLowerCase().contains(lowerQuery)) ||
+                    String.valueOf(v.getId()).contains(lowerQuery)
+                )
+                .collect(java.util.stream.Collectors.toList());
+            tableVehicules.getItems().setAll(filtered);
+        }
     }
 
     private void loadComboBoxes() {
@@ -200,11 +232,15 @@ public class VehiculeController implements Initializable {
 
     private void loadTableData() {
         try {
-            List<Vehicule> list = vehiculeService.getEntities();
-            System.out.println("Véhicules chargés: " + list.size());
+            allVehicules = vehiculeService.getEntities();
+            System.out.println("Véhicules chargés: " + allVehicules.size());
             tableVehicules.getItems().clear();
-            tableVehicules.getItems().addAll(list);
+            tableVehicules.getItems().addAll(allVehicules);
             tableVehicules.refresh();
+            
+            if (txtSearchList != null) {
+                txtSearchList.clear();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la liste des véhicules.");

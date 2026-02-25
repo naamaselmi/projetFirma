@@ -3,8 +3,12 @@ module com.example.marketplace {
     requires javafx.fxml;
     requires javafx.base;
     requires transitive javafx.graphics;
+    requires javafx.web;
+    requires jdk.jsobject;
     requires java.desktop;
     requires java.sql;
+    requires stripe.java;
+    requires com.google.gson;
 
     // Open GUI packages to JavaFX for FXML loading
     opens marketplace.GUI.Application to javafx.fxml, javafx.graphics;

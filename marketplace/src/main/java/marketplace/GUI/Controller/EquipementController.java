@@ -95,6 +95,8 @@ public class EquipementController implements Initializable {
 
     // --- LIST Tab ---
     @FXML
+    private TextField txtSearchList;
+    @FXML
     private TableView<Equipement> tableEquipements;
     @FXML
     private TableColumn<Equipement, Integer> colId;
@@ -108,12 +110,15 @@ public class EquipementController implements Initializable {
     private TableColumn<Equipement, Integer> colQuantite;
     @FXML
     private TableColumn<Equipement, Void> colActions;
+    
+    private List<Equipement> allEquipements;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadComboBoxes();
         setupTable();
         loadTableData();
+        setupSearchFilter();
 
         // Listen for tab selection to refresh list if needed
         mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -121,6 +126,39 @@ public class EquipementController implements Initializable {
                 loadTableData();
             }
         });
+    }
+    
+    /**
+     * Setup real-time search filter for the list
+     */
+    private void setupSearchFilter() {
+        if (txtSearchList != null) {
+            txtSearchList.textProperty().addListener((observable, oldValue, newValue) -> {
+                filterTable(newValue);
+            });
+        }
+    }
+    
+    /**
+     * Filter table based on search query
+     */
+    private void filterTable(String query) {
+        if (allEquipements == null) return;
+        
+        if (query == null || query.trim().isEmpty()) {
+            tableEquipements.getItems().setAll(allEquipements);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            List<Equipement> filtered = allEquipements.stream()
+                .filter(e -> 
+                    (e.getNom() != null && e.getNom().toLowerCase().contains(lowerQuery)) ||
+                    (e.getDescription() != null && e.getDescription().toLowerCase().contains(lowerQuery)) ||
+                    String.valueOf(e.getId()).contains(lowerQuery) ||
+                    (e.getPrixVente() != null && e.getPrixVente().toString().contains(lowerQuery))
+                )
+                .collect(java.util.stream.Collectors.toList());
+            tableEquipements.getItems().setAll(filtered);
+        }
     }
 
     private void loadComboBoxes() {
@@ -241,11 +279,16 @@ public class EquipementController implements Initializable {
 
     private void loadTableData() {
         try {
-            List<Equipement> list = equipementService.getEntities();
-            System.out.println("Equipements chargés: " + list.size());
+            allEquipements = equipementService.getEntities();
+            System.out.println("Equipements chargés: " + allEquipements.size());
             tableEquipements.getItems().clear();
-            tableEquipements.getItems().addAll(list);
+            tableEquipements.getItems().addAll(allEquipements);
             tableEquipements.refresh();
+            
+            // Clear search field
+            if (txtSearchList != null) {
+                txtSearchList.clear();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la liste des équipements.");
