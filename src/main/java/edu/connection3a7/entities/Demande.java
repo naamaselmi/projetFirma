@@ -1,27 +1,23 @@
 package edu.connection3a7.entities;
 
 import java.sql.Date;
-import java.util.Objects;
 
 public class Demande {
+    private int idDemande;
+    private int idUtilisateur;
+    private String typeProbleme;
+    private String description;
+    private Date dateDemande;
+    private String statut;
+    private Integer idTech;
+    private String adresseClient;  // 🔥 NOUVEAU CHAMP
 
-    private Integer idDemande;        // id_demande (PK)
-    private Integer idUtilisateur;    // id_utilisateur (FK)
-    private String typeProbleme;      // type_probleme
-    private String description;       // description
-    private Date dateDemande;         // date_demande
-    private String statut;            // statut
-    private Integer idTech;           // id_tech (FK)
+    // Constructeurs
+    public Demande() {}
 
-    // ===== Constructors =====
-    public Demande() {
-        // constructeur vide
-    }
-
-    public Demande(Integer idDemande, Integer idUtilisateur, String typeProbleme,
-                   String description, Date dateDemande,
-                   String statut, Integer idTech) {
-
+    public Demande(int idDemande, int idUtilisateur, String typeProbleme,
+                   String description, Date dateDemande, String statut,
+                   Integer idTech, String adresseClient) {
         this.idDemande = idDemande;
         this.idUtilisateur = idUtilisateur;
         this.typeProbleme = typeProbleme;
@@ -29,90 +25,42 @@ public class Demande {
         this.dateDemande = dateDemande;
         this.statut = statut;
         this.idTech = idTech;
+        this.adresseClient = adresseClient;
     }
 
-    // ===== Getters & Setters =====
-    public Integer getIdDemande() {
-        return idDemande;
-    }
+    // Getters et Setters
+    public int getIdDemande() { return idDemande; }
+    public void setIdDemande(int idDemande) { this.idDemande = idDemande; }
 
-    public void setIdDemande(Integer idDemande) {
-        this.idDemande = idDemande;
-    }
+    public int getIdUtilisateur() { return idUtilisateur; }
+    public void setIdUtilisateur(int idUtilisateur) { this.idUtilisateur = idUtilisateur; }
 
-    public Integer getIdUtilisateur() {
-        return idUtilisateur;
-    }
+    public String getTypeProbleme() { return typeProbleme; }
+    public void setTypeProbleme(String typeProbleme) { this.typeProbleme = typeProbleme; }
 
-    public void setIdUtilisateur(Integer idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getTypeProbleme() {
-        return typeProbleme;
-    }
+    public Date getDateDemande() { return dateDemande; }
+    public void setDateDemande(Date dateDemande) { this.dateDemande = dateDemande; }
 
-    public void setTypeProbleme(String typeProbleme) {
-        this.typeProbleme = typeProbleme;
-    }
+    public String getStatut() { return statut; }
+    public void setStatut(String statut) { this.statut = statut; }
 
-    public String getDescription() {
-        return description;
-    }
+    public Integer getIdTech() { return idTech; }
+    public void setIdTech(Integer idTech) { this.idTech = idTech; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    // 🔥 NOUVEAU GETTER/SETTER
+    public String getAdresseClient() { return adresseClient; }
+    public void setAdresseClient(String adresseClient) { this.adresseClient = adresseClient; }
 
-    public Date getDateDemande() {
-        return dateDemande;
-    }
-
-    public void setDateDemande(Date dateDemande) {
-        this.dateDemande = dateDemande;
-    }
-
-    public String getStatut() {
-        return statut;
-    }
-
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
-
-    public Integer getIdTech() {
-        return idTech;
-    }
-
-    public void setIdTech(Integer idTech) {
-        this.idTech = idTech;
-    }
-
-    // ===== EQUALS and HASHCODE =====
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Demande demande = (Demande) o;
-        return Objects.equals(idDemande, demande.idDemande);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idDemande);
-    }
-
-    // ===== toString =====
     @Override
     public String toString() {
         return "Demande{" +
                 "idDemande=" + idDemande +
-                ", idUtilisateur=" + idUtilisateur +
                 ", typeProbleme='" + typeProbleme + '\'' +
-                ", description='" + description + '\'' +
-                ", dateDemande=" + dateDemande +
                 ", statut='" + statut + '\'' +
-                ", idTech=" + idTech +
+                ", adresseClient='" + adresseClient + '\'' +
                 '}';
     }
 }

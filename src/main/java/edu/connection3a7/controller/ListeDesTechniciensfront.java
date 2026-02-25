@@ -37,6 +37,7 @@ public class ListeDesTechniciensfront implements Initializable {
     @FXML private Label lblInfo;
     @FXML private Button btnRetour;
     @FXML private Button btnTestCarte;
+    @FXML private Button btnDecouvrirIA;
 
 
     private Technicienserv technicienService = new Technicienserv();
@@ -66,7 +67,11 @@ public class ListeDesTechniciensfront implements Initializable {
         }
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> filtrerTechniciens(newVal));
+        if (btnDecouvrirIA != null) {
+            btnDecouvrirIA.setOnAction(e -> ouvrirAssistantIA());
+        }
     }
+
     /**
      * Retourne vers la liste des techniciens BACK
      */
@@ -150,6 +155,49 @@ public class ListeDesTechniciensfront implements Initializable {
         for (Technicien tech : techniciens) {
             VBox card = creerCarteTechnicien(tech);
             technicienGrid.getChildren().add(card);
+        }
+    }
+    /**
+     * Ouvre l'assistant IA de diagnostic
+     */
+    @FXML
+    private void ouvrirAssistantIA() {
+        try {
+            // ✅ Essayer plusieurs chemins possibles
+            URL fxmlUrl = null;
+            String[] chemins = {
+                    "/uploads/DiagnosticAI.fxml",
+                    "/DiagnosticAI.fxml",
+                    "/fxml/DiagnosticAI.fxml"
+            };
+
+            for (String chemin : chemins) {
+                fxmlUrl = getClass().getResource(chemin);
+                if (fxmlUrl != null) {
+                    System.out.println("✅ Fichier trouvé: " + chemin);
+                    break;
+                }
+            }
+
+            if (fxmlUrl == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Fichier DiagnosticAI.fxml introuvable!\n" +
+                                "Vérifiez qu'il est dans src/main/resources/uploads/");
+                return;
+            }
+
+            Parent root = FXMLLoader.load(fxmlUrl);
+
+            Stage stage = new Stage();
+            stage.setTitle("🧠 Assistant IA de diagnostic");
+            stage.setScene(new Scene(root, 700, 600));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible d'ouvrir l'assistant IA: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

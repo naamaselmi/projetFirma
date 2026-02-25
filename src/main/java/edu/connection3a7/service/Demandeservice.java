@@ -20,8 +20,8 @@ public class Demandeservice implements IService<Demande> {
     // ================= ADD =================
     @Override
     public void addentitiy(Demande d) throws SQLException {
-        String sql = "INSERT INTO demande (id_utilisateur, type_probleme, description, date_demande, statut, id_tech) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO demande (id_utilisateur, type_probleme, description, date_demande, statut, id_tech, adresse_client) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = cnx.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, d.getIdUtilisateur());
@@ -30,6 +30,7 @@ public class Demandeservice implements IService<Demande> {
             ps.setDate(4, d.getDateDemande());
             ps.setString(5, d.getStatut());
             ps.setInt(6, d.getIdTech());
+            ps.setString(7, d.getAdresseClient());
 
             ps.executeUpdate();
 
@@ -55,7 +56,8 @@ public class Demandeservice implements IService<Demande> {
     // ================= UPDATE =================
     @Override
     public void update(Demande d) throws SQLException {
-        String sql = "UPDATE demande SET id_utilisateur=?, type_probleme=?, description=?, date_demande=?, statut=?, id_tech=? " +
+        String sql = "UPDATE demande SET id_utilisateur=?, type_probleme=?, description=?, " +
+                "date_demande=?, statut=?, id_tech=?, adresse_client=? " +
                 "WHERE id_demande=?";
 
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
@@ -65,7 +67,8 @@ public class Demandeservice implements IService<Demande> {
             ps.setDate(4, d.getDateDemande());
             ps.setString(5, d.getStatut());
             ps.setInt(6, d.getIdTech());
-            ps.setInt(7, d.getIdDemande());
+            ps.setString(7, d.getAdresseClient());
+            ps.setInt(8, d.getIdDemande());
 
             ps.executeUpdate();
         }
@@ -88,7 +91,8 @@ public class Demandeservice implements IService<Demande> {
                         rs.getString("description"),
                         rs.getDate("date_demande"),
                         rs.getString("statut"),
-                        rs.getInt("id_tech")
+                        rs.getInt("id_tech"),
+                        rs.getString("adresse_client")
                 );
                 list.add(d);
             }
@@ -122,11 +126,13 @@ public class Demandeservice implements IService<Demande> {
                             rs.getString("description"),
                             rs.getDate("date_demande"),
                             rs.getString("statut"),
-                            rs.getInt("id_tech")
+                            rs.getInt("id_tech"),
+                            rs.getString("adresse_client")
                     );
                     list.add(d);
                     System.out.println("📌 Demande trouvée: ID=" + d.getIdDemande() +
-                            ", Statut=" + d.getStatut());
+                            ", Statut=" + d.getStatut() +
+                            ", Adresse=" + d.getAdresseClient());
                 }
             }
         }
@@ -152,7 +158,8 @@ public class Demandeservice implements IService<Demande> {
                             rs.getString("description"),
                             rs.getDate("date_demande"),
                             rs.getString("statut"),
-                            rs.getInt("id_tech")
+                            rs.getInt("id_tech"),
+                            rs.getString("adresse_client")
                     );
                     list.add(d);
                 }
@@ -197,7 +204,8 @@ public class Demandeservice implements IService<Demande> {
                             rs.getString("description"),
                             rs.getDate("date_demande"),
                             rs.getString("statut"),
-                            rs.getInt("id_tech")
+                            rs.getInt("id_tech"),
+                            rs.getString("adresse_client")
                     );
                     list.add(d);
                 }
@@ -271,7 +279,8 @@ public class Demandeservice implements IService<Demande> {
                             rs.getString("description"),
                             rs.getDate("date_demande"),
                             rs.getString("statut"),
-                            rs.getInt("id_tech")
+                            rs.getInt("id_tech"),
+                            rs.getString("adresse_client")
                     );
                 }
             }

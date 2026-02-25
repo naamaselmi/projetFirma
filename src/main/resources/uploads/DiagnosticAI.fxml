@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.connection3a7.controller.DiagnosticAIController"
+      prefWidth="700" prefHeight="650"
+      style="-fx-background-color: white; -fx-background-radius: 15;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- En-tête -->
+    <Label text="🧠 ASSISTANT IA DE DIAGNOSTIC"
+           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1a961e; -fx-alignment: center;"
+           maxWidth="Infinity"/>
+
+    <Separator/>
+
+    <!-- Options -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Modèle IA:" style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="comboModel" prefWidth="300"/>
+        <CheckBox fx:id="chkModeHorsLigne" text="Mode hors ligne"/>
+    </HBox>
+
+    <!-- Zone de saisie -->
+    <Label text="Décrivez votre problème :"
+           style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+    <TextArea fx:id="txtDescription"
+              promptText="Ex: Ma connexion internet est très lente, l'ordinateur rame..."
+              wrapText="true"
+              prefHeight="100"
+              style="-fx-font-size: 13; -fx-background-radius: 10;"/>
+
+    <!-- Bouton d'analyse -->
+    <HBox alignment="CENTER">
+        <Button fx:id="btnDiagnostiquer" text="🔍 ANALYSER MON PROBLÈME"
+                onAction="#diagnostiquer"
+                style="-fx-background-color: #1a961e; -fx-text-fill: white;
+                       -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 25;
+                       -fx-padding: 12 30; -fx-cursor: hand;"/>
+    </HBox>
+
+    <Separator/>
+
+    <!-- Résultat -->
+    <Label text="Résultat du diagnostic :"
+           style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+    <TextArea fx:id="txtResultat"
+              prefHeight="250"
+              editable="false"
+              wrapText="true"
+              style="-fx-font-family: monospace; -fx-font-size: 12; -fx-background-radius: 10;"/>
+
+    <!-- Bouton de fermeture -->
+    <HBox alignment="CENTER_RIGHT">
+        <Button fx:id="btnFermer" text="❌ Fermer"
+                onAction="#fermer"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white;
+                       -fx-font-weight: bold; -fx-background-radius: 20;
+                       -fx-padding: 8 20; -fx-cursor: hand;"/>
+    </HBox>
+
+</VBox>

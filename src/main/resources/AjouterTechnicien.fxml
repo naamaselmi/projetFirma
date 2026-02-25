@@ -6,7 +6,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -19,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.connection3a7.controller.AjouterTechnicienController">
+<HBox prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.connection3a7.controller.AjouterTechnicienController">
 
     <children>
 
@@ -30,7 +32,7 @@
             </padding>
 
             <children>
-                <!-- LOGO (chemin corrigé) -->
+                <!-- LOGO -->
                 <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" style="-fx-background-color: transparent;">
                     <children>
                         <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
@@ -45,20 +47,24 @@
                     </effect>
                 </VBox>
 
-                <!-- Sidebar Buttons -->
-                <Button alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="🏠  Accueil">
+                <Separator style="-fx-background-color: #BDDB9A;" />
+
+                <!-- BOUTON ACCUEIL -->
+                <Button alignment="CENTER_LEFT" onAction="#allerAccueil" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="🏠  Accueil">
                     <padding><Insets left="15.0" /></padding>
                 </Button>
 
+                <!-- BOUTON NOUVEAU TECHNICIEN -->
                 <Button alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="➕  Nouveau Technicien">
                     <padding><Insets left="15.0" /></padding>
                 </Button>
 
+                <!-- BOUTON LISTE TECHNICIENS -->
                 <Button alignment="CENTER_LEFT" onAction="#voirListe" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold;" text="📋  Liste Techniciens">
                     <padding><Insets left="15.0" /></padding>
                 </Button>
 
-                <!-- ✅ NOUVEAU BOUTON VOIR LE FRONT -->
+                <!-- BOUTON VOIR FRONT -->
                 <Button fx:id="btnVoirFront" alignment="CENTER_LEFT" onAction="#allerVersFront" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="👁️  Voir le front">
                     <padding><Insets left="15.0" /></padding>
                 </Button>
@@ -69,7 +75,7 @@
             </children>
         </VBox>
 
-        <!-- ===== MAIN CONTENT WITH SCROLLPANE ===== -->
+        <!-- ===== MAIN CONTENT ===== -->
         <ScrollPane fitToWidth="true" style="-fx-background-color: #F9F9F9;" HBox.hgrow="ALWAYS">
             <content>
                 <VBox spacing="20.0" style="-fx-background-color: #F9F9F9;">
@@ -79,7 +85,7 @@
 
                     <children>
                         <!-- TITRE -->
-                        <Label text="Ajouter un nouveau technicien" textFill="#1a961e">
+                        <Label text="Ajouter un technicien" textFill="#1a961e">
                             <font>
                                 <Font name="System Bold" size="32.0" />
                             </font>
@@ -94,6 +100,7 @@
                                         <ColumnConstraints percentWidth="50" />
                                     </columnConstraints>
                                     <rowConstraints>
+                                        <RowConstraints minHeight="60" />
                                         <RowConstraints minHeight="60" />
                                         <RowConstraints minHeight="60" />
                                         <RowConstraints minHeight="60" />
@@ -168,64 +175,82 @@
                                             </children>
                                         </VBox>
 
-                                        <!-- LOCALISATION -->
-                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                        <!-- LOCALISATION AVEC SUGGESTIONS -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4">
                                             <children>
                                                 <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Localisation :" />
-                                                <TextField fx:id="txtLocalisation" prefHeight="35.0" promptText="Ville, Pays" style="-fx-font-size: 13;" />
+                                                <TextField fx:id="txtLocalisation" prefHeight="35.0" promptText="Rechercher un lieu (ex: Tunis, Lac...)" style="-fx-font-size: 13;" />
+                                                <ListView fx:id="suggestionsListView" prefHeight="150" prefWidth="400"
+                                                          visible="false" managed="false"
+                                                          style="-fx-background-color: white; -fx-border-color: #1a961e; -fx-border-width: 2; -fx-border-radius: 5;"/>
                                             </children>
                                         </VBox>
 
                                         <!-- DISPONIBILITÉ -->
-                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="5">
                                             <children>
                                                 <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Disponibilité :" />
                                                 <CheckBox fx:id="checkDisponibilite" selected="true" style="-fx-font-size: 13;" text="Technicien disponible" />
                                             </children>
                                         </VBox>
 
-                                        <!-- SECTION IMAGE -->
-                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                                        <!-- IMAGE -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                             <children>
-                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Photo du technicien :" />
-
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Photo :" />
                                                 <HBox alignment="CENTER_LEFT" spacing="15.0">
                                                     <children>
-                                                        <ImageView fx:id="imagePreview" fitHeight="120.0" fitWidth="120.0" preserveRatio="true" style="-fx-border-color: #CCC; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-color: #f5f5f5;">
-                                                            <effect>
-                                                                <DropShadow color="#00000020" radius="5.0" />
-                                                            </effect>
-                                                        </ImageView>
-
-                                                        <VBox spacing="10.0">
-                                                            <children>
-                                                                <Button fx:id="btnChoisirImage" onAction="#parcourirImage" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-cursor: hand;" text="📁  Parcourir..." />
-
-                                                                <Button fx:id="btnSupprimerImage" disable="true" onAction="#supprimerImageSelectionnee" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-cursor: hand;" text="🗑️  Supprimer" />
-
-                                                                <Label fx:id="lblNomImage" style="-fx-text-fill: gray; -fx-font-size: 12; -fx-font-style: italic;" text="Aucune image sélectionnée" />
-                                                            </children>
+                                                        <ImageView fx:id="imagePreview" fitHeight="100.0" fitWidth="100.0" preserveRatio="true" style="-fx-border-color: #CCC; -fx-border-width: 1; -fx-background-color: #f5f5f5;" />
+                                                        <VBox spacing="5.0">
+                                                            <Button fx:id="btnChoisirImage" onAction="#parcourirImage" text="📁 Parcourir" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 12; -fx-cursor: hand; -fx-padding: 5 10;" />
+                                                            <Button fx:id="btnSupprimerImage" disable="true" onAction="#supprimerImageSelectionnee" text="🗑️ Supprimer" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12; -fx-cursor: hand; -fx-padding: 5 10;" />
                                                         </VBox>
                                                     </children>
                                                 </HBox>
+                                                <Label fx:id="lblNomImage" style="-fx-text-fill: gray; -fx-font-size: 11; -fx-font-style: italic;" text="Aucune image" />
                                             </children>
                                         </VBox>
 
-                                        <!-- NOTE INFORMATIVE -->
-                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                                        <!-- STATUT PARTAGE -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="6">
                                             <children>
-                                                <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11; -fx-font-style: italic;" text="💡 Formats acceptés : PNG, JPG, JPEG, GIF - Taille max : 5 Mo" />
+                                                <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Statut partage :" />
+                                                <Label fx:id="lblStatutPartage" text="🟢 PARTAGE ACTIF" style="-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 14;"/>
                                             </children>
                                         </VBox>
+
+                                        <!-- BOUTONS PARTAGE -->
+                                        <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="6" alignment="CENTER_LEFT">
+                                            <children>
+                                                <Button fx:id="btnActiverPartage"
+                                                        text="✅ ACTIVER"
+                                                        style="-fx-background-color: #27ae60; -fx-text-fill: white;
+                                                               -fx-font-weight: bold; -fx-background-radius: 20;
+                                                               -fx-padding: 8 15; -fx-cursor: hand;"/>
+
+                                                <Button fx:id="btnDesactiverPartage"
+                                                        text="❌ DÉSACTIVER"
+                                                        style="-fx-background-color: #e74c3c; -fx-text-fill: white;
+                                                               -fx-font-weight: bold; -fx-background-radius: 20;
+                                                               -fx-padding: 8 15; -fx-cursor: hand;"
+                                                        disable="true"/>
+                                            </children>
+                                        </HBox>
                                     </children>
                                 </GridPane>
 
-                                <!-- BOUTONS D'ACTION -->
+                                <!-- BOUTONS FORMULAIRE -->
                                 <HBox alignment="CENTER_RIGHT" spacing="15.0" style="-fx-padding: 20 0 0 0;">
                                     <children>
-                                        <Button fx:id="btnAnnuler" onAction="#annuler" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-font-size: 14;" text="❌  Annuler" />
+                                        <Button fx:id="btnAnnuler" onAction="#annuler" prefHeight="45.0" prefWidth="150.0"
+                                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold;
+                                                       -fx-background-radius: 25; -fx-cursor: hand; -fx-font-size: 14;"
+                                                text="❌  Annuler" />
 
-                                        <Button fx:id="btnEnregistrer" onAction="#ajouterTechnicien" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-font-size: 14;" text="✅  Ajouter Technicien" />
+                                        <Button fx:id="btnEnregistrer" onAction="#ajouterTechnicien" prefHeight="45.0" prefWidth="200.0"
+                                                style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold;
+                                                       -fx-background-radius: 25; -fx-cursor: hand; -fx-font-size: 14;"
+                                                text="✅  Enregistrer" />
                                     </children>
                                 </HBox>
                             </children>

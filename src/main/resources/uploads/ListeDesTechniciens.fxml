@@ -101,17 +101,7 @@
                             <!-- BOUTON ACTUALISER -->
                             <Button fx:id="refreshButton" prefHeight="45.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; -fx-padding: 10 25; -fx-font-size: 14;" text="🔄 ACTUALISER" />
 
-                            <!-- 🔥 NOUVEAU BOUTON ACTIVER POSITION -->
-                            <Button fx:id="btnActiverPosition"
-                                    text="📍 ACTIVER POSITION"
-                                    onAction="#activerPosition"
-                                    style="-fx-background-color: #3498db;
-                                           -fx-text-fill: white;
-                                           -fx-font-weight: bold;
-                                           -fx-background-radius: 25;
-                                           -fx-cursor: hand;
-                                           -fx-padding: 10 20;
-                                           -fx-font-size: 14;"/>
+
                         </children>
                     </HBox>
 

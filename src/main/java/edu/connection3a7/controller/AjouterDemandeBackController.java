@@ -3,31 +3,29 @@ package edu.connection3a7.controller;
 import edu.connection3a7.entities.Demande;
 import edu.connection3a7.entities.Technicien;
 import edu.connection3a7.service.Demandeservice;
+import edu.connection3a7.service.EmailService;
 import edu.connection3a7.service.Technicienserv;
+import edu.connection3a7.tools.MyConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;        // ← CELUI-CI MANQUANT
-import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
-import java.io.File;
-
-import java.net.URL;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
 
 public class AjouterDemandeBackController implements Initializable {
 
@@ -47,12 +45,10 @@ public class AjouterDemandeBackController implements Initializable {
     @FXML private Label lblNomTechnicien;
     @FXML private Label lblSpecialiteTechnicien;
 
-
     // ========== PHOTO DU TECHNICIEN CONNECTÉ ==========
-    @FXML private ImageView imageTechnicien;      // ← DÉCLARATION ICI
-    @FXML private Label nomTechnicien;            // ← ET ICI
-    @FXML private Label specialiteTechnicien;     // ← ET ICI
-
+    @FXML private ImageView imageTechnicien;
+    @FXML private Label nomTechnicien;
+    @FXML private Label specialiteTechnicien;
 
     // ========== BOUTONS ==========
     @FXML private Button btnActualiser;
@@ -65,6 +61,10 @@ public class AjouterDemandeBackController implements Initializable {
     // ========== SERVICES ==========
     private Demandeservice demandeService;
     private Technicienserv technicienService;
+    private EmailService emailService;
+
+    // ========== CONNEXION DB ==========
+    private Connection cnx;
 
     // ========== VARIABLES SESSION ==========
     private int idTechnicienConnecte = 1; // À remplacer par l'ID du technicien connecté
@@ -74,6 +74,8 @@ public class AjouterDemandeBackController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         demandeService = new Demandeservice();
         technicienService = new Technicienserv();
+        emailService = new EmailService();
+        this.cnx = MyConnection.getInstance().getCnx();
 
         chargerTechnicienConnecte();
         initTable();
@@ -127,6 +129,7 @@ public class AjouterDemandeBackController implements Initializable {
             e.printStackTrace();
         }
     }
+
     /**
      * Initialiser la table des demandes
      */
@@ -222,11 +225,14 @@ public class AjouterDemandeBackController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les demandes: " + e.getMessage());
             e.printStackTrace();
 
-            // Données de test pour le développement
+            // Données de test avec adresse
             ObservableList<Demande> testData = FXCollections.observableArrayList();
-            Demande d1 = new Demande(1, 101, "Réseau", "Connexion internet très lente", Date.valueOf("2026-02-13"), "En attente", 1);
-            Demande d2 = new Demande(2, 102, "Logiciel", "Problème d'installation", Date.valueOf("2026-02-12"), "Acceptée", 1);
-            Demande d3 = new Demande(3, 103, "Matériel", "Écran qui ne s'allume pas", Date.valueOf("2026-02-11"), "Terminée", 1);
+            Demande d1 = new Demande(1, 101, "Réseau", "Connexion internet très lente",
+                    Date.valueOf("2026-02-13"), "En attente", 1, "Tunis");
+            Demande d2 = new Demande(2, 102, "Logiciel", "Problème d'installation",
+                    Date.valueOf("2026-02-12"), "Acceptée", 1, "Ariana");
+            Demande d3 = new Demande(3, 103, "Matériel", "Écran qui ne s'allume pas",
+                    Date.valueOf("2026-02-11"), "Terminée", 1, "La Marsa");
             testData.addAll(d1, d2, d3);
             tableDemandesRecues.setItems(testData);
             mettreAJourStats(testData);
@@ -272,6 +278,120 @@ public class AjouterDemandeBackController implements Initializable {
                 enAttente, acceptees, refusees, terminees, demandes.size()));
     }
 
+    // ========== RÉCUPÉRATION EMAIL CLIENT ==========
+
+    /**
+     * Récupère l'email d'un client par son ID
+     */
+    // ========== RÉCUPÉRATION EMAIL CLIENT ==========
+
+    /**
+     * Récupère l'email d'un client par son ID depuis la table "utilisateurs"
+     */
+    private String getEmailClient(int idUtilisateur) {
+        String sql = "SELECT email FROM utilisateurs WHERE id_utilisateur = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, idUtilisateur);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String email = rs.getString("email");
+                System.out.println("📧 Email trouvé pour utilisateur " + idUtilisateur + ": " + email);
+                return email;
+            } else {
+                System.out.println("⚠️ Aucun email trouvé pour l'utilisateur " + idUtilisateur);
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur récupération email: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // ========== ENVOI EMAIL AU CLIENT ==========
+
+    /**
+     * Envoie un email au client pour l'informer du changement de statut
+     */
+    private void envoyerEmailClient(Demande demande, String nouveauStatut, String action) {
+        String emailClient = getEmailClient(demande.getIdUtilisateur());
+
+        if (emailClient == null || emailClient.isEmpty()) {
+            System.out.println("⚠️ Email client non trouvé pour l'utilisateur " + demande.getIdUtilisateur());
+            return;
+        }
+
+        String sujet = "";
+        String contenu = "";
+
+        switch (nouveauStatut) {
+            case "Acceptée":
+                sujet = "✅ Demande acceptée - FIRMA";
+                contenu = String.format(
+                        "Bonjour,\n\n" +
+                                "Votre demande d'intervention #%d a été **acceptée** par le technicien.\n\n" +
+                                "Détails de la demande :\n" +
+                                "➤ Type : %s\n" +
+                                "➤ Description : %s\n" +
+                                "➤ Date : %s\n\n" +
+                                "Le technicien vous contactera très prochainement pour convenir d'un rendez-vous.\n\n" +
+                                "Merci de votre confiance,\n" +
+                                "L'équipe FIRMA",
+                        demande.getIdDemande(),
+                        demande.getTypeProbleme(),
+                        demande.getDescription(),
+                        demande.getDateDemande()
+                );
+                break;
+
+            case "Refusée":
+                sujet = "❌ Demande refusée - FIRMA";
+                contenu = String.format(
+                        "Bonjour,\n\n" +
+                                "Votre demande d'intervention #%d a été **refusée**.\n\n" +
+                                "Détails de la demande :\n" +
+                                "➤ Type : %s\n" +
+                                "➤ Description : %s\n" +
+                                "➤ Date : %s\n\n" +
+                                "Vous pouvez créer une nouvelle demande ou contacter notre support pour plus d'informations.\n\n" +
+                                "Cordialement,\n" +
+                                "L'équipe FIRMA",
+                        demande.getIdDemande(),
+                        demande.getTypeProbleme(),
+                        demande.getDescription(),
+                        demande.getDateDemande()
+                );
+                break;
+
+            case "Terminée":
+                sujet = "✓ Demande terminée - FIRMA";
+                contenu = String.format(
+                        "Bonjour,\n\n" +
+                                "Votre demande d'intervention #%d a été marquée comme **terminée**.\n\n" +
+                                "Détails de la demande :\n" +
+                                "➤ Type : %s\n" +
+                                "➤ Description : %s\n" +
+                                "➤ Date : %s\n\n" +
+                                "Nous espérons que votre expérience a été satisfaisante.\n" +
+                                "N'hésitez pas à laisser un avis sur le technicien qui est intervenu.\n\n" +
+                                "À bientôt sur FIRMA,\n" +
+                                "L'équipe FIRMA",
+                        demande.getIdDemande(),
+                        demande.getTypeProbleme(),
+                        demande.getDescription(),
+                        demande.getDateDemande()
+                );
+                break;
+        }
+
+        boolean envoye = emailService.envoyerEmail(emailClient, sujet, contenu);
+
+        if (envoye) {
+            System.out.println("✅ Email envoyé au client " + emailClient + " pour demande " + nouveauStatut);
+        } else {
+            System.out.println("❌ Échec envoi email à " + emailClient);
+        }
+    }
+
     // ========== ACTIONS ==========
 
     @FXML
@@ -288,7 +408,24 @@ public class AjouterDemandeBackController implements Initializable {
             return;
         }
 
-        NavigationBack.openDetailDemande(selected.getIdDemande(), true);
+        // Navigation vers les détails de la demande
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/uploads/DetailDemande.fxml"));
+            Parent root = loader.load();
+
+            DetailDemandeController controller = loader.getController();
+            controller.initData(selected, true);
+
+            Stage stage = new Stage();
+            stage.setTitle("Détail demande #" + selected.getIdDemande());
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir les détails");
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -305,6 +442,10 @@ public class AjouterDemandeBackController implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 demandeService.changerStatut(selected.getIdDemande(), "Acceptée");
+
+                // 🔥 ENVOYER EMAIL AU CLIENT
+                envoyerEmailClient(selected, "Acceptée", "acceptation");
+
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Demande acceptée avec succès");
                 actualiser();
             } catch (SQLException e) {
@@ -328,6 +469,10 @@ public class AjouterDemandeBackController implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 demandeService.changerStatut(selected.getIdDemande(), "Refusée");
+
+                // 🔥 ENVOYER EMAIL AU CLIENT
+                envoyerEmailClient(selected, "Refusée", "refus");
+
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Demande refusée");
                 actualiser();
             } catch (SQLException e) {
@@ -351,6 +496,10 @@ public class AjouterDemandeBackController implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 demandeService.changerStatut(selected.getIdDemande(), "Terminée");
+
+                // 🔥 ENVOYER EMAIL AU CLIENT
+                envoyerEmailClient(selected, "Terminée", "terminaison");
+
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Demande terminée");
                 actualiser();
             } catch (SQLException e) {
@@ -359,6 +508,7 @@ public class AjouterDemandeBackController implements Initializable {
             }
         }
     }
+
     /**
      * Retourne vers la liste des techniciens BACK
      */
@@ -378,7 +528,15 @@ public class AjouterDemandeBackController implements Initializable {
 
     @FXML
     private void retourDashboard() {
-        NavigationBack.goToDashboard();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/uploads/DashboardTech.fxml"));
+            Stage stage = (Stage) tableDemandesRecues.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard Technicien");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -389,7 +547,15 @@ public class AjouterDemandeBackController implements Initializable {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            NavigationBack.logout();
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/uploads/Login.fxml"));
+                Stage stage = (Stage) tableDemandesRecues.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Connexion");
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

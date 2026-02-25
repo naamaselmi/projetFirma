@@ -5,6 +5,8 @@ import edu.connection3a7.entities.Coordonnees;
 import edu.connection3a7.service.GeocodageService;
 import edu.connection3a7.service.LocalisationTechnicienService;
 import edu.connection3a7.service.Technicienserv;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,9 +28,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.UUID;
+import java.util.*;
+import java.util.Timer;
 
 public class AjouterTechnicienController implements Initializable {
 
@@ -41,6 +42,7 @@ public class AjouterTechnicienController implements Initializable {
     @FXML private TextField txtAge;
     @FXML private ComboBox<String> comboSpecialite;
     @FXML private TextField txtLocalisation;
+    @FXML private ListView<String> suggestionsListView;
     @FXML private CheckBox checkDisponibilite;
     @FXML private DatePicker dateNaissance;
 
@@ -50,12 +52,17 @@ public class AjouterTechnicienController implements Initializable {
     @FXML private Button btnSupprimerImage;
     @FXML private Label lblNomImage;
 
-    // ========== BOUTONS ==========
+    // ========== BOUTONS PARTAGE ==========
+    @FXML private Button btnActiverPartage;
+    @FXML private Button btnDesactiverPartage;
+    @FXML private Label lblStatutPartage;
+
+    // ========== BOUTONS PRINCIPAUX ==========
     @FXML private Button btnEnregistrer;
     @FXML private Button btnAnnuler;
-    @FXML private Button btnVoirListe;      // Bouton Voir Liste (back)
-    @FXML private Button btnVoirFront;      // Bouton Voir Front (client)
-    @FXML private Button btnAccueil;         // Bouton Accueil
+    @FXML private Button btnVoirListe;
+    @FXML private Button btnVoirFront;
+    @FXML private Button btnAccueil;
 
     // ========== SERVICES ==========
     private Technicienserv service = new Technicienserv();
@@ -68,6 +75,11 @@ public class AjouterTechnicienController implements Initializable {
     private boolean isUpdating = false;
     private static final String IMAGE_DIRECTORY = "src/main/resources/images/";
 
+    // ========== VARIABLES POUR LA RECHERCHE DE LOCALISATION ==========
+    private List<String> suggestions = new ArrayList<>();
+    private Timer searchTimer;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("✅ AjouterTechnicienController initialisé");
@@ -76,12 +88,152 @@ public class AjouterTechnicienController implements Initializable {
         initialiserComboSpecialite();
         chargerImageDefaut();
         setupAgeDateListeners();
+        setupLocalisationSearch();
+        configurerBoutonsPartage();
 
         btnSupprimerImage.setDisable(true);
         checkDisponibilite.setSelected(true);
+    }
 
-        // Configuration des boutons de navigation
-        configurerBoutons();
+    // ========== CONFIGURATION RECHERCHE LOCALISATION ==========
+    private void setupLocalisationSearch() {
+        txtLocalisation.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty()) {
+                suggestionsListView.setVisible(false);
+                suggestionsListView.setManaged(false);
+                return;
+            }
+
+            if (searchTimer != null) {
+                searchTimer.cancel();
+            }
+
+            searchTimer = new Timer();
+            searchTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    javafx.application.Platform.runLater(() -> {
+                        rechercherLocalisation(newVal);
+                    });
+                }
+            }, 500);
+        });
+
+        suggestionsListView.setOnMouseClicked(e -> {
+            String selected = suggestionsListView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                txtLocalisation.setText(selected);
+                suggestionsListView.setVisible(false);
+                suggestionsListView.setManaged(false);
+            }
+        });
+    }
+
+    private void rechercherLocalisation(String query) {
+        if (query.length() < 2) return; // Ignorer les recherches trop courtes
+
+        try {
+            String url = "https://nominatim.openstreetmap.org/search?q="
+                    + java.net.URLEncoder.encode(query, "UTF-8")
+                    + "&format=json&limit=10&countrycodes=tn";
+
+            java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
+            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                    .uri(java.net.URI.create(url))
+                    .header("User-Agent", "FIRMA-Application/1.0")
+                    .timeout(java.time.Duration.ofSeconds(5))
+                    .build();
+
+            client.sendAsync(request, java.net.http.HttpResponse.BodyHandlers.ofString())
+                    .thenApply(java.net.http.HttpResponse::body)
+                    .thenAccept(response -> {
+                        try {
+                            JsonNode root = objectMapper.readTree(response);
+
+                            suggestions.clear();
+                            for (JsonNode node : root) {
+                                String displayName = node.get("display_name").asText();
+                                String simplified = displayName.split(",")[0].trim();
+                                suggestions.add(simplified);
+                            }
+
+                            javafx.application.Platform.runLater(() -> {
+                                suggestionsListView.getItems().clear();
+                                suggestionsListView.getItems().addAll(suggestions);
+
+                                if (!suggestions.isEmpty()) {
+                                    suggestionsListView.setVisible(true);
+                                    suggestionsListView.setManaged(true);
+                                } else {
+                                    suggestionsListView.setVisible(false);
+                                    suggestionsListView.setManaged(false);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    })
+                    .exceptionally(e -> {
+                        System.err.println("❌ Erreur de connexion: " + e.getMessage());
+                        return null;
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ========== CONFIGURATION BOUTONS PARTAGE ==========
+    private void configurerBoutonsPartage() {
+        // Initialiser les boutons (par défaut partage activé)
+        mettreAJourBoutonsPartage(true);
+
+        btnActiverPartage.setOnAction(e -> activerPartage());
+        btnDesactiverPartage.setOnAction(e -> desactiverPartage());
+    }
+
+    private void activerPartage() {
+        mettreAJourBoutonsPartage(true);
+
+        if (technicienAModifier != null) {
+            try {
+                localisationService.activerPartage(technicienAModifier.getId_tech(), true);
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "✅ Partage activé pour " + technicienAModifier.getPrenom());
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Impossible d'activer le partage: " + e.getMessage());
+            }
+        }
+    }
+
+    private void desactiverPartage() {
+        mettreAJourBoutonsPartage(false);
+
+        if (technicienAModifier != null) {
+            try {
+                localisationService.activerPartage(technicienAModifier.getId_tech(), false);
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "✅ Partage désactivé pour " + technicienAModifier.getPrenom());
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Impossible de désactiver le partage: " + e.getMessage());
+            }
+        }
+    }
+
+    private void mettreAJourBoutonsPartage(boolean actif) {
+        if (actif) {
+            btnActiverPartage.setDisable(true);
+            btnDesactiverPartage.setDisable(false);
+            lblStatutPartage.setText("🟢 PARTAGE ACTIF");
+            lblStatutPartage.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+        } else {
+            btnActiverPartage.setDisable(false);
+            btnDesactiverPartage.setDisable(true);
+            lblStatutPartage.setText("🔴 PARTAGE INACTIF");
+            lblStatutPartage.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+        }
     }
 
     private void creerDossierImages() {
@@ -98,11 +250,6 @@ public class AjouterTechnicienController implements Initializable {
                 "Électronique", "Plomberie", "Électricité", "Mécanique",
                 "Sécurité", "Dépannage", "Installation", "Autre"
         );
-    }
-
-    private void configurerBoutons() {
-        // Les boutons sont déjà liés via FXML avec onAction
-        // Pas besoin de setOnAction ici
     }
 
     private void setupAgeDateListeners() {
@@ -256,12 +403,23 @@ public class AjouterTechnicienController implements Initializable {
         tech.setCin(txtCin.getText().trim());
         tech.setAge(Integer.parseInt(txtAge.getText().trim()));
         tech.setSpecialite(comboSpecialite.getValue());
-        tech.setLocalisation(txtLocalisation.getText().trim());
+
+        // Tronquer la localisation si trop longue
+        String localisation = txtLocalisation.getText().trim();
+        if (localisation.length() > 255) {
+            localisation = localisation.substring(0, 255);
+            System.out.println("⚠️ Localisation tronquée à 255 caractères");
+        }
+        tech.setLocalisation(localisation);
+
         tech.setDisponibilite(checkDisponibilite.isSelected());
         tech.setDateNaissance(dateNaissance.getValue());
         tech.setImage(nomImage);
 
         service.addentitiy(tech);
+
+        // Activer le partage par défaut
+        localisationService.activerPartage(tech.getId_tech(), true);
         mettreAJourCoordonneesDepuisAdresse(tech.getId_tech(), tech.getLocalisation());
 
         showAlert(Alert.AlertType.INFORMATION, "Succès",
@@ -279,7 +437,13 @@ public class AjouterTechnicienController implements Initializable {
         technicienAModifier.setCin(txtCin.getText().trim());
         technicienAModifier.setAge(Integer.parseInt(txtAge.getText().trim()));
         technicienAModifier.setSpecialite(comboSpecialite.getValue());
-        technicienAModifier.setLocalisation(txtLocalisation.getText().trim());
+
+        String localisation = txtLocalisation.getText().trim();
+        if (localisation.length() > 255) {
+            localisation = localisation.substring(0, 255);
+        }
+        technicienAModifier.setLocalisation(localisation);
+
         technicienAModifier.setDisponibilite(checkDisponibilite.isSelected());
         technicienAModifier.setDateNaissance(dateNaissance.getValue());
         technicienAModifier.setImage(nomImage);
@@ -343,6 +507,7 @@ public class AjouterTechnicienController implements Initializable {
         Optional<Coordonnees> resultat = geocodageService.geocoderAdresse(adresse);
         if (resultat.isEmpty()) {
             System.out.println("⚠️ Adresse non géocodée pour le technicien " + idTech + ": " + adresse);
+            localisationService.mettreAJourPosition(idTech, 36.8065, 10.1815);
             return;
         }
 
@@ -385,22 +550,26 @@ public class AjouterTechnicienController implements Initializable {
             }
         }
 
+        // Vérifier l'état du partage
+        try {
+            boolean partageActif = localisationService.estPartageActif(tech.getId_tech());
+            mettreAJourBoutonsPartage(partageActif);
+        } catch (Exception e) {
+            mettreAJourBoutonsPartage(false);
+        }
+
         btnEnregistrer.setText("✅ Modifier Technicien");
 
         System.out.println("✏️ Modification du technicien: " + tech.getPrenom() + " " + tech.getNom());
     }
 
-    // ========== MÉTHODES DE NAVIGATION CORRIGÉES ==========
+    // ========== MÉTHODES DE NAVIGATION ==========
 
-    /**
-     * ✅ Aller vers la liste back (gestion technicien)
-     */
     @FXML
     private void voirListe() {
         try {
             System.out.println("🔄 Navigation vers la liste BACK");
 
-            // Le fichier BACK est dans /uploads/ListeDesTechniciens.fxml
             URL fxmlUrl = getClass().getResource("/uploads/ListeDesTechniciens.fxml");
 
             if (fxmlUrl == null) {
@@ -421,15 +590,11 @@ public class AjouterTechnicienController implements Initializable {
         }
     }
 
-    /**
-     * ✅ Aller vers la liste front (client)
-     */
     @FXML
     private void allerVersFront() {
         try {
             System.out.println("🔄 Navigation vers la liste FRONT");
 
-            // Le fichier FRONT est à la racine /ListeDesTechniciensfront.fxml
             URL fxmlUrl = getClass().getResource("/ListeDesTechniciensfront.fxml");
 
             if (fxmlUrl == null) {
@@ -450,9 +615,6 @@ public class AjouterTechnicienController implements Initializable {
         }
     }
 
-    /**
-     * ✅ Aller vers l'accueil
-     */
     @FXML
     private void allerAccueil() {
         try {
@@ -478,17 +640,11 @@ public class AjouterTechnicienController implements Initializable {
         }
     }
 
-    /**
-     * ✅ Annuler et retourner à la liste back
-     */
     @FXML
     private void annuler() {
         voirListe();
     }
 
-    /**
-     * ✅ Afficher une alerte
-     */
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

@@ -14,6 +14,9 @@ public class LocalisationTechnicienService {
 
     public LocalisationTechnicienService() {
         this.cnx = MyConnection.getInstance().getCnx();
+        if (this.cnx == null) {
+            System.err.println("❌ Erreur: Connexion à la base de données échouée!");
+        }
     }
 
     // ===================== Classe interne PositionTechnicien =====================
@@ -28,12 +31,10 @@ public class LocalisationTechnicienService {
             this.technicien = technicien;
         }
 
-        // Actif si partage activé ET coordonnées valides
         public boolean estActif() {
             return partageActif && latitude != 0.0 && longitude != 0.0;
         }
 
-        // Statut affiché côté front
         public String getStatut() {
             if (!partageActif) return "Hors ligne";
             if (latitude == 0.0 && longitude == 0.0) return "Position inconnue";
@@ -60,10 +61,25 @@ public class LocalisationTechnicienService {
             ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(3, idTech);
             ps.executeUpdate();
-            System.out.println("Technicien " + idTech + " partage: " + (actif ? "ACTIVE" : "DESACTIVE"));
+            System.out.println("📍 Technicien " + idTech + " partage: " + (actif ? "ACTIVÉ" : "DÉSACTIVÉ"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // ===================== Vérifier si le partage est actif =====================
+    public boolean estPartageActif(int idTech) {
+        String sql = "SELECT partage_position FROM technicien WHERE id_tech = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, idTech);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getBoolean("partage_position");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // ===================== Mettre à jour la position =====================
@@ -75,7 +91,7 @@ public class LocalisationTechnicienService {
             ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             ps.setInt(4, idTech);
             ps.executeUpdate();
-            System.out.println("Position mise à jour pour technicien " + idTech);
+            System.out.println("📍 Position mise à jour pour technicien " + idTech);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -84,9 +100,9 @@ public class LocalisationTechnicienService {
     // ===================== Récupérer les techniciens avec position =====================
     public List<PositionTechnicien> getTechniciensAvecPosition() {
         List<PositionTechnicien> positions = new ArrayList<>();
-        System.out.println("\nRECHERCHE DES TECHNICIENS EN LIGNE...");
+        System.out.println("\n🔍 RECHERCHE DES TECHNICIENS EN LIGNE...");
 
-        String sql = "SELECT * FROM technicien"; // On récupère tous les techniciens
+        String sql = "SELECT * FROM technicien WHERE partage_position = TRUE";
 
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -108,18 +124,17 @@ public class LocalisationTechnicienService {
                     pos.setDerniereMaj(ts.toLocalDateTime());
                 }
 
-                // 🔹 Filtrage côté Java pour ne garder que les techniciens actifs avec position valide
                 if (pos.estActif()) {
                     positions.add(pos);
-                    System.out.println("Technicien actif: " + t.getPrenom() + " " + t.getNom()
+                    System.out.println("✅ Technicien actif: " + t.getPrenom() + " " + t.getNom()
                             + " | LAT=" + pos.getLatitude() + " | LNG=" + pos.getLongitude());
                 }
             }
 
-            System.out.println("TOTAL: " + positions.size() + " technicien(s) visibles sur la carte");
+            System.out.println("📊 TOTAL: " + positions.size() + " technicien(s) visibles sur la carte");
 
         } catch (SQLException e) {
-            System.out.println("ERREUR SQL: " + e.getMessage());
+            System.out.println("❌ ERREUR SQL: " + e.getMessage());
             e.printStackTrace();
         }
 

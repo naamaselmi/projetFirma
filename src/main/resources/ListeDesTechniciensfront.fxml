@@ -44,6 +44,7 @@
                     <padding><Insets left="15.0"/></padding>
                 </Button>
 
+
                 <Button onAction="#retournerVersBack"
                         text="📋  Liste Techniciens"
                         style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand;"
@@ -104,15 +105,7 @@
                                                -fx-cursor: hand;
                                                -fx-padding: 8 20;"/>
 
-                                <!-- 🔥 NOUVEAU BOUTON CONNEXION TECHNICIEN (vert) -->
-                                <Button text="🔧 Connexion Technicien"
-                                        onAction="#ouvrirLoginTechnicien"
-                                        style="-fx-background-color: #1a961e;
-                                               -fx-text-fill: white;
-                                               -fx-font-weight: bold;
-                                               -fx-background-radius: 25;
-                                               -fx-cursor: hand;
-                                               -fx-padding: 8 20;"/>
+
                             </children>
                         </HBox>
 
@@ -123,6 +116,16 @@
                                        style="-fx-background-color: white; -fx-padding: 8 20; -fx-background-radius: 20; -fx-border-color: #CCC; -fx-border-radius: 20; -fx-font-size: 14;"/>
                             </children>
                         </HBox>
+                        <!-- Bouton Découvrir avec IA (violet) -->
+                        <Button fx:id="btnDecouvrirIA"
+                                text="🤖 Découvrir avec IA"
+                                onAction="#ouvrirAssistantIA"
+                                style="-fx-background-color: #9b59b6;
+               -fx-text-fill: white;
+               -fx-font-weight: bold;
+               -fx-background-radius: 25;
+               -fx-cursor: hand;
+               -fx-padding: 8 20;"/>
 
                         <!-- GRILLE DES TECHNICIENS -->
                         <ScrollPane fitToWidth="true" fitToHeight="true"
