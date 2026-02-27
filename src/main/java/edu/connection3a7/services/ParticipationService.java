@@ -150,6 +150,35 @@ public class ParticipationService implements IService<Participation> {
     }
 
     /**
+     * Récupère une participation par son code unique.
+     */
+    public Participation getByCode(String codeParticipation) throws SQLException {
+        String requete = "SELECT * FROM participations WHERE code_participation = ?";
+        PreparedStatement pst = MyConnection.getInstance().getCnx().prepareStatement(requete);
+        pst.setString(1, codeParticipation);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            return mapParticipation(rs);
+        }
+
+        return null;
+    }
+
+    /**
+     * Met à jour uniquement le statut d'une participation.
+     */
+    public void updateStatut(int idParticipation, Statut nouveauStatut) throws SQLException {
+        String requete = "UPDATE participations SET statut = ? WHERE id_participation = ?";
+        PreparedStatement pst = MyConnection.getInstance().getCnx().prepareStatement(requete);
+        pst.setString(1, String.valueOf(nouveauStatut));
+        pst.setInt(2, idParticipation);
+        pst.executeUpdate();
+        System.out.println("Statut participation " + idParticipation + " mis à jour → " + nouveauStatut);
+    }
+
+    /**
      * Compte le nombre de participations confirmées pour un événement
      */
     public int countParticipationsByEvent(int idEvenement) throws SQLException {
@@ -189,7 +218,7 @@ public class ParticipationService implements IService<Participation> {
      * Vérifie si un utilisateur est déjà inscrit à un événement
      */
     public boolean isUserAlreadyParticipating(int idUtilisateur, int idEvenement) throws SQLException {
-        String requete = "SELECT COUNT(*) as total FROM participations WHERE id_utilisateur = ? AND id_evenement = ? AND statut = 'CONFIRME'";
+        String requete = "SELECT COUNT(*) as total FROM participations WHERE id_utilisateur = ? AND id_evenement = ? AND statut IN ('CONFIRME', 'EN_ATTENTE')";
         PreparedStatement pst = MyConnection.getInstance().getCnx().prepareStatement(requete);
         pst.setInt(1, idUtilisateur);
         pst.setInt(2, idEvenement);
@@ -207,7 +236,7 @@ public class ParticipationService implements IService<Participation> {
      * Récupère la participation d'un utilisateur pour un événement
      */
     public Participation getParticipationByUserAndEvent(int idUtilisateur, int idEvenement) throws SQLException {
-        String requete = "SELECT * FROM participations WHERE id_utilisateur = ? AND id_evenement = ? AND statut = 'CONFIRME'";
+        String requete = "SELECT * FROM participations WHERE id_utilisateur = ? AND id_evenement = ? AND statut IN ('CONFIRME', 'EN_ATTENTE')";
         PreparedStatement pst = MyConnection.getInstance().getCnx().prepareStatement(requete);
         pst.setInt(1, idUtilisateur);
         pst.setInt(2, idEvenement);
@@ -226,7 +255,7 @@ public class ParticipationService implements IService<Participation> {
      */
     public List<Participation> getParticipationsByUser(int idUtilisateur) throws SQLException {
         List<Participation> data = new ArrayList<>();
-        String requete = "SELECT * FROM participations WHERE id_utilisateur = ? AND statut = 'CONFIRME' ORDER BY date_inscription DESC";
+        String requete = "SELECT * FROM participations WHERE id_utilisateur = ? AND statut IN ('CONFIRME', 'EN_ATTENTE') ORDER BY date_inscription DESC";
 
         PreparedStatement pst = MyConnection.getInstance().getCnx().prepareStatement(requete);
         pst.setInt(1, idUtilisateur);

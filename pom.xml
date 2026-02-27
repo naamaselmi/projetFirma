@@ -46,6 +46,29 @@
         <version>5.10.2</version>
         <scope>test</scope>
     </dependency>
+    <!-- Jakarta Mail : Envoi d'emails (confirmation + tickets PDF) -->
+    <dependency>
+        <groupId>com.sun.mail</groupId>
+        <artifactId>jakarta.mail</artifactId>
+        <version>2.0.1</version>
+    </dependency>
+    <!-- ZXing : Génération et lecture de QR Codes -->
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>3.5.2</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>javase</artifactId>
+        <version>3.5.2</version>
+    </dependency>
+    <!-- Jackson pour le traitement JSON (API IA) -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.15.2</version>
+    </dependency>
     </dependencies>
     <build>
         <plugins>

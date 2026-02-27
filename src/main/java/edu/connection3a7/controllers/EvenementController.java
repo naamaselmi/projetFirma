@@ -60,6 +60,7 @@ public class EvenementController {
     @FXML private TextField      createLieu;
     @FXML private TextField      createAdresse;
     @FXML private Label          createImageLabel;
+    @FXML private Button         btnGenererIA;
 
     // ===== MODIFIER =====
     @FXML private TextField      modifySearchField;
@@ -75,6 +76,7 @@ public class EvenementController {
     @FXML private TextField      modifyLieu;
     @FXML private TextField      modifyAdresse;
     @FXML private Label          modifyImageLabel;
+    @FXML private Button         btnGenererIAModif;
 
     // ===== SERVICES & STATE =====
     private final EvenementService     service              = new EvenementService();
@@ -90,6 +92,10 @@ public class EvenementController {
     private ConstructionCartesEvenement       cardBuilder;
     private FormulaireCreationModificationEvenement        formHelper;
     private AffichageListeParticipants participantsHelper;
+    private DashboardAnalytique        dashboardHelper;
+
+    // ===== DASHBOARD =====
+    @FXML private VBox dashboardContainer;
 
     // ============================================================
     //  INITIALISATION
@@ -100,6 +106,10 @@ public class EvenementController {
         cardBuilder       = new ConstructionCartesEvenement(this);
         formHelper        = new FormulaireCreationModificationEvenement(this);
         participantsHelper = new AffichageListeParticipants(this);
+        dashboardHelper    = new DashboardAnalytique(this);
+
+        // Dashboard analytique
+        chargerDashboard();
 
         createType.setItems(FXCollections.observableArrayList(Type.values()));
         modifyType.setItems(FXCollections.observableArrayList(Type.values()));
@@ -185,9 +195,11 @@ public class EvenementController {
     // ============================================================
 
     @FXML void ajouterImage(ActionEvent event)        { formHelper.ajouterImage(); }
+    @FXML void genererImageIA(ActionEvent event)      { formHelper.genererImageIA(); }
     @FXML void creerEvenement(ActionEvent event)      { formHelper.creerEvenement(); }
     @FXML void rechercherPourModifier(ActionEvent event) { formHelper.rechercherPourModifier(); }
     @FXML void modifierImage(ActionEvent event)       { formHelper.modifierImage(); }
+    @FXML void genererImageIAModification(ActionEvent event) { formHelper.genererImageIAModification(); }
     @FXML void modifierEvenement(ActionEvent event)   { formHelper.modifierEvenement(); }
 
     // Appelé par les boutons des cartes (via cardBuilder)
@@ -228,6 +240,21 @@ public class EvenementController {
     }
 
     // ============================================================
+    //  DASHBOARD
+    // ============================================================
+
+    private void chargerDashboard() {
+        if (dashboardContainer != null) {
+            dashboardContainer.getChildren().clear();
+            dashboardContainer.getChildren().add(dashboardHelper.construireDashboard());
+        }
+    }
+
+    void rafraichirDashboard() {
+        chargerDashboard();
+    }
+
+    // ============================================================
     //  ACCESSEURS PACKAGE-PRIVATE (pour les helpers)
     // ============================================================
 
@@ -258,6 +285,7 @@ public class EvenementController {
     Label          getCreateImageLabel()   { return createImageLabel; }
     String         getCreateImagePath()    { return createImagePath; }
     void           setCreateImagePath(String p) { this.createImagePath = p; }
+    Button         getBtnGenererIA()       { return btnGenererIA; }
 
     // Modifier – champs
     TextField      getModifySearchField()  { return modifySearchField; }
@@ -275,6 +303,7 @@ public class EvenementController {
     Label          getModifyImageLabel()   { return modifyImageLabel; }
     String         getModifyImagePath()    { return modifyImagePath; }
     void           setModifyImagePath(String p) { this.modifyImagePath = p; }
+    Button         getBtnGenererIAModif()  { return btnGenererIAModif; }
 
     // État sélection
     int  getSelectedEvenementId()          { return selectedEvenementId; }

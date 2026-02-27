@@ -5,6 +5,7 @@ import edu.connection3a7.entities.Evenement;
 import edu.connection3a7.entities.Participation;
 import edu.connection3a7.entities.Utilisateur;
 import edu.connection3a7.services.AccompagnantService;
+import edu.connection3a7.tools.QRCodeUtil;
 import edu.connection3a7.tools.SessionManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -31,8 +32,14 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
 
 import java.awt.Desktop;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -242,6 +249,18 @@ public class AffichageTicketsEtExportPDF {
         sep2.setPrefHeight(1);
         sep2.setStyle("-fx-background-color: #f0ece0;");
 
+        // QR Code
+        String fullName = (prenom != null ? prenom : "") + " " + (nom != null ? nom : "");
+        String qrContent = QRCodeUtil.construireContenuTicket(code, fullName.trim(), e.getTitre());
+        javafx.scene.image.ImageView qrImageView = QRCodeUtil.genererQRCodeImageView(qrContent, 120);
+
+        VBox qrBox = new VBox(4);
+        qrBox.setAlignment(Pos.CENTER);
+        qrBox.setPadding(new Insets(6, 0, 2, 0));
+        Label lblQR = new Label("Scannez pour valider");
+        lblQR.setStyle("-fx-font-size: 9px; -fx-text-fill: #999; -fx-font-style: italic;");
+        qrBox.getChildren().addAll(qrImageView, lblQR);
+
         // Statut Confirmé
         HBox statutRow = new HBox(10);
         statutRow.setAlignment(Pos.CENTER);
@@ -250,7 +269,7 @@ public class AffichageTicketsEtExportPDF {
                 "-fx-background-color: #e8f8e0; -fx-background-radius: 12; -fx-padding: 4 16;");
         statutRow.getChildren().add(lblStatut);
 
-        cardBody.getChildren().addAll(nomRow, sep1, dateRow, horaireRow, lieuRow, sep2, statutRow);
+        cardBody.getChildren().addAll(nomRow, sep1, dateRow, horaireRow, lieuRow, sep2, qrBox, statutRow);
 
         card.getChildren().addAll(cardHeader, cardBody);
         return card;
@@ -420,7 +439,7 @@ public class AffichageTicketsEtExportPDF {
 
             // ── Carte du participant principal ──
             ajouterCarteParticipantPDF(doc, code, prenom, nom, "Participant principal",
-                    fontBold, fontNormal, vertPrimaire, vertClair, grisClair);
+                    fontBold, fontNormal, vertPrimaire, vertClair, grisClair, e.getTitre());
 
             // ── Cartes des accompagnants ──
             if (accompagnants != null) {
@@ -428,7 +447,7 @@ public class AffichageTicketsEtExportPDF {
                     Accompagnant a = accompagnants.get(i);
                     String accCode = code + "-A" + (i + 1);
                     ajouterCarteParticipantPDF(doc, accCode, a.getPrenom(), a.getNom(),
-                            "Accompagnant " + (i + 1), fontBold, fontNormal, vertPrimaire, vertClair, grisClair);
+                            "Accompagnant " + (i + 1), fontBold, fontNormal, vertPrimaire, vertClair, grisClair, e.getTitre());
                 }
             }
 
@@ -474,6 +493,14 @@ public class AffichageTicketsEtExportPDF {
     private void ajouterCarteParticipantPDF(Document doc, String code, String prenom, String nom,
                                             String role, PdfFont fontBold, PdfFont fontNormal,
                                             DeviceRgb headerColor, DeviceRgb badgeColor, DeviceRgb separatorColor) {
+        ajouterCarteParticipantPDF(doc, code, prenom, nom, role, fontBold, fontNormal,
+                headerColor, badgeColor, separatorColor, null);
+    }
+
+    private void ajouterCarteParticipantPDF(Document doc, String code, String prenom, String nom,
+                                            String role, PdfFont fontBold, PdfFont fontNormal,
+                                            DeviceRgb headerColor, DeviceRgb badgeColor, DeviceRgb separatorColor,
+                                            String titreEvenement) {
         // Titre vert avec code
         Table cardTable = new Table(UnitValue.createPercentArray(new float[]{65, 35}))
                 .useAllAvailableWidth()
@@ -495,14 +522,46 @@ public class AffichageTicketsEtExportPDF {
         cardTable.addCell(headerRight);
         doc.add(cardTable);
 
-        // Corps
-        Table bodyTable = new Table(UnitValue.createPercentArray(new float[]{35, 65}))
+        // Corps : infos + QR Code côte à côte
+        String fullName = (prenom != null ? prenom : "") + " " + (nom != null ? nom : "");
+
+        Table bodyTable = new Table(UnitValue.createPercentArray(new float[]{65, 35}))
                 .useAllAvailableWidth().setMarginBottom(10);
 
-        String fullName = (prenom != null ? prenom : "") + " " + (nom != null ? nom : "");
-        ajouterLignePDF(bodyTable, "Participant", fullName.trim(), fontBold, fontNormal, separatorColor);
-        ajouterLignePDF(bodyTable, "Code", code, fontBold, fontNormal, separatorColor);
+        // Colonne gauche : informations textuelles
+        Table infoTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}))
+                .useAllAvailableWidth();
+        ajouterLignePDF(infoTable, "Participant", fullName.trim(), fontBold, fontNormal, separatorColor);
+        ajouterLignePDF(infoTable, "Code", code, fontBold, fontNormal, separatorColor);
 
+        Cell infoCell = new Cell().add(infoTable)
+                .setBorder(Border.NO_BORDER)
+                .setPadding(4);
+        bodyTable.addCell(infoCell);
+
+        // Colonne droite : QR Code
+        Cell qrCell = new Cell().setBorder(Border.NO_BORDER).setPadding(6);
+        try {
+            String qrContent = QRCodeUtil.construireContenuTicket(code, fullName.trim(),
+                    titreEvenement != null ? titreEvenement : "");
+            BufferedImage qrBuffered = QRCodeUtil.genererQRCodeBufferedImage(qrContent, 200);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(qrBuffered, "png", baos);
+            ImageData qrImageData = ImageDataFactory.create(baos.toByteArray());
+            Image qrImage = new Image(qrImageData).scaleToFit(90, 90);
+            qrCell.add(new Paragraph().add(qrImage).setTextAlignment(TextAlignment.CENTER));
+            qrCell.add(new Paragraph("Scannez pour valider")
+                    .setFont(fontNormal).setFontSize(7)
+                    .setFontColor(new DeviceRgb(153, 153, 153))
+                    .setTextAlignment(TextAlignment.CENTER));
+        } catch (Exception ex) {
+            System.err.println("Erreur QR Code PDF : " + ex.getMessage());
+            qrCell.add(new Paragraph("[QR Code]").setFont(fontNormal).setFontSize(8)
+                    .setTextAlignment(TextAlignment.CENTER));
+        }
+        bodyTable.addCell(qrCell);
+
+        // Ligne statut sur toute la largeur
         Cell statutCell = new Cell(1, 2).add(
                         new Paragraph("CONFIRME").setFont(fontBold).setFontSize(10)
                                 .setFontColor(new DeviceRgb(45, 138, 26))

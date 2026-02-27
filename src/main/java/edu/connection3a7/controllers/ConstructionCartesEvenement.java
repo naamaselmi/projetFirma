@@ -2,6 +2,8 @@ package edu.connection3a7.controllers;
 
 import edu.connection3a7.entities.Evenement;
 import edu.connection3a7.services.ParticipationService;
+import edu.connection3a7.tools.WeatherService;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -276,6 +278,55 @@ public class ConstructionCartesEvenement {
                 separateur(),
                 ligneInfo("👥", "Participations", genererInfoParticipations(e))
         );
+
+        // ── Section météo ──
+        VBox meteoSection = new VBox(6);
+        meteoSection.setPadding(new Insets(10, 0, 10, 0));
+        meteoSection.setVisible(false);
+        meteoSection.setManaged(false);
+        body.getChildren().addAll(separateur(), meteoSection);
+
+        if (e.getDateDebut() != null && e.getLieu() != null && !e.getLieu().isBlank()
+                && WeatherService.getInstance().isConfigured()) {
+            Label meteoTitle = new Label("☀️  Météo prévue");
+            meteoTitle.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;");
+            Label meteoLoading = new Label("⌛ Chargement...");
+            meteoLoading.setStyle("-fx-font-size: 12px; -fx-text-fill: #999;");
+            meteoSection.getChildren().addAll(meteoTitle, meteoLoading);
+            meteoSection.setVisible(true);
+            meteoSection.setManaged(true);
+
+            WeatherService.getInstance().getMeteo(e.getLieu(), e.getAdresse(), e.getDateDebut())
+                    .thenAccept(result -> Platform.runLater(() -> {
+                        meteoSection.getChildren().clear();
+                        meteoSection.getChildren().add(meteoTitle);
+                        if (result != null) {
+                            HBox tempRow = new HBox(10);
+                            tempRow.setAlignment(Pos.CENTER_LEFT);
+                            Label emoji = new Label(result.getEmoji());
+                            emoji.setStyle("-fx-font-size: 28px;");
+                            VBox tempInfo = new VBox(2);
+                            Label tempLabel = new Label(Math.round(result.temperature) + "°C");
+                            tempLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333;");
+                            Label descLabel = new Label(result.description);
+                            descLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #555;");
+                            tempInfo.getChildren().addAll(tempLabel, descLabel);
+                            tempRow.getChildren().addAll(emoji, tempInfo);
+
+                            Label minMax = new Label("↓ " + Math.round(result.tempMin) + "°C  /  ↑ " + Math.round(result.tempMax) + "°C");
+                            minMax.setStyle("-fx-font-size: 11px; -fx-text-fill: #888;");
+
+                            Label fiabilite = new Label(result.getFiabilite());
+                            fiabilite.setStyle("-fx-font-size: 10px; -fx-text-fill: #aaa; -fx-font-style: italic;");
+
+                            meteoSection.getChildren().addAll(tempRow, minMax, fiabilite);
+                        } else {
+                            Label noData = new Label("Données météo indisponibles");
+                            noData.setStyle("-fx-font-size: 12px; -fx-text-fill: #999;");
+                            meteoSection.getChildren().add(noData);
+                        }
+                    }));
+        }
 
         ScrollPane scrollPane = new ScrollPane(body);
         scrollPane.setFitToWidth(true);

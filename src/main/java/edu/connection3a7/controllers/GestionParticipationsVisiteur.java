@@ -261,7 +261,42 @@ public class GestionParticipationsVisiteur {
             Participation result = ajouterParticipation(e, nbAccomp, tfNote.getText(), accompagnants);
             popup.close();
             if (result != null) {
-                controller.showTicketCards(result, e, tfPrenom.getText(), tfNom.getText(), accompagnants);
+                // Envoyer l'email de confirmation si le service est configuré
+                if (edu.connection3a7.tools.EmailService.getInstance().isConfigured()) {
+                    String emailDest = tfEmail.getText().trim();
+                    String prenomDest = tfPrenom.getText().trim();
+                    edu.connection3a7.tools.EmailService.getInstance()
+                            .envoyerEmailConfirmation(emailDest, prenomDest, e, result.getCodeParticipation())
+                            .thenAccept(success -> javafx.application.Platform.runLater(() -> {
+                                if (success) {
+                                    OutilsInterfaceGraphique.afficherAlerte(javafx.scene.control.Alert.AlertType.INFORMATION,
+                                            "Email envoyé \u2709",
+                                            "Un email de confirmation a été envoyé à " + emailDest + ".\n\n"
+                                            + "Veuillez cliquer sur le lien dans l'email pour confirmer votre participation "
+                                            + "et recevoir votre ticket PDF.");
+                                } else {
+                                    OutilsInterfaceGraphique.afficherAlerte(javafx.scene.control.Alert.AlertType.WARNING,
+                                            "Email non envoyé",
+                                            "L'email de confirmation n'a pas pu être envoyé.\n"
+                                            + "Votre inscription est enregistrée (en attente de confirmation).");
+                                }
+                            }));
+                    // Afficher un message immédiat avant que l'email n'arrive
+                    OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.INFORMATION,
+                            "Inscription enregistrée",
+                            "Votre inscription est en attente de confirmation.\n\n"
+                            + "\u2709 Un email de confirmation va être envoyé à " + tfEmail.getText().trim() + ".\n"
+                            + "Cliquez sur le lien dans l'email pour confirmer et recevoir votre ticket PDF.");
+                } else {
+                    // Si email non configuré, confirmer directement et montrer les tickets
+                    try {
+                        partService().updateStatut(result.getIdParticipation(), Statut.CONFIRME);
+                        result.setStatut(Statut.CONFIRME);
+                    } catch (Exception ex) {
+                        System.err.println("Erreur confirmation directe : " + ex.getMessage());
+                    }
+                    controller.showTicketCards(result, e, tfPrenom.getText(), tfNom.getText(), accompagnants);
+                }
             }
         });
 
@@ -295,7 +330,7 @@ public class GestionParticipationsVisiteur {
             participation.setIdUtilisateur(u.getIdUtilisateur());
             participation.setNombreAccompagnants(nombreAccompagnants);
             participation.setCommentaire(commentaire.trim().isEmpty() ? null : commentaire.trim());
-            participation.setStatut(Statut.CONFIRME);
+            participation.setStatut(Statut.EN_ATTENTE);
             participation.setDateInscription(LocalDateTime.now());
 
             partService().addEntityWithAccompagnants(participation, accompagnants);

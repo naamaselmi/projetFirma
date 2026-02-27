@@ -171,6 +171,8 @@
                                        style="-fx-font-size: 13px; -fx-text-fill: #888; -fx-background-color: #f5f5f5; -fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-border-radius: 5;" />
                                 <Button onAction="#ajouterImage" prefHeight="38" prefWidth="110"
                                         style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Parcourir" />
+                                <Button fx:id="btnGenererIA" onAction="#genererImageIA" prefHeight="38" prefWidth="150"
+                                        style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="🤖 Générer avec IA" />
                             </HBox>
 
                             <HBox alignment="CENTER_RIGHT" spacing="15">
@@ -264,6 +266,8 @@
                                        style="-fx-font-size: 13px; -fx-text-fill: #888; -fx-background-color: #f5f5f5; -fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-border-radius: 5;" />
                                 <Button onAction="#modifierImage" prefHeight="38" prefWidth="110"
                                         style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Parcourir" />
+                                <Button fx:id="btnGenererIAModif" onAction="#genererImageIAModification" prefHeight="38" prefWidth="150"
+                                        style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="🤖 Générer avec IA" />
                             </HBox>
 
                             <HBox alignment="CENTER_RIGHT" spacing="15">
@@ -273,6 +277,11 @@
                             </HBox>
                         </VBox>
                     </ScrollPane>
+                </Tab>
+
+                <!-- ==================== DASHBOARD ==================== -->
+                <Tab text="📊 Dashboard">
+                    <VBox fx:id="dashboardContainer" />
                 </Tab>
 
             </TabPane>

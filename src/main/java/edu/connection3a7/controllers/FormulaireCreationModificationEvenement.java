@@ -4,6 +4,7 @@ import edu.connection3a7.entities.Evenement;
 import edu.connection3a7.entities.Statutevent;
 import edu.connection3a7.entities.Type;
 import edu.connection3a7.services.EvenementService;
+import edu.connection3a7.tools.AIImageService;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
@@ -419,4 +420,178 @@ public class FormulaireCreationModificationEvenement {
             return null;
         }
     }
-}
+
+    // ============================================================
+    //  GÉNÉRATION D'IMAGES PAR IA
+    // ============================================================
+
+    /**
+     * Génère une image d'événement avec l'IA pour la création
+     */
+    void genererImageIA() {
+        // Vérifier qu'un titre est saisi (minimum requis)
+        String titre = controller.getCreateTitre().getText().trim();
+        if (titre.isEmpty()) {
+            OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.WARNING, 
+                "Titre requis", 
+                "Veuillez d'abord saisir un titre pour l'événement.");
+            return;
+        }
+
+        // Récupérer les données du formulaire
+        String description = controller.getCreateDescription().getText();
+        Type type = controller.getCreateType().getValue();
+        String lieu = controller.getCreateLieu().getText();
+        String organisateur = controller.getCreateOrganisateur().getText();
+        
+        // Afficher un indicateur de chargement
+        controller.getCreateImageLabel().setText("Génération en cours...");
+        controller.getCreateImageLabel().setStyle(
+            "-fx-font-size: 13px; -fx-text-fill: #666; -fx-background-color: #fff3cd; "
+            + "-fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #ffeaa7; "
+            + "-fx-border-width: 1.5; -fx-border-radius: 5;");
+
+        // Désactiver le bouton pendant la génération
+        if (controller.getBtnGenererIA() != null) {
+            controller.getBtnGenererIA().setDisable(true);
+            controller.getBtnGenererIA().setText("Génération...");
+        }
+
+        // Exécuter dans un thread séparé pour ne pas bloquer l'UI
+        new Thread(() -> {
+            try {
+                AIImageService aiService = new AIImageService();
+                
+                // Générer l'image avec l'IA
+                File imageGeneree = aiService.generateEventImage(
+                    titre,
+                    description,
+                    type,
+                    lieu,
+                    organisateur
+                );
+
+                // Mettre à jour l'UI dans le thread JavaFX
+                javafx.application.Platform.runLater(() -> {
+                    if (imageGeneree != null) {
+                        controller.setCreateImagePath(imageGeneree.getAbsolutePath());
+                        controller.getCreateImageLabel().setText("Image générée par IA");
+                        controller.getCreateImageLabel().setStyle(
+                            "-fx-font-size: 13px; -fx-text-fill: #155724; -fx-background-color: #d4edda; "
+                            + "-fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c3e6cb; "
+                            + "-fx-border-width: 1.5; -fx-border-radius: 5;");
+                        
+                        OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.INFORMATION, 
+                            "Image générée", 
+                            "L'image a été générée avec succès par l'IA.");
+                    }
+                });
+            } catch (Exception e) {
+                javafx.application.Platform.runLater(() -> {
+                    OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.ERROR, 
+                        "Erreur de génération", 
+                        "Impossible de générer l'image : " + e.getMessage());
+                    controller.getCreateImageLabel().setText("Échec de génération");
+                    controller.getCreateImageLabel().setStyle(
+                        "-fx-font-size: 13px; -fx-text-fill: #721c24; -fx-background-color: #f8d7da; "
+                        + "-fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #f5c6cb; "
+                        + "-fx-border-width: 1.5; -fx-border-radius: 5;");
+                });
+            } finally {
+                javafx.application.Platform.runLater(() -> {
+                    if (controller.getBtnGenererIA() != null) {
+                        controller.getBtnGenererIA().setDisable(false);
+                        controller.getBtnGenererIA().setText("🤖 Générer avec IA");
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * Génère une image IA pour la modification
+     */
+    void genererImageIAModification() {
+        // Vérifier qu'un événement est sélectionné
+        if (controller.getSelectedEvenementId() == -1) {
+            OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.WARNING, 
+                "Aucun événement", 
+                "Veuillez d'abord sélectionner un événement à modifier.");
+            return;
+        }
+
+        // Récupérer les données du formulaire de modification
+        String titre = controller.getModifyTitre().getText().trim();
+        if (titre.isEmpty()) {
+            OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.WARNING, 
+                "Titre requis", 
+                "Veuillez d'abord saisir un titre pour l'événement.");
+            return;
+        }
+
+        String description = controller.getModifyDescription().getText();
+        Type type = controller.getModifyType().getValue();
+        String lieu = controller.getModifyLieu().getText();
+        String organisateur = controller.getModifyOrganisateur().getText();
+        
+        // Afficher un indicateur de chargement
+        controller.getModifyImageLabel().setText("Génération en cours...");
+        controller.getModifyImageLabel().setStyle(
+            "-fx-font-size: 13px; -fx-text-fill: #666; -fx-background-color: #fff3cd; "
+            + "-fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #ffeaa7; "
+            + "-fx-border-width: 1.5; -fx-border-radius: 5;");
+
+        // Désactiver le bouton pendant la génération
+        if (controller.getBtnGenererIAModif() != null) {
+            controller.getBtnGenererIAModif().setDisable(true);
+            controller.getBtnGenererIAModif().setText("Génération...");
+        }
+
+        // Exécuter dans un thread séparé
+        new Thread(() -> {
+            try {
+                AIImageService aiService = new AIImageService();
+                
+                File imageGeneree = aiService.generateEventImage(
+                    titre,
+                    description,
+                    type,
+                    lieu,
+                    organisateur
+                );
+
+                javafx.application.Platform.runLater(() -> {
+                    if (imageGeneree != null) {
+                        controller.setModifyImagePath(imageGeneree.getAbsolutePath());
+                        controller.getModifyImageLabel().setText("Image générée par IA");
+                        controller.getModifyImageLabel().setStyle(
+                            "-fx-font-size: 13px; -fx-text-fill: #155724; -fx-background-color: #d4edda; "
+                            + "-fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c3e6cb; "
+                            + "-fx-border-width: 1.5; -fx-border-radius: 5;");
+                            
+                        OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.INFORMATION, 
+                            "Image générée", 
+                            "L'image a été générée avec succès.");
+                    }
+                });
+            } catch (Exception e) {
+                javafx.application.Platform.runLater(() -> {
+                    OutilsInterfaceGraphique.afficherAlerte(Alert.AlertType.ERROR, 
+                        "Erreur de génération", 
+                        "Impossible de générer l'image : " + e.getMessage());
+                    controller.getModifyImageLabel().setText("Échec de génération");
+                    controller.getModifyImageLabel().setStyle(
+                        "-fx-font-size: 13px; -fx-text-fill: #721c24; -fx-background-color: #f8d7da; "
+                        + "-fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #f5c6cb; "
+                        + "-fx-border-width: 1.5; -fx-border-radius: 5;");
+                });
+            } finally {
+                javafx.application.Platform.runLater(() -> {
+                    if (controller.getBtnGenererIAModif() != null) {
+                        controller.getBtnGenererIAModif().setDisable(false);
+                        controller.getBtnGenererIAModif().setText("🤖 Générer avec IA");
+                    }
+                });
+            }
+        }).start();
+    }}
