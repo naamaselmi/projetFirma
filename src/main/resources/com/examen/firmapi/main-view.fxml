@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.examen.firmapi.controllers.MainController"
             style="-fx-background-color: #f4f6f9;">
@@ -27,14 +28,33 @@
 
       <Pane HBox.hgrow="ALWAYS"/>
 
-      <Button fx:id="logoutButton"
-              text="Déconnexion"
-              onAction="#logout"
-              style="-fx-background-color: #b66060;
-                           -fx-text-fill: white;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 20;
-                           -fx-padding: 8 20 8 20;" />
+      <!-- USER INFO -->
+      <MenuButton fx:id="profileMenu"
+                  style="-fx-background-color: transparent;"
+                  contentDisplay="LEFT">
+
+        <graphic>
+          <HBox alignment="CENTER" spacing="10">
+            <ImageView fx:id="profileImage"
+                       fitHeight="35"
+                       fitWidth="35"
+                       preserveRatio="true"
+                       style="-fx-background-radius: 50;" />
+            <Label fx:id="userNameLabel"
+                   style="-fx-text-fill: white;
+                          -fx-font-weight: bold;
+                          -fx-font-size: 14px;" />
+          </HBox>
+        </graphic>
+
+        <items>
+          <MenuItem text="Edit Profile"
+                    onAction="#handleEditProfile"/>
+          <MenuItem text="Déconnexion"
+                    onAction="#logout"/>
+        </items>
+
+      </MenuButton>
     </HBox>
   </top>
 

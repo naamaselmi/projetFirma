@@ -11,6 +11,8 @@ public class LogoutUtil {
 
     public static void logout(Stage stage) {
 
+        UserSession.clear();
+
         try {
             FXMLLoader loader = new FXMLLoader(
                     LogoutUtil.class.getResource("/com/examen/firmapi/auth-view.fxml")

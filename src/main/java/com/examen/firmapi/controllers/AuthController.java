@@ -3,6 +3,8 @@ package com.examen.firmapi.controllers;
 import com.examen.firmapi.entities.Role;
 import com.examen.firmapi.entities.Utilisateur;
 import com.examen.firmapi.services.UtilisateurService;
+import com.examen.firmapi.utils.TempPasswordStore;
+import com.examen.firmapi.utils.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -44,38 +46,33 @@ public class AuthController {
         TextField emailField = (TextField) view.lookup("#emailField");
         PasswordField passwordField = (PasswordField) view.lookup("#passwordField");
         Button loginBtn = (Button) view.lookup("#loginBtn");
+        Hyperlink forgotPasswordLink = (Hyperlink) view.lookup("#forgotPasswordLink");
+
+        forgotPasswordLink.setOnAction(e -> handleForgotPassword());
 
         loginBtn.setOnAction(e -> {
 
-            Utilisateur user =
-                    service.login(emailField.getText(), passwordField.getText());
+            String email = emailField.getText();
+            String password = passwordField.getText();
+
+            Utilisateur user = service.login(email, password);
 
             if (user != null) {
 
-                Stage stage = (Stage) contentPane.getScene().getWindow();
+                String tempPassword = TempPasswordStore.get(email);
 
-                try {
+                if (tempPassword != null && password.equals(tempPassword)) {
 
-                    if (user.getRole() == Role.ADMIN) {
-
-                        stage.setScene(new Scene(
-                                FXMLLoader.load(
-                                        getClass().getResource("/com/examen/firmapi/utilisateur-view.fxml")
-                                )
-                        ));
-
-                    } else {
-
-                        stage.setScene(new Scene(
-                                FXMLLoader.load(
-                                        getClass().getResource("/com/examen/firmapi/main-view.fxml")
-                                )
-                        ));
+                    try {
+                        showChangePassword(user);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
 
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                    return;
                 }
+
+                redirectUser(user);
 
             } else {
                 new Alert(Alert.AlertType.ERROR,
@@ -158,4 +155,118 @@ public class AuthController {
         });
     }
 
+    // ========================
+    // SHOW CHANGE PASSWORD
+    // ========================
+
+    private void showChangePassword(Utilisateur user) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/com/examen/firmapi/change-password.fxml")
+        );
+
+        Parent view = loader.load();
+        contentPane.getChildren().setAll(view);
+
+        PasswordField newPasswordField =
+                (PasswordField) view.lookup("#newPasswordField");
+
+        PasswordField confirmPasswordField =
+                (PasswordField) view.lookup("#confirmPasswordField");
+
+        Button changePasswordBtn =
+                (Button) view.lookup("#changePasswordBtn");
+
+        changePasswordBtn.setOnAction(e -> {
+
+            String newPass = newPasswordField.getText();
+            String confirmPass = confirmPasswordField.getText();
+
+            if (newPass.isEmpty() || confirmPass.isEmpty()) {
+                new Alert(Alert.AlertType.WARNING,
+                        "Please fill all fields").show();
+                return;
+            }
+
+            if (!newPass.equals(confirmPass)) {
+                new Alert(Alert.AlertType.ERROR,
+                        "Passwords do not match").show();
+                return;
+            }
+
+            try {
+                // Update password in DB
+                service.updatePassword(user.getEmail(), newPass);
+
+                // Remove temp password
+                TempPasswordStore.remove(user.getEmail());
+
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Password changed successfully").show();
+
+                // Auto login after change
+                redirectUser(user);
+
+            } catch (Exception ex) {
+                new Alert(Alert.AlertType.ERROR,
+                        ex.getMessage()).show();
+            }
+
+        });
+    }
+
+    private void redirectUser(Utilisateur user) {
+        System.out.println("➡ Redirecting user...");
+        UserSession.setUser(user);
+
+        Stage stage = (Stage) contentPane.getScene().getWindow();
+
+        try {
+
+            if (user.getRole() == Role.ADMIN) {
+
+                stage.setScene(new Scene(
+                        FXMLLoader.load(
+                                getClass().getResource("/com/examen/firmapi/utilisateur-view.fxml")
+                        )
+                ));
+
+            } else {
+
+                stage.setScene(new Scene(
+                        FXMLLoader.load(
+                                getClass().getResource("/com/examen/firmapi/main-view.fxml")
+                        )
+                ));
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private void handleForgotPassword() {
+
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Forgot Password");
+        dialog.setHeaderText("Enter your registered email");
+        dialog.setContentText("Email:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(email -> {
+            try {
+                service.resetPassword(email);
+
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Temporary password sent to your email.").show();
+
+            } catch (Exception e) {
+                new Alert(Alert.AlertType.ERROR,
+                        e.getMessage()).show();
+            }
+        });
+    }
 }
