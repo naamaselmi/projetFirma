@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20" style="-fx-background-color: #fefbde;" stylesheets="@evenement-style.css"
+      xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Firma.controllers.GestionEvenement.EvenementController">
+    <padding><Insets bottom="30" left="30" right="30" top="30" /></padding>
+    <Label text="Evènement :" textFill="#49ad32">
+        <font><Font name="System Bold" size="48.0" /></font>
+    </Label>
+
+    <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+
+        <!-- ==================== LISTE ==================== -->
+        <Tab text="Liste">
+            <VBox spacing="20" style="-fx-background-color: white;">
+                <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <TextField fx:id="searchField" prefHeight="40.0" promptText="Recherche" HBox.hgrow="ALWAYS"
+                               style="-fx-font-size: 16px; -fx-background-color: white; -fx-border-color: #e1dfdf; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    <Button fx:id="btnSearch" onAction="#rechercher" prefHeight="40.0" prefWidth="50.0"
+                            style="-fx-background-color: #49ad32; -fx-background-radius: 5;">
+                        <graphic><Label style="-fx-text-fill: white; -fx-font-size: 20px;" text="🔍" /></graphic>
+                    </Button>
+                    <Label text="Trier par :" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;" />
+                    <ComboBox fx:id="sortComboBox" prefHeight="40.0" prefWidth="200"
+                              style="-fx-font-size: 13px; -fx-border-color: #e1dfdf; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                </HBox>
+                <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-background: white;" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="evenementsContainer" spacing="15" style="-fx-background-color: white;">
+                        <padding><Insets top="10" /></padding>
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+        </Tab>
+
+        <!-- ==================== CRÉER ==================== -->
+        <Tab text="Créer">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-background: white;">
+                <VBox spacing="18" style="-fx-background-color: white;">
+                    <padding><Insets bottom="30" left="40" right="40" top="30" /></padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Titre :" />
+                        <TextField fx:id="createTitre" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="TOP_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Description :" />
+                        <TextArea fx:id="createDescription" prefHeight="110" wrapText="true" HBox.hgrow="ALWAYS"
+                                  style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Nom organisateur :" />
+                        <TextField fx:id="createOrganisateur" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <!-- TYPE → ComboBox -->
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Type :" />
+                        <ComboBox fx:id="createType" prefHeight="38" prefWidth="300"
+                                  style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Date début :" />
+                        <DatePicker fx:id="createDateDebut" prefHeight="38" promptText="jj/mm/aaaa" HBox.hgrow="ALWAYS"
+                                    style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                        <Label prefWidth="100" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Date fin :" />
+                        <DatePicker fx:id="createDateFin" prefHeight="38" promptText="jj/mm/aaaa" HBox.hgrow="ALWAYS"
+                                    style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Horaire début :" />
+                        <TextField fx:id="createTempsDebut" prefHeight="38" promptText="hh:mm" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                        <Label prefWidth="100" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Horaire fin :" />
+                        <TextField fx:id="createTempsFin" prefHeight="38" promptText="hh:mm" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Nombre de place :" />
+                        <TextField fx:id="createNombrePlaces" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Lieu :" />
+                        <TextField fx:id="createLieu" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Adresse :" />
+                        <TextField fx:id="createAdresse" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Image :" />
+                        <Label fx:id="createImageLabel" text="Aucune image sélectionnée" HBox.hgrow="ALWAYS"
+                               style="-fx-font-size: 13px; -fx-text-fill: #888; -fx-background-color: #f5f5f5; -fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-border-radius: 5;" />
+                        <Button onAction="#ajouterImage" prefHeight="38" prefWidth="120"
+                                style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="📁 Parcourir" />
+                        <Button onAction="#genererImageIACreate" prefHeight="38" prefWidth="155"
+                                style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="🤖 Générer IA" />
+                        <Label fx:id="createIAStatusLabel" text="" style="-fx-font-size: 12px; -fx-text-fill: #7c3aed;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_RIGHT" spacing="15">
+                        <VBox.margin><Insets top="10" /></VBox.margin>
+                        <Button onAction="#creerEvenement" prefHeight="42" prefWidth="130"
+                                style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;" text="+ Créer" />
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- ==================== MODIFIER ==================== -->
+        <Tab text="Modifier">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-background: white;">
+                <VBox spacing="18" style="-fx-background-color: white;">
+                    <padding><Insets bottom="30" left="40" right="40" top="30" /></padding>
+
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <TextField fx:id="modifySearchField" prefHeight="38" prefWidth="300" promptText="Recherche"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                        <Button onAction="#rechercherPourModifier" prefHeight="38" prefWidth="42"
+                                style="-fx-background-color: #49ad32; -fx-background-radius: 5; -fx-cursor: hand;">
+                            <graphic><Label style="-fx-text-fill: white; -fx-font-size: 18px;" text="🔍" /></graphic>
+                        </Button>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Titre :" />
+                        <TextField fx:id="modifyTitre" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="TOP_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Description :" />
+                        <TextArea fx:id="modifyDescription" prefHeight="110" wrapText="true" HBox.hgrow="ALWAYS"
+                                  style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Nom organisateur :" />
+                        <TextField fx:id="modifyOrganisateur" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <!-- TYPE → ComboBox -->
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Type :" />
+                        <ComboBox fx:id="modifyType" prefHeight="38" prefWidth="300"
+                                  style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Date début :" />
+                        <DatePicker fx:id="modifyDateDebut" prefHeight="38" promptText="jj/mm/aaaa" HBox.hgrow="ALWAYS"
+                                    style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                        <Label prefWidth="100" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Date fin :" />
+                        <DatePicker fx:id="modifyDateFin" prefHeight="38" promptText="jj/mm/aaaa" HBox.hgrow="ALWAYS"
+                                    style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Horaire début :" />
+                        <TextField fx:id="modifyTempsDebut" prefHeight="38" promptText="hh:mm" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                        <Label prefWidth="100" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Horaire fin :" />
+                        <TextField fx:id="modifyTempsFin" prefHeight="38" promptText="hh:mm" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Nombre de place :" />
+                        <TextField fx:id="modifyNombrePlaces" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Lieu :" />
+                        <TextField fx:id="modifyLieu" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Adresse :" />
+                        <TextField fx:id="modifyAdresse" prefHeight="38" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-background-radius: 5; -fx-border-radius: 5;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label prefWidth="160" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Image :" />
+                        <Label fx:id="modifyImageLabel" text="Aucune image sélectionnée" HBox.hgrow="ALWAYS"
+                               style="-fx-font-size: 13px; -fx-text-fill: #888; -fx-background-color: #f5f5f5; -fx-padding: 8; -fx-background-radius: 5; -fx-border-color: #c8c8c8; -fx-border-width: 1.5; -fx-border-radius: 5;" />
+                        <Button onAction="#modifierImage" prefHeight="38" prefWidth="120"
+                                style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="📁 Parcourir" />
+                        <Button onAction="#genererImageIAModify" prefHeight="38" prefWidth="155"
+                                style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="🤖 Générer IA" />
+                        <Label fx:id="modifyIAStatusLabel" text="" style="-fx-font-size: 12px; -fx-text-fill: #7c3aed;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_RIGHT" spacing="15">
+                        <VBox.margin><Insets top="10" /></VBox.margin>
+                        <Button onAction="#modifierEvenement" prefHeight="42" prefWidth="130"
+                                style="-fx-background-color: #f5a623; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand;" text="Modifier" />
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- ==================== DASHBOARD ==================== -->
+        <Tab text="📊 Dashboard">
+            <VBox fx:id="dashboardContainer" />
+        </Tab>
+
+    </TabPane>
+</VBox>

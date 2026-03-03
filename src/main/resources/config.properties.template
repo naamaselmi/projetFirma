@@ -1,0 +1,80 @@
+# ========================================================
+# FIRMA Configuration Template
+# ========================================================
+# ⚠️  IMPORTANT: This is a TEMPLATE file
+# ⚠️  Copy this to config.properties and fill in YOUR actual values
+# ⚠️  NEVER commit config.properties to Git!
+#
+# Setup Instructions:
+# 1. Copy this file: cp config.properties.template config.properties
+# 2. Fill in the values below with your actual credentials
+# 3. Set environment variables OR update config.properties with real values
+# 4. Ensure config.properties is in .gitignore
+#
+# Recommended: Use environment variables instead of hardcoding
+# export GOOGLE_MAPS_API_KEY=your_key_here
+# ========================================================
+
+# ==========================================
+# Google Maps API Configuration
+# ==========================================
+# Get your API key from: https://console.cloud.google.com/
+# Required for: MapPicker, location services
+# Scopes needed: Maps JavaScript API, Geocoding API
+google.maps.api.key=REPLACE_WITH_YOUR_GOOGLE_MAPS_API_KEY
+
+# ==========================================
+# Hugging Face API Configuration
+# ==========================================
+# Get your token from: https://huggingface.co/settings/tokens
+# Required for: AI image generation (SDXL)
+# Type: READ token
+# Models used: stabilityai/stable-diffusion-xl-base-1.0
+huggingface.api.token=REPLACE_WITH_YOUR_HUGGINGFACE_TOKEN
+
+# ==========================================
+# Stripe Payment Configuration
+# ==========================================
+# Get your keys from: https://dashboard.stripe.com/apikeys
+# Public Key (publishable): starts with pk_
+# Secret Key: starts with sk_ (KEEP SECRET!)
+stripe.public.key=REPLACE_WITH_YOUR_STRIPE_PUBLIC_KEY
+stripe.secret.key=REPLACE_WITH_YOUR_STRIPE_SECRET_KEY
+
+# ==========================================
+# Database Configuration
+# ==========================================
+# MySQL/MariaDB connection parameters
+db.url=jdbc:mysql://localhost:3306/firma
+db.username=root
+db.password=REPLACE_WITH_YOUR_DB_PASSWORD
+db.driver=com.mysql.cj.jdbc.Driver
+
+# ==========================================
+# Email Configuration (Gmail SMTP)
+# ==========================================
+# Gmail SMTP for sending confirmations and receipts
+# You MUST use an "App Password" (not your main Gmail password)
+# Setup: https://myaccount.google.com/apppasswords
+email.smtp.host=smtp.gmail.com
+email.smtp.port=587
+email.smtp.user=REPLACE_WITH_YOUR_GMAIL_ADDRESS
+email.smtp.password=REPLACE_WITH_YOUR_GMAIL_APP_PASSWORD
+email.from.address=REPLACE_WITH_YOUR_GMAIL_ADDRESS
+email.from.name=FIRMA
+
+# ==========================================
+# Application Configuration
+# ==========================================
+app.name=FIRMA Agricultural Management System
+app.version=1.0.0
+app.environment=development
+
+# ==========================================
+# Feature Flags
+# ==========================================
+feature.stripe.enabled=true
+feature.email.enabled=true
+feature.maps.enabled=true
+feature.ai.enabled=true
+

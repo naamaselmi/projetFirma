@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<HBox prefHeight="650.0" prefWidth="950.0" style="-fx-background-color: white;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Firma.controllers.GestionTechnicien.AjouterDemandeFrontController">
+
+    <children>
+
+        <!-- ===== SIDEBAR ===== -->
+
+
+        <!-- ===== MAIN CONTENT WITH SCROLLPANE ===== -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #F9F9F9;" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox spacing="20.0" style="-fx-background-color: #F9F9F9;">
+                    <padding>
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0"/>
+                    </padding>
+
+                    <children>
+                        <!-- TITRE PRINCIPAL -->
+                        <Label text="Créer une demande d'assistance" textFill="#1a961e">
+                            <font>
+                                <Font name="System Bold" size="32.0"/>
+                            </font>
+                        </Label>
+
+                        <!-- FORMULAIRE DE DEMANDE -->
+                        <VBox spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #CCC; -fx-border-radius: 15; -fx-padding: 30;">
+                            <children>
+                                <GridPane hgap="30.0" vgap="20.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50"/>
+                                        <ColumnConstraints percentWidth="50"/>
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="70"/>
+                                        <RowConstraints minHeight="70"/>
+                                        <RowConstraints minHeight="120"/>
+                                    </rowConstraints>
+
+                                    <children>
+                                        <!-- TYPE DE PROBLÈME -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                            <children>
+                                                <Label text="Type de problème :" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                                <ComboBox fx:id="comboTypeProbleme" promptText="Sélectionnez le type"
+                                                          prefHeight="35.0" maxWidth="Infinity" style="-fx-font-size: 13;"/>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- DATE (AUTO) -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                            <children>
+                                                <Label text="Date de demande :" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                                <TextField fx:id="txtDate" editable="false"
+                                                           style="-fx-font-size: 13; -fx-background-color: #f0f0f0;"
+                                                           prefHeight="35.0"/>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- TECHNICIEN -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                                            <children>
+                                                <Label text="Choisir un technicien :" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                                <ComboBox fx:id="comboTechniciens" promptText="Sélectionnez un technicien disponible"
+                                                          prefHeight="35.0" maxWidth="Infinity" style="-fx-font-size: 13;"/>
+                                                <Label fx:id="lblInfoTech" style="-fx-text-fill: #666; -fx-font-size: 12; -fx-font-style: italic;" text=""/>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- DESCRIPTION -->
+                                        <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                            <children>
+                                                <Label text="Description détaillée :" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                                <TextArea fx:id="txtDescription"
+                                                          promptText="Décrivez votre problème en détail (minimum 10 caractères)..."
+                                                          wrapText="true" prefHeight="100.0" style="-fx-font-size: 13;"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </GridPane>
+
+                                <!-- ===== BOUTONS DU FORMULAIRE MODIFIÉS ===== -->
+                                <HBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20 0 0 0;">
+                                    <children>
+                                        <!-- Bouton Manuel (VERT) -->
+                                        <Button fx:id="btnSoumettreManuel"
+                                                onAction="#soumettreDemandeManuelle"
+                                                prefHeight="45.0" prefWidth="140.0"
+                                                style="-fx-background-color: #4F772D;
+                                                       -fx-text-fill: white;
+                                                       -fx-font-weight: bold;
+                                                       -fx-background-radius: 25;
+                                                       -fx-cursor: hand;
+                                                       -fx-font-size: 14;
+                                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+                                                text="📤  Manuel"/>
+
+                                        <!-- Bouton Auto-assigner (VIOLET) -->
+                                        <Button fx:id="btnAutoAssigner"
+                                                onAction="#soumettreDemandeAuto"
+                                                prefHeight="45.0" prefWidth="140.0"
+                                                style="-fx-background-color: #9b59b6;
+                                                       -fx-text-fill: white;
+                                                       -fx-font-weight: bold;
+                                                       -fx-background-radius: 25;
+                                                       -fx-cursor: hand;
+                                                       -fx-font-size: 14;
+                                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+                                                text="🤖  Auto-assigner"/>
+
+                                        <!-- Bouton Annuler (ROUGE) -->
+                                        <Button fx:id="btnAnnuler"
+                                                onAction="#annuler"
+                                                prefHeight="45.0" prefWidth="140.0"
+                                                style="-fx-background-color: #e74c3c;
+                                                       -fx-text-fill: white;
+                                                       -fx-font-weight: bold;
+                                                       -fx-background-radius: 25;
+                                                       -fx-cursor: hand;
+                                                       -fx-font-size: 14;
+                                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+                                                text="🗑️  Annuler"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                            <effect>
+                                <DropShadow color="#00000014" height="20.0" radius="9.5" width="20.0"/>
+                            </effect>
+                        </VBox>
+
+                        <!-- MES DEMANDES RÉCENTES -->
+                        <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #CCC; -fx-border-radius: 15; -fx-padding: 20;">
+                            <children>
+                                <!-- HEADER AVEC BOUTON ACTUALISER -->
+                                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                    <children>
+                                        <Label text="Mes demandes récentes"
+                                               style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: #1a961e;"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Button fx:id="btnActualiser" onAction="#rafraichir"
+                                                text="🔄  Actualiser"
+                                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;"
+                                                prefHeight="35.0" prefWidth="130.0"/>
+                                    </children>
+                                </HBox>
+
+                                <!-- TABLEAU DES DEMANDES -->
+                                <TableView fx:id="tableMesDemandes" prefHeight="250.0" style="-fx-font-size: 12;">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                                        <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                                        <TableColumn fx:id="colDescription" text="Description" prefWidth="250"/>
+                                        <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+                                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+                                        <TableColumn fx:id="colTech" text="Tech ID" prefWidth="70"/>
+                                    </columns>
+                                </TableView>
+
+                                <!-- BOUTON RETOUR simple -->
+
+
+                                <!-- BOUTON VOIR DÉTAILS -->
+                                <HBox alignment="CENTER_RIGHT">
+                                    <children>
+                                        <Button fx:id="btnVoirDetails" onAction="#voirDetailDemande"
+                                                text="🔍  Voir détails"
+                                                style="-fx-background-color: #5bc0de; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;"
+                                                prefHeight="35.0" prefWidth="130.0"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                            <effect>
+                                <DropShadow color="#00000014" height="20.0" radius="9.5" width="20.0"/>
+                            </effect>
+                        </VBox>
+
+                        <!-- NOTE INFORMATIVE -->
+                        <Label text="💡 Double-cliquez sur une demande pour voir les détails"
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 11; -fx-font-style: italic; -fx-alignment: center;"/>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</HBox>

@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"/tmp/technicien_extract/connection3a7 - Copie - Copie\" branch -a)",
+      "Bash(git -C \"/tmp/technicien_extract/connection3a7 - Copie - Copie\" log --all --oneline)",
+      "Bash(git checkout 21284de208102c96f52527e6b447697ef90aab53)",
+      "Bash(# Extract all dangling blob content to find Java/FXML files cd \"\"/tmp/technicien_extract/connection3a7 - Copie - Copie\"\" && git fsck --unreachable)",
+      "Bash(then echo \"=== $hash ===\" git cat-file blob $hash)",
+      "Bash(git clone --branch gestion-technicien --single-branch https://github.com/naamaselmi/projetFirma.git /tmp/gestion-technicien)",
+      "Bash(wc -l /tmp/gestion-technicien/src/main/resources/uploads/*.fxml)",
+      "Bash(dir \"C:\\\\Users\\\\Ramez Hadhri\\\\Downloads\" /b /a)",
+      "Bash(dir \"C:\\\\Users\\\\Ramez Hadhri\\\\Desktop\\\\connection3a7 - Copie - Copie\\\\src\\\\main\\\\resources\" /s /b)",
+      "Bash(dir \"C:\\\\Users\\\\Ramez Hadhri\\\\Desktop\\\\finale\\\\finale\\\\firma\\\\src\\\\main\\\\resources\\\\GestionTechnicien\" /s /b)",
+      "Bash(dir \"C:\\\\Users\\\\Ramez Hadhri\\\\Desktop\\\\connection3a7 - Copie - Copie\\\\src\\\\main\\\\resources\" /s /b /a)",
+      "Bash(findstr \".css\" dir \"C:\\\\Users\\\\Ramez Hadhri\\\\Desktop\\\\connection3a7 - Copie - Copie\\\\src\\\\main\\\\resources\" /s /b /a)",
+      "Bash(findstr \".properties\\\\|.json\\\\|config\" dir \"C:\\\\Users\\\\Ramez Hadhri\\\\Desktop\\\\connection3a7 - Copie - Copie\\\\src\\\\main\\\\resources\" /s /b /a)",
+      "Bash(findstr \".png\\\\|.jpg\\\\|.jpeg\\\\|images\" dir \"C:\\\\Users\\\\Ramez Hadhri\\\\AppData\\\\Local\\\\Temp\\\\gestion-technicien\\\\src\\\\main\\\\resources\" /s /b)",
+      "Bash(dir \"C:\\\\Users\\\\Ramez Hadhri\\\\Desktop\\\\finale\\\\finale\\\\firma\\\\src\\\\main\\\\resources\\\\images\" /b)",
+      "Bash(findstr \"tech_\\\\|avatar\\\\|o.png\")"
+    ]
+  }
+}

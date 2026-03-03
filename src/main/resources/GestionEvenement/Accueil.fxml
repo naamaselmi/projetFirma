@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/20.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Firma.controllers.GestionEvenement.AccueilController"
+            style="-fx-background-color: #fefbde;">
+
+    <!-- MENU LATERAL GAUCHE -->
+    <left>
+        <VBox prefWidth="185.0" spacing="0"
+              style="-fx-background-color: #49ad32; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 3, 0);">
+            <padding><Insets top="20" /></padding>
+
+            <VBox alignment="CENTER" prefHeight="185.0">
+                <ImageView fitHeight="150.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@../image/logofirma.jpg" /></image>
+                </ImageView>
+            </VBox>
+
+            <VBox spacing="0" VBox.vgrow="ALWAYS">
+                <Button fx:id="btnAccueil" onAction="#goToAccueil"
+                        prefHeight="52.0" prefWidth="185.0" text="Accueil"
+                        style="-fx-background-color: white; -fx-background-radius: 0 26 26 0; -fx-text-fill: #49ad32; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnEvenement" onAction="#goToEvenement"
+                        prefHeight="52.0" prefWidth="185.0" text="Evènement"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnMarketplace" onAction="#goToMarketplace"
+                        prefHeight="52.0" prefWidth="185.0" text="Marketplace"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnForum" onAction="#goToForum"
+                        prefHeight="52.0" prefWidth="185.0" text="Forum"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnTechnicien" onAction="#goToTechnicien"
+                        prefHeight="52.0" prefWidth="185.0" text="Technicien"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+                <Button fx:id="btnProfil" onAction="#goToProfil"
+                        prefHeight="52.0" prefWidth="185.0" text="Profil"
+                        style="-fx-background-color: #49ad32; -fx-background-radius: 0 26 26 0; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25;">
+                    <VBox.margin><Insets bottom="4" /></VBox.margin>
+                </Button>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+            <Button onAction="#deconnecter"
+                    prefHeight="50.0" prefWidth="185.0" text="Déconnecter"
+                    style="-fx-background-color: rgba(0,0,0,0.18); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 25; -fx-background-radius: 0;">
+                <VBox.margin><Insets bottom="20" /></VBox.margin>
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- CONTENU PRINCIPAL -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #fefbde; -fx-background: #fefbde; -fx-border-color: transparent;">
+            <VBox spacing="24" style="-fx-background-color: #fefbde;">
+                <padding><Insets top="30" right="35" bottom="35" left="35" /></padding>
+
+                <!-- ====== WELCOME HEADER ====== -->
+                <VBox spacing="4">
+                    <Label fx:id="lblWelcome" text="Bienvenue" textFill="#49ad32">
+                        <font><Font name="System Bold" size="36.0" /></font>
+                    </Label>
+                    <Label fx:id="lblDate" text="" style="-fx-font-size: 14px; -fx-text-fill: #888888;" />
+                </VBox>
+
+                <!-- ====== SHORTCUT BUTTONS ====== -->
+                <HBox spacing="16" alignment="CENTER_LEFT">
+                    <Button onAction="#goToEvenement" prefHeight="48" prefWidth="240"
+                            style="-fx-background-color: #49ad32; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(73,173,50,0.3), 8, 0, 0, 2);"
+                            text="📅  Gestion Évènements" />
+                    <Button onAction="#goToMarketplace" prefHeight="48" prefWidth="240"
+                            style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(230,126,34,0.3), 8, 0, 0, 2);"
+                            text="🛒  Marketplace" />
+                    <Button onAction="#goToForum" prefHeight="48" prefWidth="200"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.3), 8, 0, 0, 2);"
+                            text="💬  Forum" />
+                    <Button onAction="#goToTechnicien" prefHeight="48" prefWidth="200"
+                            style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(142,68,173,0.3), 8, 0, 0, 2);"
+                            text="🔧  Technicien" />
+                </HBox>
+
+                <!-- ====== KPI CARDS ROW 1 — Événements ====== -->
+                <Label text="Événements" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;">
+                    <VBox.margin><Insets top="6" /></VBox.margin>
+                </Label>
+                <FlowPane fx:id="eventKpiPane" hgap="16" vgap="16" />
+
+                <!-- ====== EVENT CHARTS ====== -->
+                <HBox spacing="20" alignment="TOP_CENTER">
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-radius: 14; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);"
+                          HBox.hgrow="ALWAYS">
+                        <padding><Insets top="16" right="16" bottom="16" left="16" /></padding>
+                        <Label text="Événements par type" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                        <PieChart fx:id="chartEventType" prefHeight="260" legendVisible="true" labelsVisible="false" />
+                    </VBox>
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-radius: 14; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);"
+                          HBox.hgrow="ALWAYS">
+                        <padding><Insets top="16" right="16" bottom="16" left="16" /></padding>
+                        <Label text="Participations (12 derniers mois)" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                        <BarChart fx:id="chartParticipations" prefHeight="260" legendVisible="false">
+                            <xAxis><CategoryAxis label="" /></xAxis>
+                            <yAxis><NumberAxis label="" /></yAxis>
+                        </BarChart>
+                    </VBox>
+                </HBox>
+
+                <!-- ====== UPCOMING EVENTS ====== -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-radius: 14; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                    <padding><Insets top="16" right="20" bottom="16" left="20" /></padding>
+                    <Label text="📅 Événements à venir (cette semaine)" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                    <VBox fx:id="upcomingEventsBox" spacing="8" />
+                </VBox>
+
+                <!-- ====== KPI CARDS ROW 2 — Marketplace ====== -->
+                <Label text="Marketplace" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;">
+                    <VBox.margin><Insets top="6" /></VBox.margin>
+                </Label>
+                <FlowPane fx:id="marketKpiPane" hgap="16" vgap="16" />
+
+                <!-- ====== MARKETPLACE CHARTS ====== -->
+                <HBox spacing="20" alignment="TOP_CENTER">
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-radius: 14; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);"
+                          HBox.hgrow="ALWAYS">
+                        <padding><Insets top="16" right="16" bottom="16" left="16" /></padding>
+                        <Label text="Commandes par statut de livraison" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                        <PieChart fx:id="chartOrderStatus" prefHeight="260" legendVisible="true" labelsVisible="false" />
+                    </VBox>
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-radius: 14; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);"
+                          HBox.hgrow="ALWAYS">
+                        <padding><Insets top="16" right="16" bottom="16" left="16" /></padding>
+                        <Label text="Stock par catégorie" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                        <PieChart fx:id="chartStockCategory" prefHeight="260" legendVisible="true" labelsVisible="false" />
+                    </VBox>
+                </HBox>
+
+                <!-- ====== TOP EVENTS ====== -->
+                <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 14; -fx-border-radius: 14; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                    <padding><Insets top="16" right="20" bottom="16" left="20" /></padding>
+                    <Label text="🏆 Top 5 événements les plus populaires" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                    <VBox fx:id="topEventsBox" spacing="8" />
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

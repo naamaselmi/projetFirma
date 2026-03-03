@@ -36,3 +36,57 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# ==========================================
+# FIRMA - SENSITIVE CONFIGURATION & CREDENTIALS
+# ==========================================
+# ⚠️  NEVER COMMIT FILES CONTAINING:
+#     - API Keys (Google Maps, Hugging Face, Stripe)
+#     - Database Passwords
+#     - Email Credentials
+#     - OAuth Tokens
+#     - Secret Keys
+
+# 🔐 Configuration files with hardcoded secrets
+src/main/resources/config.properties
+src/main/resources/application.properties
+src/main/resources/application-*.properties
+src/main/resources/database.properties
+src/main/resources/secrets.properties
+
+# 🔐 Environment variables and local config
+.env
+.env.local
+.env.*.local
+.env.prod
+.env.dev
+.env.test
+
+# 🔐 IDE workspace data with sensitive info
+.idea/workspace.xml
+.idea/other.xml
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/shelf/
+
+# 🔐 Local database and cache
+*.db
+*.sqlite
+*.sqlite3
+*.log
+logs/
+
+# 🔐 Credentials and secrets files
+**/credentials.json
+**/secrets.json
+**/secret*.properties
+**/secret*.yaml
+**/secret*.yml
+
+# 🔐 OS specific files
+Thumbs.db
+*.tmp
+*.bak
+*~
+.swp
+.swo

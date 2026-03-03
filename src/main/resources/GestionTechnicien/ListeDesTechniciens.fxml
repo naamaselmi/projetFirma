@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #F4F7F6;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Firma.controllers.GestionTechnicien.ListeTechnicienController">
+
+    <VBox spacing="25.0" style="-fx-background-color: #1a961e; -fx-background-radius: 0 0 30 30;">
+        <padding>
+            <Insets bottom="40.0" left="50.0" right="50.0" top="30.0" />
+        </padding>
+        <children>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <children>
+                    <ImageView fitHeight="60.0" fitWidth="60.0" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/o.png" />
+                        </image>
+                    </ImageView>
+                    <Label style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 28;" text="FIRMA" />
+                </children>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <children>
+                    <Button fx:id="btnAjouter" onAction="#ouvrirAjoutTechnicien" prefHeight="45.0" style="-fx-background-color: #4F772D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12; -fx-cursor: hand;" text="➕  NOUVEAU TECHNICIEN">
+                        <tooltip><Tooltip text="Ajouter un nouveau technicien au système" /></tooltip>
+                        <padding><Insets left="20.0" right="20.0" /></padding>
+                    </Button>
+
+                    <Button prefHeight="45.0" style="-fx-background-color: #FFFADE; -fx-text-fill: #1a961e; -fx-font-weight: bold; -fx-background-radius: 12;" text="📋  LISTE DES TECHNICIENS">
+                        <padding><Insets left="20.0" right="20.0" /></padding>
+                    </Button>
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox spacing="25.0">
+                <padding>
+                    <Insets bottom="30.0" left="50.0" right="50.0" top="30.0" />
+                </padding>
+
+                <children>
+                    <HBox alignment="BOTTOM_LEFT" spacing="20.0">
+                        <children>
+                            <VBox HBox.hgrow="ALWAYS">
+                                <children>
+                                    <Label text="Annuaire des Techniciens" textFill="#1a961e">
+                                        <font>
+                                            <Font name="System Bold" size="32.0" />
+                                        </font>
+                                    </Label>
+                                    <Label text="Consultez, recherchez et gérez les profils techniques." textFill="#666666" />
+                                </children>
+                            </VBox>
+
+                            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                <children>
+                                    <TextField fx:id="searchField" prefHeight="40.0" prefWidth="320.0" promptText="🔍 Rechercher par nom ou spécialité..." style="-fx-background-radius: 20; -fx-border-color: #ddd; -fx-border-radius: 20; -fx-background-color: white;" />
+                                    <Button fx:id="refreshButton" prefHeight="40.0" prefWidth="45.0" style="-fx-background-color: #1a961e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;" text="🔄" />
+                                </children>
+                            </HBox>
+                        </children>
+                    </HBox>
+
+                    <HBox>
+                        <children>
+                            <Label fx:id="lblInfo" style="-fx-background-color: white; -fx-padding: 8 20; -fx-background-radius: 15; -fx-text-fill: #4F772D; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" text="Chargement des techniciens..." />
+                        </children>
+                    </HBox>
+
+                    <FlowPane fx:id="technicienGrid" hgap="25.0" prefWrapLength="1100.0" vgap="25.0" />
+                </children>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

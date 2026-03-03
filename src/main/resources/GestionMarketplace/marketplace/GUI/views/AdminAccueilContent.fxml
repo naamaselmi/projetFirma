@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+            style="-fx-background-color: #fefbde; -fx-background: #fefbde;"
+            xmlns="http://javafx.com/javafx/20.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Firma.controllers.GestionMarketplace.AdminAccueilController">
+
+    <VBox spacing="25" style="-fx-background-color: #fefbde;">
+        <padding><Insets bottom="30" left="30" right="30" top="25"/></padding>
+
+        <!-- ========== WELCOME HEADER ========== -->
+        <VBox spacing="4">
+            <Label fx:id="lblWelcome" text="Bienvenue, Admin" textFill="#333333">
+                <font><Font name="System Bold" size="30.0"/></font>
+            </Label>
+            <Label fx:id="lblDate" text="" textFill="#888888">
+                <font><Font size="14.0"/></font>
+            </Label>
+        </VBox>
+
+        <Separator style="-fx-background-color: #e0e0e0;"/>
+
+        <!-- ========== QUICK NAV BUTTONS (grid) ========== -->
+        <Label text="Raccourcis rapides" textFill="#333333">
+            <font><Font name="System Bold" size="18.0"/></font>
+        </Label>
+        <HBox fx:id="shortcutContainer" alignment="CENTER" spacing="15"/>
+
+        <Separator style="-fx-background-color: #e0e0e0;"/>
+
+        <!-- ========== ÉVÉNEMENTS SECTION ========== -->
+        <Label text="📅  Gestion Événements" textFill="#49ad32">
+            <font><Font name="System Bold" size="22.0"/></font>
+        </Label>
+
+        <!-- Event KPI cards -->
+        <FlowPane fx:id="eventKpiPane" hgap="15" vgap="15"/>
+
+        <!-- Event charts row -->
+        <HBox spacing="20" alignment="TOP_CENTER">
+            <VBox spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                <padding><Insets bottom="15" left="15" right="15" top="15"/></padding>
+                <Label text="Répartition par type" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #555;"/>
+                <PieChart fx:id="chartEventType" prefHeight="260" legendVisible="true"
+                          labelsVisible="false" animated="true"/>
+            </VBox>
+            <VBox spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                <padding><Insets bottom="15" left="15" right="15" top="15"/></padding>
+                <Label text="Participations par mois" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #555;"/>
+                <BarChart fx:id="chartParticipations" prefHeight="260" animated="true"
+                          legendVisible="false" categoryGap="8" barGap="2">
+                    <xAxis><CategoryAxis label="Mois"/></xAxis>
+                    <yAxis><NumberAxis label="Participations"/></yAxis>
+                </BarChart>
+            </VBox>
+        </HBox>
+
+        <!-- Top événements -->
+        <VBox fx:id="topEventsBox" spacing="8"
+              style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+            <padding><Insets bottom="15" left="20" right="20" top="15"/></padding>
+            <Label text="🏆  Top événements (par participations)" style="-fx-font-weight: bold; -fx-font-size: 15; -fx-text-fill: #333;"/>
+        </VBox>
+
+        <Separator style="-fx-background-color: #e0e0e0;"/>
+
+        <!-- ========== MARKETPLACE SECTION ========== -->
+        <Label text="🛒  Gestion Marketplace" textFill="#e67e22">
+            <font><Font name="System Bold" size="22.0"/></font>
+        </Label>
+
+        <!-- Marketplace KPI cards -->
+        <FlowPane fx:id="marketKpiPane" hgap="15" vgap="15"/>
+
+        <!-- Marketplace charts row -->
+        <HBox spacing="20" alignment="TOP_CENTER">
+            <VBox spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                <padding><Insets bottom="15" left="15" right="15" top="15"/></padding>
+                <Label text="Statut des livraisons" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #555;"/>
+                <PieChart fx:id="chartDeliveryStatus" prefHeight="260" legendVisible="true"
+                          labelsVisible="false" animated="true"/>
+            </VBox>
+            <VBox spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                <padding><Insets bottom="15" left="15" right="15" top="15"/></padding>
+                <Label text="Stock par catégorie" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #555;"/>
+                <PieChart fx:id="chartStockCategory" prefHeight="260" legendVisible="true"
+                          labelsVisible="false" animated="true"/>
+            </VBox>
+        </HBox>
+
+        <!-- Revenue chart -->
+        <VBox spacing="8"
+              style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+            <padding><Insets bottom="15" left="15" right="15" top="15"/></padding>
+            <Label text="💰  Revenu mensuel (6 derniers mois)" style="-fx-font-weight: bold; -fx-font-size: 15; -fx-text-fill: #333;"/>
+            <BarChart fx:id="chartRevenue" prefHeight="280" animated="true"
+                      legendVisible="false" categoryGap="15" barGap="2">
+                <xAxis><CategoryAxis label="Mois"/></xAxis>
+                <yAxis><NumberAxis label="Revenu (TND)"/></yAxis>
+            </BarChart>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

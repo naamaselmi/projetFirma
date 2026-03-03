@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<HBox prefHeight="650.0" prefWidth="950.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Firma.controllers.GestionTechnicien.AjouterDemandeBackController">
+
+    <children>
+        <!-- ===== SIDEBAR ===== -->
+
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #F9F9F9;" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox spacing="20.0" style="-fx-background-color: #F9F9F9;">
+                    <HBox alignment="CENTER_LEFT" spacing="20.0" prefHeight="60.0">
+                        <children>
+
+
+                            <Pane HBox.hgrow="ALWAYS" />
+
+                            <Button fx:id="btnDeconnexion" onAction="#deconnecter"
+                                    style="-fx-background-color: white;
+                       -fx-text-fill: #d9534f;
+                       -fx-border-color: #d9534f;
+                       -fx-border-radius: 20;
+                       -fx-background-radius: 20;
+                       -fx-font-weight: bold;
+                       -fx-font-size: 13;
+                       -fx-cursor: hand;
+                       -fx-padding: 8 20 8 20;"
+                                    text="🚪 Déconnecter">
+                                <effect>
+                                    <DropShadow color="#0000001a" radius="5.0" />
+                                </effect>
+                            </Button>
+                        </children>
+                    </HBox>
+                    <padding>
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0"/>
+                    </padding>
+
+                    <children>
+                        <!-- HEADER avec titre -->
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                            <children>
+                                <Label text="Gestion des demandes reçues" textFill="#1a961e">
+                                    <font>
+                                        <Font name="System Bold" size="32.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+
+                        <!-- INFOS TECHNICIEN CONNECTÉ (UNIQUE) -->
+                        <HBox spacing="20.0" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-border-color: #1a961e; -fx-border-radius: 15;">
+                            <children>
+                                <ImageView fx:id="imageTechnicien" fitHeight="70.0" fitWidth="70.0" preserveRatio="true" style="-fx-border-radius: 35; -fx-background-radius: 35; -fx-border-color: #1a961e; -fx-border-width: 3;">
+                                    <image>
+                                        <Image url="@../images/avatar.png"/>
+                                    </image>
+                                </ImageView>
+                                <VBox spacing="5.0">
+                                    <Label fx:id="nomTechnicien" style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: #1a961e;"/>
+                                    <Label fx:id="specialiteTechnicien" style="-fx-text-fill: #666; -fx-font-size: 14;"/>
+                                    <Label fx:id="lblInfoTechnicien" style="-fx-text-fill: #27ae60; -fx-font-size: 12; -fx-font-style: italic;" text="Connecté"/>
+                                </VBox>
+                            </children>
+                            <effect>
+                                <DropShadow color="#0000000a" radius="5.0"/>
+                            </effect>
+                        </HBox>
+
+                        <!-- FILTRES ET STATS -->
+                        <HBox spacing="20.0" alignment="CENTER_LEFT">
+                            <children>
+                                <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-border-color: #ddd; -fx-border-radius: 15;" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label text="Filtres" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #1a961e; -fx-padding: 0 0 10 0;"/>
+                                        <HBox spacing="10.0" alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="Statut:" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+                                                <ComboBox fx:id="comboFiltreStatut" prefWidth="150.0" style="-fx-font-size: 13; -fx-background-radius: 20;"/>
+                                                <Button fx:id="btnActualiser" onAction="#actualiser" text="🔄  Actualiser" style="-fx-background-color: #5bc0de; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;" prefHeight="35.0" prefWidth="120.0"/>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15; -fx-border-color: #ddd; -fx-border-radius: 15;" alignment="CENTER" prefWidth="300.0">
+                                    <Label text="Statistiques" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #1a961e; -fx-padding: 0 0 10 0;"/>
+                                    <Label fx:id="lblStats" text="Chargement..." style="-fx-font-size: 13; -fx-text-fill: #333;"/>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <!-- BOUTON RETOUR -->
+
+
+                        <!-- TABLEAU DES DEMANDES -->
+                        <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #ddd; -fx-border-radius: 15; -fx-padding: 20;">
+                            <children>
+                                <Label text="Liste des demandes" style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: #1a961e; -fx-padding: 0 0 10 0;"/>
+
+                                <TableView fx:id="tableDemandesRecues" prefHeight="300.0" style="-fx-font-size: 12;">
+                                    <columns>
+                                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                                        <TableColumn fx:id="colUtilisateur" text="Client" prefWidth="70"/>
+                                        <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                                        <TableColumn fx:id="colDescription" text="Description" prefWidth="200"/>
+                                        <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+                                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+                                    </columns>
+                                </TableView>
+
+                                <!-- BOUTONS D'ACTION -->
+                                <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 10 0 0 0;">
+                                    <children>
+                                        <Button fx:id="btnVoirDetails" onAction="#voirDetailDemande" text="👁️  Voir détails" style="-fx-background-color: #5bc0de; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;" prefHeight="40.0" prefWidth="130.0" disable="true"/>
+                                        <Button fx:id="btnAccepter" onAction="#accepterDemande" text="✅  Accepter" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;" prefHeight="40.0" prefWidth="120.0" disable="true"/>
+                                        <Button fx:id="btnRefuser" onAction="#refuserDemande" text="❌  Refuser" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;" prefHeight="40.0" prefWidth="120.0" disable="true"/>
+                                        <Button fx:id="btnTerminer" onAction="#terminerDemande" text="✓  Terminer" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;" prefHeight="40.0" prefWidth="120.0" disable="true"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- NOTE INFORMATIVE -->
+                        <Label text="💡 Double-cliquez sur une demande pour voir les détails" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11; -fx-font-style: italic; -fx-alignment: center;"/>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</HBox>
