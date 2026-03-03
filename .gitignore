@@ -83,6 +83,28 @@ logs/
 **/secret*.yaml
 **/secret*.yml
 
+# 🔐 Java source files with HARDCODED secrets (must NOT be pushed)
+# ⚠️  These files contain real API keys, passwords, and tokens hardcoded in the source code.
+# ⚠️  Ideally, refactor them to load secrets from config.properties instead.
+
+# Stripe API keys (sk_test_... and pk_test_...) hardcoded
+src/main/java/Firma/services/GestionMarketplace/StripeService.java
+
+# Gmail address + App Password hardcoded
+src/main/java/Firma/services/GestionMarketplace/EmailService.java
+
+# Gmail SMTP credentials hardcoded (molkaajengui@gmail.com)
+src/main/java/Firma/tools/GestionTechnicien/EmailConfig.java
+
+# HuggingFace API token (hf_...) hardcoded
+src/main/java/Firma/tools/GestionEvenement/HuggingFaceImageService.java
+
+# Database URL, username, password hardcoded
+src/main/java/Firma/tools/GestionEvenement/MyConnection.java
+
+# 🔐 Generated receipts (contain client PII)
+receipts/
+
 # 🔐 OS specific files
 Thumbs.db
 *.tmp
