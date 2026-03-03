@@ -474,57 +474,17 @@ mvn test
 
 ## 👥 Équipe
 
-<table>
-<tr>
-<td align="center" width="20%">
-<br/>
-<b>Naama Selmi</b>
-<br/>
-<sub>📅 Gestion Événements</sub>
-<br/><br/>
-<a href="mailto:naama.selmi@esprit.tn">📧 naama.selmi@esprit.tn</a>
-</td>
-<td align="center" width="20%">
-<br/>
-<b>Hamza Slimani</b>
-<br/>
-<sub>🛒 Gestion Marketplace</sub>
-<br/><br/>
-<a href="mailto:hamza.slimani@esprit.tn">📧 hamza.slimani@esprit.tn</a>
-</td>
-<td align="center" width="20%">
-<br/>
-<b>Molka Ajengui</b>
-<br/>
-<sub>🔧 Gestion Techniciens</sub>
-<br/><br/>
-<a href="mailto:Molka.Ajengui@esprit.tn">📧 Molka.Ajengui@esprit.tn</a>
-</td>
-<td align="center" width="20%">
-<br/>
-<b>Zeineb ElAbed</b>
-<br/>
-<sub>💬 Gestion Forum</sub>
-<br/><br/>
-<a href="mailto:Zeineb.ElAbed@esprit.tn">📧 Zeineb.ElAbed@esprit.tn</a>
-</td>
-<td align="center" width="20%">
-<br/>
-<b>Mehdi Obba</b>
-<br/>
-<sub>👤 Gestion Utilisateurs</sub>
-<br/><br/>
-<a href="mailto:Mehdi.OBBA@esprit.tn">📧 Mehdi.OBBA@esprit.tn</a>
-</td>
-</tr>
-</table>
+> 🎓 Projet académique — **ESPRIT** (3A)
 
-<p align="center">
-  Projet académique — <b>ESPRIT</b> (3A)
-</p>
+| | Membre | Module | Contact |
+|:-:|--------|--------|---------|
+| 📅 | **Naama Selmi** | Gestion Événements | [naama.selmi@esprit.tn](mailto:naama.selmi@esprit.tn) |
+| 🛒 | **Hamza Slimani** | Gestion Marketplace | [hamza.slimani@esprit.tn](mailto:hamza.slimani@esprit.tn) |
+| 🔧 | **Molka Ajengui** | Gestion Techniciens | [Molka.Ajengui@esprit.tn](mailto:Molka.Ajengui@esprit.tn) |
+| 💬 | **Zeineb ElAbed** | Gestion Forum | [Zeineb.ElAbed@esprit.tn](mailto:Zeineb.ElAbed@esprit.tn) |
+| 👤 | **Mehdi Obba** | Gestion Utilisateurs | [Mehdi.OBBA@esprit.tn](mailto:Mehdi.OBBA@esprit.tn) |
 
 ---
-
 ## 📄 Licence
 
 Projet académique — usage éducatif uniquement.
